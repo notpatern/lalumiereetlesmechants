@@ -17,7 +17,7 @@ namespace Utilities {
 		inline T setX(T x) {
 			m_x = x;
 		}
-		inline T setT(T y) {
+		inline T setY(T y) {
 			m_y = y;
 		}
 
