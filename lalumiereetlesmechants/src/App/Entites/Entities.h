@@ -7,12 +7,12 @@ namespace Entity {
 	class Entities
 	{
 	protected:
-		Utilities::Vector2<int>* m_position;
+		Utilities::Vector2<int> m_position;
 		Sprite* m_sprite;
 
 	public:
 		Entities();
-		Entities(Utilities::Vector2<int>* position, Sprite* sprite);
+		Entities(const Utilities::Vector2<int>& position, Sprite* sprite);
 		~Entities();
 
 		inline Sprite* getSprite() {
@@ -23,22 +23,22 @@ namespace Entity {
 			m_sprite = sprite;
 		}
 
-		inline Utilities::Vector2<int>* getPosition() {
+		inline Utilities::Vector2<int>& getPosition() {
 			return m_position;
 		}
 
-		void setPosition(Utilities::Vector2<int>* newPos) {
+		void setPosition(Utilities::Vector2<int>& newPos) {
 			m_position = newPos;
 		}
 
-		void setPosition(Utilities::Vector2<float>* newPos) {
-			m_position->setX((int)newPos->getX());
-			m_position->setY((int)newPos->getY());
+		void setPosition(Utilities::Vector2<float>& newPos) {
+			m_position.x = (int)newPos.x;
+			m_position.y = (int)newPos.y;
 		}
 
 		void setPosition(int x, int y) {
-			m_position->setX(x);
-			m_position->setY(y);
+			m_position.x = x;
+			m_position.y = y;
 		}
 
 		virtual void Update() = 0;

@@ -1,32 +1,32 @@
 #pragma once
 
 namespace Utilities {
-	template <typename T>
-	class Vector2
-	{
-	public:
-		Vector2(T x, T y);
-		~Vector2();
-		inline T getX() {
-			return m_x;
-		}
-		inline T getY() {
-			return m_y;
-		}
+    template <typename T> struct Vector2 {
+        T x;
+        T y;
 
-		inline T setX(T x) {
-			m_x = x;
-		}
-		inline T setY(T y) {
-			m_y = y;
-		}
+        Vector2() : x(0), y(0) {}
+        Vector2(T x, T y) : x(x), y(y) {}
 
-		void Clear();
+        Vector2 operator+(const Vector2& other) const {
+            return Vector2(x + other.x, y + other.y);
+        }
 
-	private:
-		T m_x;
-		T m_y;
+        Vector2 operator-(const Vector2& other) const {
+            return Vector2(x - other.x, y - other.y);
+        }
 
-	};
+        Vector2& operator+=(const Vector2& other) const {
+            x += other.x;
+            y += other.y;
+            return *this;
+        }
+
+        Vector2& operator-=(const Vector2& other) const {
+            x -= other.x;
+            y -= other.y;
+            return *this;
+        }
+    };
 }
 

@@ -135,7 +135,6 @@
     <ClCompile Include="src\App\Entites\Entities.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\program.cpp" />
-    <ClCompile Include="src\Utilities\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App\Manager\GameManager.h" />
