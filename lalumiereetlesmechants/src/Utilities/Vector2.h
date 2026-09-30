@@ -13,6 +13,10 @@ public:
 		return m_y;
 	}
 
+	Vector2<T>* GetPosition();
+
+	void Clear();
+
 private:
 	T m_x;
 	T m_y;
