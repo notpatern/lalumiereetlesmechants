@@ -1,9 +1,6 @@
 #include "InputManager.h"
 #include <windows.h>
 
-//#include <consoleapi3.h>
-
-
 bool InputManager::IsKeyDown(int virtualKey)
 {
 	return (GetAsyncKeyState(virtualKey) & 0x8000) != 0;
