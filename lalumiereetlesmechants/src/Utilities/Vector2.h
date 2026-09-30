@@ -21,6 +21,8 @@ namespace Utilities {
 			m_y = y;
 		}
 
+		void Clear();
+
 	private:
 		T m_x;
 		T m_y;
