@@ -12,12 +12,6 @@ Utilities::Vector2<T>::~Vector2()
 }
 
 template<typename T>
-Utilities::Vector2<T>* Utilities::Vector2<T>::GetPosition()
-{
-	return this;
-}
-
-template<typename T>
 void Utilities::Vector2<T>::Clear()
 {
 	m_x = 0;
