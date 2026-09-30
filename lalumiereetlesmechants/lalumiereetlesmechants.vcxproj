@@ -123,6 +123,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App\Manager\GameManager.cpp" />
+    <ClCompile Include="src\App\Manager\InputManager.cpp" />
+    <ClCompile Include="src\App\Manager\SoundManager.cpp" />
     <ClCompile Include="src\App\Render\Lightable.cpp" />
     <ClCompile Include="src\App\Player\Player.cpp" />
     <ClCompile Include="src\App\Render\Renderer.cpp" />
@@ -132,8 +135,12 @@
     <ClCompile Include="src\App\Entites\Entities.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\program.cpp" />
+    <ClCompile Include="src\Utilities\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\Manager\GameManager.h" />
+    <ClInclude Include="src\App\Manager\InputManager.h" />
+    <ClInclude Include="src\App\Manager\SoundManager.h" />
     <ClInclude Include="src\App\Render\Lightable.h" />
     <ClInclude Include="src\App\Player\Player.h" />
     <ClInclude Include="src\App\Render\Renderer.h" />
@@ -143,6 +150,7 @@
     <ClInclude Include="src\App\Entites\Entities.h" />
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\Utilities\Timer.h" />
+    <ClInclude Include="src\Utilities\Vector2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
