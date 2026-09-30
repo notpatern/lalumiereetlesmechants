@@ -1,8 +1,12 @@
 #include <iostream>
 #include "App/App.h"
+#include "Utilities/Timer.h"
 
 int main()
 {
-	App app{};
-	app.Run();
+	Utilities::Timer* timer = new Utilities::Timer();
+	App app{timer};
+	while (app.getIsRunning()) {
+		app.Run();
+	}
 }

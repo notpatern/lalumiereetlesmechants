@@ -48,5 +48,12 @@ namespace Utilities {
 			unsigned long elapsed = (unsigned long)((float)elapsedLong / (float)freq);
 			return elapsed;
 		}
+
+		float previousFrameTime{};
+		float getDeltaTime() {
+			float deltaTime = getElapsedSeconds() - previousFrameTime;
+			previousFrameTime = getElapsedSeconds();
+			return deltaTime;
+		}
 	};
 }
