@@ -3,41 +3,44 @@
 #include "../Render/Sprite.h"
 #include "../../Utilities/Vector2.h"
 
-class Entities
-{
-private:
-	Utilities::Vector2<int>* m_position;
-	Sprite* m_sprite;
-public:
-	Entities();
-	~Entities();
+namespace Entity {
+	class Entities
+	{
+	protected:
+		Utilities::Vector2<int>* m_position;
+		Sprite* m_sprite;
 
-	inline Sprite* getSprite() {
-		return m_sprite;
-	}
+	public:
+		Entities();
+		Entities(Utilities::Vector2<int>* position, Sprite* sprite);
+		~Entities();
 
-	inline void setSprite(Sprite* sprite) {
-		m_sprite = sprite;
-	}
+		inline Sprite* getSprite() {
+			return m_sprite;
+		}
 
-	inline Utilities::Vector2<int>* getPosition() {
-		return m_position;
-	}
+		inline void setSprite(Sprite* sprite) {
+			m_sprite = sprite;
+		}
 
-	void setPosition(Utilities::Vector2<int>* newPos) {
-		m_position = newPos;
-	}
+		inline Utilities::Vector2<int>* getPosition() {
+			return m_position;
+		}
 
-	void setPosition(Utilities::Vector2<int>* newPos) {
+		void setPosition(Utilities::Vector2<int>* newPos) {
+			m_position = newPos;
+		}
 
-	}
+		void setPosition(Utilities::Vector2<float>* newPos) {
+			m_position->setX((int)newPos->getX());
+			m_position->setY((int)newPos->getY());
+		}
 
-	void setPosition(Utilities::Vector2<int>* newPos) {
+		void setPosition(int x, int y) {
+			m_position->setX(x);
+			m_position->setY(y);
+		}
 
-	}
-
-	void setPosition(Utilities::Vector2<int>* newPos) {
-
-	}
-};
-
+		virtual void Update() = 0;
+	};
+}

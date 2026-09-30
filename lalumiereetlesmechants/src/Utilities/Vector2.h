@@ -10,7 +10,7 @@ namespace Utilities {
 		inline T getX() {
 			return m_x;
 		}
-		inline T getT() {
+		inline T getY() {
 			return m_y;
 		}
 
