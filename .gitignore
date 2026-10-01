@@ -71,3 +71,8 @@ Testing/
 */.vs
 /.vs
 /lalumiereetlesmechants/x64
+*.vcxproj.user
+.idea/
+.vs/
+*.vcxproj.user
+x64/
