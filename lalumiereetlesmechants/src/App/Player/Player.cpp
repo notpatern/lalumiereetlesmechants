@@ -37,8 +37,8 @@ Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
 
 void Player::Move(float dt, const Utility::Vector2<int>& direction)
 {
-	m_position.x += direction.x * m_speed.x * dt;
-	m_position.y += direction.y * m_speed.y * dt;
+	m_position.x += static_cast<float>(direction.x) * m_speed.x * dt;
+	m_position.y += static_cast<float>(direction.y) * m_speed.y * dt;
 }
 
 
