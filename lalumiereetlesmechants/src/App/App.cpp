@@ -1,7 +1,7 @@
 #include "App.h"
 #include <windows.h>
 
-App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE))
+App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)), m_renderer(m_world)
 {
 	LONG_PTR new_style =  WS_OVERLAPPEDWINDOW | WS_HSCROLL | WS_VSCROLL;
     setConsoleWindowStyle(GWL_STYLE,new_style);
@@ -20,7 +20,7 @@ App::~App()
 }
 
 void App::Run() {
-	
+	m_renderer.Render();
 }
 
 LONG_PTR App::setConsoleWindowStyle(INT n_index, LONG_PTR new_style)

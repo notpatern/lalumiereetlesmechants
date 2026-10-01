@@ -19,19 +19,16 @@ void World::SetArraySizes(const Utility::Vector2<int>& size)
 	m_worldMap = new int[size.x * size.y]();
 }
 
-bool World::CanAccessMap(const Utility::Vector2<int>& position)
+bool CanAccessMap(const World& world, const Utility::Vector2<int>& position)
 {
-	if (position.x >= 0 && position.x < m_size.x && position.y >= 0 && position.y < m_size.y) {
-		return true;
-	}
-	return false;
+	return (position.x >= 0 && position.x < world.m_size.x && position.y >= 0 && position.y < world.m_size.y);
 }
 
-void World::SetMapValue(const Utility::Vector2<int>& position, int value, int* const map)
+void SetMapValue(World& world, const Utility::Vector2<int>& position, int value, int* const map)
 {
-	int oneDX = ((position.x % m_size.x) + m_size.x) % m_size.x;
-	int oneDY = ((position.y % m_size.y) + m_size.y) % m_size.y;
-	int index = oneDY * m_size.x + oneDX;
+	int oneDX = ((position.x % world.m_size.x) + world.m_size.x) % world.m_size.x;
+	int oneDY = ((position.y % world.m_size.y) + world.m_size.y) % world.m_size.y;
+	int index = oneDY * world.m_size.x + oneDX;
 
 	map[index] = value;
 }

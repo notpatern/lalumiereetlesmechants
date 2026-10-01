@@ -16,8 +16,8 @@ public:
 	~World();
 
 	void SetArraySizes(const Utility::Vector2<int>& size);
-	bool CanAccessMap(const Utility::Vector2<int>& position);
-	void SetMapValue(const Utility::Vector2<int>& position, int value, int* const map);
+	friend bool CanAccessMap(const World& world, const Utility::Vector2<int>& position);
+	friend void SetMapValue(World& world, const Utility::Vector2<int>& position, int value, int* const map);
 
 	int* getLightMap() {
 		return m_lightMap;
