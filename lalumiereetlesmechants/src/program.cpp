@@ -5,9 +5,9 @@
 
 int main()
 {
-	Utilities::Timer* timer = new Utilities::Timer();
+	Utility::Timer* timer = new Utility::Timer();
 	App app{timer};
-	while (app.getIsRunning()) {
-		app.Run();
-	}
+	//while (app.getIsRunning()) {
+	//	app.Run();
+	//}
 }

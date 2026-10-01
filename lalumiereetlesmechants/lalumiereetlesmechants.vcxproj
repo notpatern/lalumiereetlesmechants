@@ -135,6 +135,7 @@
     <ClCompile Include="src\App\Entites\Entities.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\program.cpp" />
+    <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App\Manager\GameManager.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\Utilities\Timer.h" />
     <ClInclude Include="src\Utilities\Vector2.h" />
+    <ClInclude Include="src\App\World\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

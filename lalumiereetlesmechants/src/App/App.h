@@ -1,16 +1,28 @@
 #pragma once
 
 #include "../Utilities/Timer.h"
+#include "../Utilities/Vector2.h"
+#include "World/World.h"
 
 class App {
 private:
-	Utilities::Timer* m_timer;
+	Utility::Timer* m_timer;
 	bool m_isRunning{true};
+
+	CONSOLE_SCREEN_BUFFER_INFO m_consoleInfo;
+	HANDLE m_consoleHandle;
+
+	Utility::Vector2<int> m_windowSize{};
+
+	World m_world{};
+
 public:
-	App(Utilities::Timer* timer);
+	App(Utility::Timer* timer);
 	~App();
 
-	void Run();
+	void Run();	
+	LONG_PTR setConsoleWindowStyle(INT n_index, LONG_PTR new_style);
+
 	inline bool getIsRunning() {
 		return m_isRunning;
 	}

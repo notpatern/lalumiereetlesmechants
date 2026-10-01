@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-namespace Utilities {
+namespace Utility {
 	
 	class Timer
 	{

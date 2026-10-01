@@ -1,10 +1,10 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : Entities()
+Enemy::Enemy() : Entity()
 {
 }
 
-Enemy::Enemy(const Utilities::Vector2<int>& position, Sprite* sprite) : Entities(position, sprite)
+Enemy::Enemy(const Utility::Vector2<int>& position, Sprite* sprite) : Entity(position, sprite)
 {
 }
 
