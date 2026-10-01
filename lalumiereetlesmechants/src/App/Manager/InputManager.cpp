@@ -25,7 +25,9 @@ bool InputManager::WasJustPressed(int virtualKey)
 
 void InputManager::Update()
 {
-	m_previous = m_current;
+	int n = std::size(m_current);
+
+	std::copy_n(m_current, n, m_previous);
 	bool focus = ConsoleHasFocus();
 
 	if (focus)
@@ -36,17 +38,16 @@ void InputManager::Update()
 		}
 	}
 
-	m_desiredDirection = ReadMove();
-	std::cout<<m_desiredDirection.x<<" "<<m_desiredDirection.y<< std::endl;
+	m_inputDesiredDirection = ReadMove();
+	std::cout<<m_inputDesiredDirection.x<<" "<<m_inputDesiredDirection.y<< std::endl;
 }
 
-Utility::Vector2<int> InputManager::getDesiredDirection()
+Utility::Vector2<int>& InputManager::getDesiredDirection()
 {
-	// Je voulais faire en inline mais au final non AU CAS OU
-	return m_desiredDirection;
+	return m_inputDesiredDirection;
 }
 
-Utility::Vector2<int> InputManager::ReadMove()
+const Utility::Vector2<int>& InputManager::ReadMove()
 {
 	if (IsDown(VK_UP) || IsDown('Z'))
 	{

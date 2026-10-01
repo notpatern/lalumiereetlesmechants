@@ -11,18 +11,19 @@ public:
 	bool IsDown(int virtualKey);
 	bool WasJustPressed(int virtualKey);
 
+	//TODO : Faire un event et mettre en prive
+
 	void Update();
 
-	inline Utility::Vector2<int> getDesiredDirection();
+	Utility::Vector2<int>& getDesiredDirection();
 
 private:
 	int m_key_count = 256;
-	std::array<bool, 256> m_current{};
-	std::array<bool, 256> m_previous{};
+	bool m_current[256]{};
+	bool m_previous[256]{};
 
-	Utility::Vector2<int> m_desiredDirection{};
-	Utility::Vector2<int> m_currentDirection{};
+	Utility::Vector2<int> m_inputDesiredDirection{};
 
-	Utility::Vector2<int> ReadMove();
+	const Utility::Vector2<int>& ReadMove();
 };
 
