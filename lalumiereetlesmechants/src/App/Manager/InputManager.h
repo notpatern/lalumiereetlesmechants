@@ -1,29 +1,19 @@
 #pragma once
 #include <array>
-#include "../../Utilities/Vector2.h"
 
 class InputManager
 {
 public:
-	bool IsKeyDown(int virtualKey);;
-
-	bool ConsoleHasFocus();
-	bool IsDown(int virtualKey);
-	bool WasJustPressed(int virtualKey);
-
-	//TODO : Faire un event et mettre en prive
-
 	void Update();
-
-	Utility::Vector2<int>& getDesiredDirection();
+	bool IsDown(int virtualKey) const;
+	bool WasJustPressed(int virtualKey) const;
 
 private:
-	int m_key_count = 256;
-	bool m_current[256]{};
-	bool m_previous[256]{};
+	static constexpr int KEY_COUNT = 256;
 
-	Utility::Vector2<int> m_inputDesiredDirection{};
+	std::array<bool, KEY_COUNT> m_currentKeys{};
+	std::array<bool, KEY_COUNT> m_previousKeys{};
 
-	const Utility::Vector2<int>& ReadMove();
+	static bool ReadKeyFromWindows(int virtualKey);
+	static bool ConsoleHasFocus();
 };
-

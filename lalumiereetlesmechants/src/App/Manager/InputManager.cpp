@@ -1,9 +1,9 @@
 #include "InputManager.h"
-
-#include <iostream>
 #include <windows.h>
 
-bool InputManager::IsKeyDown(int virtualKey)
+// GetAsyncKeyState renvoie 16 bits
+// le bit 0x8000 vaut 1 si la touche est enfoncee en ce moment
+bool InputManager::ReadKeyFromWindows(int virtualKey)
 {
 	return (GetAsyncKeyState(virtualKey) & 0x8000) != 0;
 }
@@ -13,57 +13,32 @@ bool InputManager::ConsoleHasFocus()
 	return GetForegroundWindow() == GetAncestor(GetConsoleWindow(), GA_ROOTOWNER);
 }
 
-bool InputManager::IsDown(int virtualKey)
+bool InputManager::IsDown(int virtualKey) const
 {
-	return virtualKey >= 0 && virtualKey < m_key_count && m_current[virtualKey];
+	return virtualKey >= 0 && virtualKey < KEY_COUNT && m_currentKeys[virtualKey];
 }
 
-bool InputManager::WasJustPressed(int virtualKey)
+bool InputManager::WasJustPressed(int virtualKey) const
 {
-	return IsDown(virtualKey) && !m_previous[virtualKey];
+	return IsDown(virtualKey) && !m_previousKeys[virtualKey];
 }
 
 void InputManager::Update()
 {
-	int n = std::size(m_current);
+	m_previousKeys = m_currentKeys;
 
-	std::copy_n(m_current, n, m_previous);
-	bool focus = ConsoleHasFocus();
-
-	if (focus)
+	if (ConsoleHasFocus())
 	{
-		for (int key = 0; key < m_key_count; ++key)
+		//Ici je lis 256 touches, donc un peu couteux
+		//J'aurais pu enregistrer que les touches de notre jeu
+		//Mais je prefere la reutilisabilite de la classe a la perf ici
+		for (int key = 0; key < KEY_COUNT; ++key)
 		{
-			m_current[key] = IsKeyDown(key);
+			m_currentKeys[key] = ReadKeyFromWindows(key);
 		}
 	}
-
-	m_inputDesiredDirection = ReadMove();
-	std::cout<<m_inputDesiredDirection.x<<" "<<m_inputDesiredDirection.y<< std::endl;
-}
-
-Utility::Vector2<int>& InputManager::getDesiredDirection()
-{
-	return m_inputDesiredDirection;
-}
-
-const Utility::Vector2<int>& InputManager::ReadMove()
-{
-	if (IsDown(VK_UP) || IsDown('Z'))
+	else
 	{
-		return { 0, -1 };
+		m_currentKeys.fill(false);
 	}
-	if (IsDown(VK_DOWN) || IsDown('S'))
-	{
-		return { 0, 1 };
-	}
-	if (IsDown(VK_LEFT) || IsDown('Q') || IsDown('A'))
-	{
-		return { -1, 0 };
-	}
-	if (IsDown(VK_RIGHT) || IsDown('D'))
-	{
-		return { 1, 0 };
-	}
-	return {0,0};
 }
