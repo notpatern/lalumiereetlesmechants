@@ -8,9 +8,10 @@
 class App {
 private:
 	Utility::Timer* m_timer;
-	bool m_isRunning{true};
 
 	CONSOLE_SCREEN_BUFFER_INFO m_consoleInfo;
+	bool m_isRunning{true};
+	char padding;
 	HANDLE m_consoleHandle;
 
 	Utility::Vector2<int> m_windowSize{};

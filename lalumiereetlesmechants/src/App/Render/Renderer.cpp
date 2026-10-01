@@ -4,11 +4,9 @@
 
 Renderer::Renderer()
 {
-	
-	m_world = *() // truc dangereux
 }
 
-Renderer::Renderer(World& world) : m_world(world)
+Renderer::Renderer(World* world) : m_world(world)
 {
 }
 
@@ -30,12 +28,7 @@ void Renderer::Render()
 	ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);
 
-	buffer[5][10].Char.AsciiChar = 'H';
-	buffer[5][10].Attributes = 0x0E;
-	buffer[5][11].Char.AsciiChar = 'i';
-	buffer[5][11].Attributes = 0x0B;
-	buffer[5][12].Char.AsciiChar = '!';
-	buffer[5][12].Attributes = 0x0A;
+
 
 	WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);

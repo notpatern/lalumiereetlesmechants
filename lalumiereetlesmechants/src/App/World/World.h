@@ -7,7 +7,7 @@ class World
 private:
 	Utility::Vector2<int> m_size;
 	int* m_lightMap;
-	int* m_worldMap;
+	char* m_worldMap;
 
 public:
 	explicit World(); 
@@ -23,7 +23,7 @@ public:
 		return m_lightMap;
 	}
 
-	int* getWorldMap() {
+	char* getWorldMap() {
 		return m_worldMap;
 	}
 
