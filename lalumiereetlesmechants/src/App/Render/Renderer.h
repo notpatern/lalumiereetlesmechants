@@ -1,16 +1,28 @@
 #pragma once
 
 #include "../World/World.h"
+#include "Sprite.h"
+#include <vector>
 
 class Renderer
 {
+	static constexpr short SCREEN_WIDTH = 40;
+	static constexpr short SCREEN_HEIGHT = 40;
 private:
-	World& m_world;
+	World* m_world;
+	std::vector<Sprite*> m_renderQueue{};
 
 public:
-	explicit Renderer(World& world);
+	Renderer();
+	Renderer(World* world);
 	~Renderer();
 
+	static Renderer& getInstance() {
+        static Renderer instance;
+        return instance;
+    }
+
 	void Render();
+	void AddToRenderQueue(Sprite* sprite);
 };
 

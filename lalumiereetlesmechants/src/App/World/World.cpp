@@ -1,4 +1,5 @@
 #include "World.h"
+#include <iostream>
 
 World::World() : m_size(Utility::Vector2<int>::zero())
 {
@@ -16,7 +17,11 @@ void World::SetArraySizes(const Utility::Vector2<int>& size)
 		m_size = size;
 	}
 	m_lightMap = new int[size.x * size.y]();
-	m_worldMap = new int[size.x * size.y]();
+	m_worldMap = new char[size.x * size.y]();
+	for (int i = 0; i++, i < size.x * size.y;) 
+	{
+		m_worldMap[i] = 0;
+	}
 }
 
 bool CanAccessMap(const World& world, const Utility::Vector2<int>& position)
