@@ -139,6 +139,7 @@
     <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\Entites\IDamageable.h" />
     <ClInclude Include="src\App\Manager\GameManager.h" />
     <ClInclude Include="src\App\Manager\InputManager.h" />
     <ClInclude Include="src\App\Manager\SoundManager.h" />
