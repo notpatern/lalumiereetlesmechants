@@ -15,7 +15,7 @@ void Player::Update(float dt, const InputManager& input)
 	m_shotCountdown.Update(dt);
 
 	Move(dt, ReadDirection(input));
-	Shoot(dt, ReadShoot(input));
+	Shoot(ReadShoot(input));
 
 }
 
@@ -54,13 +54,13 @@ bool Player::ReadShoot(const InputManager& input)
 	return (input.IsDown(VK_SPACE) || input.IsDown('E'));
 }
 
-void Player::Shoot(float deltaTime, bool shoot)
+void Player::Shoot(bool shoot)
 {
 	if (shoot && m_shotCountdown.IsFinished() && m_currentMissile > 0)
 	{
 		if (Missile* missile = m_missilePool->Acquire())
 		{
-			missile->Launch(m_position, {45.f, 0.f});
+			missile->Launch(m_position, {0.f, 45.f});
 			m_shotCountdown.Start(m_shootCooldown);
 			--m_currentMissile;
 			std::cout << "Shoot, remaining bullets : " << m_currentMissile <<  std::endl;

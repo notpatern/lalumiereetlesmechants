@@ -33,5 +33,5 @@ private:
 	void Move(float dt, const Utility::Vector2<int>& direction);
 
 	static bool ReadShoot(const InputManager& input);
-	void Shoot(float deltaTime, bool shoot);
+	void Shoot(bool shoot);
 };
