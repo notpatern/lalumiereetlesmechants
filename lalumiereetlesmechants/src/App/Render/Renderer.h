@@ -6,7 +6,7 @@
 
 class Renderer
 {
-	static constexpr short SCREEN_WIDTH = 40;
+	static constexpr short SCREEN_WIDTH = 80;
 	static constexpr short SCREEN_HEIGHT = 40;
 private:
 	World* m_world;
@@ -24,5 +24,6 @@ public:
 
 	void Render();
 	void AddToRenderQueue(Sprite* sprite);
+	void RemoveFromRenderQueue(Sprite* sprite);
 };
 
