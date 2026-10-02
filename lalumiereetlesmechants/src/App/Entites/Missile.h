@@ -30,5 +30,7 @@ private:
 	Utility::Countdown m_lifetime;
 
 	bool m_isActive;
+
+	void Explode();
 };
 

@@ -1,5 +1,7 @@
 #include "Missile.h"
 
+#include "IDamageable.h"
+
 Missile::Missile() : m_isActive(false)
 {
 
@@ -35,6 +37,11 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 void Missile::Deactivate()
 {
 	m_isActive = false;
+}
+
+void Missile::Explode()
+{
+	Deactivate();
 }
 
 
