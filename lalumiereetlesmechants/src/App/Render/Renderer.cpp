@@ -28,11 +28,28 @@ void Renderer::Render()
 	ReadConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);
 
+	for (int x = 0; x < SCREEN_WIDTH; ++x)
+	{
+		for (int y = 0; y < SCREEN_HEIGHT; ++y)
+		{
+			if (CanAccessMap(*m_world, Utility::Vector2<int>(x, y)))
+			{
+				int lightValue = GetLightMapValue(*m_world, { x, y });
+				char worldChar = (char)GetWorldMapValue(*m_world, { x, y });
 
+				buffer[y][x].Char.AsciiChar = worldChar;
+				buffer[y][x].Attributes = 0xFFFFFF;
+			}
+			else
+			{
+				buffer[y][x].Char.AsciiChar = ' ';
+				buffer[y][x].Attributes = 0;
+			}
+		}
+	}
 
 	WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);
-
 
 	for (Sprite* currentSprite : m_renderQueue) {
 		currentSprite->Render();
@@ -42,4 +59,9 @@ void Renderer::Render()
 void Renderer::AddToRenderQueue(Sprite* sprite)
 {
 	m_renderQueue.push_back(sprite);
+}
+
+void Renderer::RemoveFromRenderQueue(Sprite* sprite)
+{
+	m_renderQueue.erase(std::remove(m_renderQueue.begin(), m_renderQueue.end(), sprite), m_renderQueue.end());
 }
