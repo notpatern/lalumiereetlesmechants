@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,6 +151,7 @@
     <ClInclude Include="src\App\Entites\Entities.h" />
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\Utilities\Countdown.h" />
+    <ClInclude Include="src\Utilities\Pool.h" />
     <ClInclude Include="src\Utilities\Timer.h" />
     <ClInclude Include="src\Utilities\Vector2.h" />
     <ClInclude Include="src\App\World\World.h" />
