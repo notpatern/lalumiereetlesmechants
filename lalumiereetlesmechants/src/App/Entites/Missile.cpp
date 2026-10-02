@@ -1,10 +1,33 @@
 #include "Missile.h"
 
-#include "IDamageable.h"
-
-Missile::Missile() : m_isActive(false)
+Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
 {
+}
 
+void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage)
+{
+	m_lifetime.Start(LIFETIME);
+	m_position = position;
+	m_velocity = velocity;
+	m_team = team;
+	m_damage = damage;
+
+	m_isActive = true;
+}
+
+DamageInfos Missile::getDamageInfos() const
+{
+	return { .amount = m_damage, .source = m_team, .position = m_position };
+}
+
+void Missile::Deactivate()
+{
+	m_isActive = false;
+}
+
+void Missile::Explode()
+{
+	Deactivate();
 }
 
 void Missile::Update(float dt)
@@ -22,26 +45,5 @@ void Missile::Update(float dt)
 	{
 		Deactivate();
 	}
-
 }
-
-void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity)
-{
-	m_lifetime.Start(LIFETIME);
-	m_position = position;
-	m_velocity = velocity;
-
-	m_isActive = true;
-}
-
-void Missile::Deactivate()
-{
-	m_isActive = false;
-}
-
-void Missile::Explode()
-{
-	Deactivate();
-}
-
 

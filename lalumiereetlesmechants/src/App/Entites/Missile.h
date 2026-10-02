@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Vector2.h"
+#include "../Gameplay/DamageInfos.h"
 
 class Sprite; //TODO : DEMANDER FORWARD DECLARATION PROF
 
@@ -17,7 +18,11 @@ public:
 
 	bool getIsActive() const { return m_isActive; }
 
-	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity);
+	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage);
+	void Explode();
+
+	Team getTeam() const { return m_team; }
+	DamageInfos getDamageInfos() const;
 	void Deactivate();
 
 private:
@@ -29,8 +34,10 @@ private:
 	static constexpr float LIFETIME = 2.f;
 	Utility::Countdown m_lifetime;
 
+	Team m_team;
+	int m_damage;
+
 	bool m_isActive;
 
-	void Explode();
 };
 
