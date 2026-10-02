@@ -10,7 +10,7 @@
 class Player
 {
 public:
-	explicit Player(const Utility::Vector2<float>& startPosition, Pool<Missile>& missiles);
+	explicit Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles);
 
 	void Update(float dt, const InputManager& input);
 
@@ -22,7 +22,7 @@ private:
 	Utility::Vector2<float> m_position;
 	Utility::Vector2<float> m_speed{ 30.f, 15.f };
 
-	Pool<Missile>* m_missilePool;
+	Utility::Pool<Missile>* m_missilePool;
 	int m_MaxMissiles{10};
 	int m_currentMissile{m_MaxMissiles};
 

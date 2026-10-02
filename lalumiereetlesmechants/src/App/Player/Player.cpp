@@ -5,7 +5,7 @@
 #include <windows.h>
 
 
-Player::Player(const Utility::Vector2<float>& startPosition, Pool<Missile>& missiles) : m_position(startPosition), m_missilePool(&missiles)
+Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles) : m_position(startPosition), m_missilePool(&missiles)
 {
 
 }

@@ -49,6 +49,7 @@ void App::Run() {
 
 		const std::string title = "x = " + std::to_string(position.x) + "   y = " + std::to_string(position.y);
 		SetConsoleTitleA(title.c_str());
+
 	}
 	// FON TEST
 

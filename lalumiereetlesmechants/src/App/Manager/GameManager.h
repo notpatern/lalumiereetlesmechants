@@ -8,7 +8,7 @@ class GameManager
 public:
 	GameManager();
 
-	Pool<Missile> m_missilesPool;
+	Utility::Pool<Missile> m_missilesPool;
 
 	void Update(float deltaTime);
 };
