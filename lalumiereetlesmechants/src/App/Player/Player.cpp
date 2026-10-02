@@ -1,7 +1,4 @@
 #include "Player.h"
-#include <algorithm>
-#include <iostream>
-#include <ostream>
 #include <windows.h>
 
 
@@ -12,11 +9,13 @@ Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missi
 
 void Player::Update(float dt, const InputManager& input)
 {
-	m_shotCountdown.Update(dt);
+	m_fireCooldown.Update(dt);
 
 	Move(dt, ReadDirection(input));
-	Shoot(ReadShoot(input));
-
+	if (ReadShoot(input))
+	{
+		TryShoot();
+	}
 }
 
 Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
@@ -54,16 +53,17 @@ bool Player::ReadShoot(const InputManager& input)
 	return (input.IsDown(VK_SPACE) || input.IsDown('E'));
 }
 
-void Player::Shoot(bool shoot)
+void Player::TryShoot()
 {
-	if (shoot && m_shotCountdown.IsFinished() && m_currentMissile > 0)
+	if (!m_fireCooldown.IsFinished() || m_remainingMissiles <= 0)
 	{
-		if (Missile* missile = m_missilePool->Acquire())
-		{
-			missile->Launch(m_position, {0.f, 45.f});
-			m_shotCountdown.Start(m_shootCooldown);
-			--m_currentMissile;
-			std::cout << "Shoot, remaining bullets : " << m_currentMissile <<  std::endl;
-		}
+		return;
+	}
+
+	if (Missile* missile = m_missilePool->Acquire())
+	{
+		missile->Launch({ m_position.x, m_position.y - 1.f }, { 0.f, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
+		m_fireCooldown.Start(m_fireDelay);
+		--m_remainingMissiles;
 	}
 }

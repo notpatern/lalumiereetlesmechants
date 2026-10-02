@@ -22,16 +22,19 @@ private:
 	Utility::Vector2<float> m_position;
 	Utility::Vector2<float> m_speed{ 30.f, 15.f };
 
-	Utility::Pool<Missile>* m_missilePool;
-	int m_MaxMissiles{10};
-	int m_currentMissile{m_MaxMissiles};
+	static constexpr float MISSILE_SPEED = 45.f;
+	static constexpr int MISSILE_DAMAGE = 1;
 
-	Utility::Countdown m_shotCountdown;
-	float m_shootCooldown{1.0f};
+	Utility::Pool<Missile>* m_missilePool;
+	int m_maxMissiles{10};
+	int m_remainingMissiles{m_maxMissiles};
+
+	Utility::Countdown m_fireCooldown;
+	float m_fireDelay{1.0f};
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
 	void Move(float dt, const Utility::Vector2<int>& direction);
 
 	static bool ReadShoot(const InputManager& input);
-	void Shoot(bool shoot);
+	void TryShoot();
 };
