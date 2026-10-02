@@ -13,7 +13,7 @@ public:
 	void Update() override;
 
 	//IDamageable
-	void TakeDamage(const int damages) override;
+	void TakeDamage(const DamageInfos damageInfos) override;
 	int GetHealth() const override {return m_health;}
 	int GetMaxHealth() const override {return m_maxHealth;}
 	bool IsDead() const override {return m_isDead;}

@@ -20,19 +20,20 @@ void Enemy::Update()
 
 }
 
-void Enemy::TakeDamage(const int damages)
+void Enemy::TakeDamage(const DamageInfos damageInfos)
 {
-	if (m_isDead || damages <= 0)
+	if (m_isDead || damageInfos.amount <= 0)
 	{
 		return;
 	}
 
-	m_health -= damages;
+	m_health -= damageInfos.amount;
 	m_health = std::max(m_health, 0);
 	if (m_health <= 0)
 	{
 		Die();
 	}
+
 }
 
 void Enemy::Die()
