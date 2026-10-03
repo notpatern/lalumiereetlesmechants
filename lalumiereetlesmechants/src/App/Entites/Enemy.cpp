@@ -1,12 +1,12 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : m_health(MAX_HEALTH), m_isActive(false)
+Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_isActive(false)
 {
 }
 
 void Enemy::Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity)
 {
-	m_position = position;
+	m_currentPosition = position;
 	m_velocity = velocity;
 	m_health.Reset();
 	m_hitFlash.Start(0.f);
@@ -20,8 +20,8 @@ void Enemy::Update(float dt)
 		return;
 	}
 
-	m_position.x += m_velocity.x * dt;
-	m_position.y += m_velocity.y * dt;
+	m_currentPosition.x += m_velocity.x * dt;
+	m_currentPosition.y += m_velocity.y * dt;
 
 	m_hitFlash.Update(dt);
 }
