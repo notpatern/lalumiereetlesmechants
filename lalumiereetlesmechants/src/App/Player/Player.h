@@ -30,7 +30,7 @@ private:
 	int m_remainingMissiles{m_maxMissiles};
 
 	Utility::Countdown m_fireCooldown;
-	float m_fireDelay{1.0f};
+	float m_fireDelay{0.25f};
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
 	void Move(float dt, const Utility::Vector2<int>& direction);
