@@ -4,6 +4,7 @@
 #include "../../Utilities/Pool.h"
 #include "../Entites/Enemy.h"
 #include "../Gameplay/Hittable.h"
+#include "../Gameplay/WaveSpawner.h"
 #include "../Player/Player.h"
 
 
@@ -11,6 +12,8 @@ class GameManager
 {
 public:
 	GameManager();
+	GameManager(const GameManager&) = delete;
+	GameManager& operator=(GameManager&) = delete;
 
 	Utility::Pool<Missile> m_missilesPool;
 	Utility::Pool<Enemy> m_enemiesPool;
@@ -35,13 +38,12 @@ private:
 	static constexpr float PLAYER_START_Y = 20.f;
 
 	Player m_player;
+	WaveSpawner m_waveSpawner;
 
 	void DeactivateOutOfArea();
 
 	template <typename T>
 	void DeactivateOutside(Utility::Pool<T>& pool, const Collision::CellRect& area);
-
-	void SpawnTestEnemies();
 
 	template <Hittable Target>
 	void CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam);

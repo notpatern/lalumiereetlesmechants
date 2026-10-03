@@ -1,16 +1,17 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_isActive(false)
+Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
 {
 }
 
-void Enemy::Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity)
+void Enemy::Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, IEnemyObserver* observer)
 {
 	m_currentPosition = position;
 	m_velocity = velocity;
 	m_health.Reset();
 	m_hitFlash.Start(0.f);
 	m_isActive = true;
+	m_observer = observer;
 }
 
 void Enemy::Update(float dt)
@@ -28,7 +29,7 @@ void Enemy::Update(float dt)
 
 void Enemy::Deactivate()
 {
-	m_isActive = false;
+	RemoveFromPlay(EnemyRemovalReason::Escaped);
 }
 
 void Enemy::TakeDamage(const DamageInfos& damage)
@@ -50,5 +51,22 @@ void Enemy::TakeDamage(const DamageInfos& damage)
 
 void Enemy::Die()
 {
-	Deactivate();
+	RemoveFromPlay(EnemyRemovalReason::Killed);
+}
+
+void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
+{
+	if (!m_isActive)
+	{
+		return;
+	}
+
+	m_isActive = false;
+
+	if (m_observer)
+	{
+		m_observer->OnEnemyRemoved({.reason = reason, .position = m_currentPosition});
+		m_observer = nullptr;
+	}
+
 }

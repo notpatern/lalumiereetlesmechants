@@ -1,13 +1,13 @@
 #include "GameManager.h"
-
 #include "../Gameplay/Collision.h"
+#include "../Gameplay/WaveData.h"
 
 GameManager::GameManager() :
 	m_missilesPool{ INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE },
 	m_enemiesPool{ INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE },
-	m_player{ Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool }
+	m_player{ Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool },
+	m_waveSpawner{ WaveData::GetWaves(), m_enemiesPool }
 {
-	SpawnTestEnemies();
 }
 void GameManager::Update(float deltaTime, const InputManager& inputManager)
 {
@@ -17,6 +17,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	}
 
 	m_player.Update(deltaTime, inputManager);
+	m_waveSpawner.Update(deltaTime);
 	m_missilesPool.Update(deltaTime);
 	m_enemiesPool.Update(deltaTime);
 
@@ -33,22 +34,6 @@ void GameManager::DeactivateOutOfArea()
 
 	DeactivateOutside(m_enemiesPool, area);
 	DeactivateOutside(m_missilesPool, area);
-}
-
-void GameManager::SpawnTestEnemies()
-{
-	if (Enemy* enemy = m_enemiesPool.Acquire())
-	{
-		enemy->Spawn({ 30, 5}, {0,0});
-	}
-	if (Enemy* enemy = m_enemiesPool.Acquire())
-	{
-		enemy->Spawn({ 40, 5}, {0,0});
-	}
-	if (Enemy* enemy = m_enemiesPool.Acquire())
-	{
-		enemy->Spawn({ 50, 5}, {0,0});
-	}
 }
 
 template <typename T>

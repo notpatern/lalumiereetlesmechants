@@ -129,6 +129,8 @@
   <ItemGroup>
     <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Health.cpp" />
+    <ClCompile Include="src\App\Gameplay\WaveData.cpp" />
+    <ClCompile Include="src\App\Gameplay\WaveSpawner.cpp" />
     <ClCompile Include="src\App\Manager\GameManager.cpp" />
     <ClCompile Include="src\App\Manager\InputManager.cpp" />
     <ClCompile Include="src\App\Manager\SoundManager.cpp" />
@@ -149,6 +151,10 @@
     <ClInclude Include="src\App\Gameplay\Health.h" />
     <ClInclude Include="src\App\Gameplay\Hittable.h" />
     <ClInclude Include="src\App\Gameplay\IDamageable.h" />
+    <ClInclude Include="src\App\Gameplay\IEnemyObserver.h" />
+    <ClInclude Include="src\App\Gameplay\Wave.h" />
+    <ClInclude Include="src\App\Gameplay\WaveData.h" />
+    <ClInclude Include="src\App\Gameplay\WaveSpawner.h" />
     <ClInclude Include="src\App\Manager\GameManager.h" />
     <ClInclude Include="src\App\Manager\InputManager.h" />
     <ClInclude Include="src\App\Manager\SoundManager.h" />

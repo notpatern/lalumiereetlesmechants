@@ -4,13 +4,14 @@
 #include "../Gameplay/Collision.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
+#include "../Gameplay/IEnemyObserver.h"
 
 class Enemy : public IDamageable
 {
 public:
 	Enemy();
 
-	void Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity);
+	void Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, IEnemyObserver* observer);
 	void Update(float dt);
 	void Deactivate();
 
@@ -37,7 +38,11 @@ private:
 	Collision::Hitbox m_hitbox;
 	Utility::Countdown m_hitFlash;
 
+	IEnemyObserver* m_observer;
+
 	bool m_isActive;
 
 	void Die();
+
+	void RemoveFromPlay(EnemyRemovalReason reason);
 };
