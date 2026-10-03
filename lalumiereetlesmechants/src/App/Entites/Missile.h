@@ -13,7 +13,8 @@ public:
 	Missile();
 
 	Sprite* getSprite() const { return m_sprite; }
-	Utility::Vector2<float> getPosition() const { return m_position; }
+	Utility::Vector2<float> getCurrentPosition() const { return m_currentPosition; }
+	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 
 	void Update(float dt);
 
@@ -31,7 +32,8 @@ public:
 private:
 	Sprite* m_sprite = nullptr;
 
-	Utility::Vector2<float> m_position;
+	Utility::Vector2<float> m_currentPosition;
+	Utility::Vector2<float> m_lastPosition;
 	Utility::Vector2<float> m_velocity;
 
 	static constexpr float LIFETIME = 2.f;
