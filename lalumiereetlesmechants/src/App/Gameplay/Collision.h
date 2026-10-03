@@ -16,7 +16,7 @@ namespace Collision
 
 	struct Hitbox
 	{
-		Utility::Vector2<int> offset;        // decalage depuis la position (qui est coin haut gauche du sprite)
+		Utility::Vector2<int> offset{0,0};        // decalage depuis la position (qui est coin haut gauche du sprite)
 		Utility::Vector2<int> size{ 1, 1 };
 
 		CellRect At(const Utility::Vector2<float>& position) const;
