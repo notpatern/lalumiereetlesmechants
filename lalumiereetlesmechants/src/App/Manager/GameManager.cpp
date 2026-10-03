@@ -12,7 +12,7 @@ void GameManager::Update(float deltaTime)
 	m_missilesPool.Update(deltaTime);
 	m_enemiesPool.Update(deltaTime);
 
-	CheckMissilesHits();
+	CheckMissilesHits(m_enemiesPool, Team::Enemy);
 }
 
 void GameManager::SpawnTestEnemies()
@@ -31,23 +31,26 @@ void GameManager::SpawnTestEnemies()
 	}
 }
 
-void GameManager::CheckMissilesHits()
+template <Hittable Target>
+void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam)
 {
 	for (Missile& missile : m_missilesPool.getObjects())
 	{
-		if (!missile.getIsActive() || missile.getTeam() == Team::Enemy)
+		if (!missile.getIsActive() || missile.getTeam() == targetTeam)
 		{
 			continue;
 		}
-		for (Enemy& enemy : m_enemiesPool.getObjects())
+
+		for (Target& target : targets.getObjects())
 		{
-			if (!enemy.getIsActive())
+			if (!target.getIsActive())
 			{
 				continue;
 			}
-			if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), enemy.getHitboxRect()))
+
+			if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), target.getHitboxRect()))
 			{
-				missile.OnHit(enemy);
+				missile.OnHit(target);
 				break;
 			}
 		}

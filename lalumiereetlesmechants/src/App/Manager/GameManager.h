@@ -2,6 +2,7 @@
 #include "../Entites/Missile.h"
 #include "../../Utilities/Pool.h"
 #include "../Entites/Enemy.h"
+#include "../Gameplay/Hittable.h"
 
 
 class GameManager
@@ -22,6 +23,6 @@ private:
 
 	void SpawnTestEnemies();
 
-	void CheckMissilesHits();
+	template <Hittable Target>
+	void CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam);
 };
-
