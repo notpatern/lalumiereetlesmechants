@@ -2,6 +2,7 @@
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/DamageInfos.h"
+#include "../Gameplay/IDamageable.h"
 
 class Sprite; //TODO : DEMANDER FORWARD DECLARATION PROF
 
@@ -20,6 +21,8 @@ public:
 
 	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage);
 	void Explode();
+
+	void OnHit(IDamageable& damageable);
 
 	Team getTeam() const { return m_team; }
 	DamageInfos getDamageInfos() const;

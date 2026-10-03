@@ -30,6 +30,12 @@ void Missile::Explode()
 	Deactivate();
 }
 
+void Missile::OnHit(IDamageable& damageable)
+{
+	damageable.TakeDamage(getDamageInfos());
+	Explode();
+}
+
 void Missile::Update(float dt)
 {
 	if (!m_isActive)
