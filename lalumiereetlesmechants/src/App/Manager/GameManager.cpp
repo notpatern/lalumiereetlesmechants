@@ -45,7 +45,7 @@ void GameManager::CheckMissilesHits()
 			{
 				continue;
 			}
-			if (Collision::IsSameCell(missile.getPosition(), enemy.getPosition()))
+			if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), enemy.getHitboxRect()))
 			{
 				missile.OnHit(enemy);
 				break;
