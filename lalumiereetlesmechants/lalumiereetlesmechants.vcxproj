@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Health.cpp" />
     <ClCompile Include="src\App\Manager\GameManager.cpp" />
     <ClCompile Include="src\App\Manager\InputManager.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\Gameplay\Collision.h" />
     <ClInclude Include="src\App\Gameplay\DamageInfos.h" />
     <ClInclude Include="src\App\Gameplay\Health.h" />
     <ClInclude Include="src\App\Gameplay\IDamageable.h" />
