@@ -17,7 +17,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 		deltaTime = MAX_DELTA_TIME;
 	}
 
-	m_player.Update(deltaTime, inputManager);
+	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
 	m_missilesPool.Update(deltaTime);
 	m_enemiesPool.Update(deltaTime);

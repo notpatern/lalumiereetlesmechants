@@ -15,7 +15,7 @@ class Player : public IDamageable
 public:
 	explicit Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles);
 
-	void Update(float dt, const InputManager& input);
+	void Update(float dt, const InputManager& input, const Collision::CellRect& bounds);
 
 	Utility::Vector2<float> getPosition() const { return m_position; }
 	Sprite* getSprite() const { return m_sprite; }
@@ -58,7 +58,8 @@ private:
 	Utility::Countdown m_invincibility;
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
-	void Move(float dt, const Utility::Vector2<int>& direction);
+	void Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds);
+	void TryMoveTo(const Utility::Vector2<float>& target, const Collision::CellRect& bounds);
 
 	static bool ReadShoot(const InputManager& input);
 	void TryShoot();

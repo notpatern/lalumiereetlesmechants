@@ -8,7 +8,7 @@ Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missi
 
 }
 
-void Player::Update(float dt, const InputManager& input)
+void Player::Update(float dt, const InputManager& input, const Collision::CellRect& bounds)
 {
 	if (IsDead())
 	{
@@ -18,7 +18,7 @@ void Player::Update(float dt, const InputManager& input)
 	m_fireCooldown.Update(dt);
 	m_invincibility.Update(dt);
 
-	Move(dt, ReadDirection(input));
+	Move(dt, ReadDirection(input), bounds);
 	if (ReadShoot(input))
 	{
 		TryShoot();
@@ -65,10 +65,21 @@ Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
 	return direction;
 }
 
-void Player::Move(float dt, const Utility::Vector2<int>& direction)
+void Player::Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds)
 {
-	m_position.x += static_cast<float>(direction.x) * m_speed.x * dt;
-	m_position.y += static_cast<float>(direction.y) * m_speed.y * dt;
+	const float stepX = static_cast<float>(direction.x) * m_speed.x * dt;
+	const float stepY = static_cast<float>(direction.y) * m_speed.y * dt;
+
+	TryMoveTo({ m_position.x + stepX, m_position.y }, bounds);
+	TryMoveTo({ m_position.x, m_position.y + stepY }, bounds);
+}
+
+void Player::TryMoveTo(const Utility::Vector2<float>& target, const Collision::CellRect& bounds)
+{
+	if (bounds.Contains(m_hitbox.At(target)))
+	{
+		m_position = target;
+	}
 }
 
 bool Player::ReadShoot(const InputManager& input)
