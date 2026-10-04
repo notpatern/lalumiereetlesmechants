@@ -25,7 +25,7 @@ public:
 
 	Team getTeam() const { return m_team; }
 	DamageInfos getDamageInfos() const;
-	void Deactivate();
+	void OnLeftPlayArea();
 
 private:
 	Sprite* m_sprite = nullptr;
@@ -41,6 +41,8 @@ private:
 	int m_damage;
 
 	bool m_isActive;
+
+	void Deactivate();
 
 };
 

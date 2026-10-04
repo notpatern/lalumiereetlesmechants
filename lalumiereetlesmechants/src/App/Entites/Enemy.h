@@ -13,7 +13,7 @@ public:
 
 	void Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, IEnemyObserver* observer);
 	void Update(float dt);
-	void Deactivate();
+	void OnLeftPlayArea();
 
 	// IDamageable
 	void TakeDamage(const DamageInfos& damage) override;

@@ -24,18 +24,18 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 
 	CheckMissilesHits(m_enemiesPool, Team::Enemy);
 	CheckPlayerContact();
-	DeactivateOutOfArea();
+	CheckPlayAreaExits();
 }
 
-void GameManager::DeactivateOutOfArea()
+void GameManager::CheckPlayAreaExits()
 {
 	const Collision::CellRect area{
 		{-OFFSCREEN_MARGIN, -OFFSCREEN_MARGIN},
 		{PLAY_AREA_WIDTH - 1 + OFFSCREEN_MARGIN, PLAY_AREA_HEIGHT - 1 + OFFSCREEN_MARGIN}
 	};
 
-	DeactivateOutside(m_enemiesPool, area);
-	DeactivateOutside(m_missilesPool, area);
+	CheckExits(m_enemiesPool, area);
+	CheckExits(m_missilesPool, area);
 }
 
 void GameManager::CheckPlayerContact()
@@ -58,7 +58,7 @@ void GameManager::CheckPlayerContact()
 }
 
 template <typename T>
-void GameManager::DeactivateOutside(Utility::Pool<T>& pool, const Collision::CellRect& area)
+void GameManager::CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& area)
 {
 	pool.ForEachActive([&](T& object)
 	{

@@ -39,10 +39,10 @@ private:
 	Player m_player;
 	WaveSpawner m_waveSpawner;
 
-	void DeactivateOutOfArea();
+	void CheckPlayAreaExits();
 
 	template <typename T>
-	void DeactivateOutside(Utility::Pool<T>& pool, const Collision::CellRect& area);
+	void CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& area);
 
 	template <Hittable Target>
 	void CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam);

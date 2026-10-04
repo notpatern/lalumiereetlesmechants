@@ -27,7 +27,7 @@ void Enemy::Update(float dt)
 	m_hitFlash.Update(dt);
 }
 
-void Enemy::Deactivate()
+void Enemy::OnLeftPlayArea()
 {
 	RemoveFromPlay(EnemyRemovalReason::Escaped);
 }

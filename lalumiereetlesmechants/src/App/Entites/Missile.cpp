@@ -21,6 +21,11 @@ DamageInfos Missile::getDamageInfos() const
 	return { .amount = m_damage, .source = m_team, .position = m_currentPosition };
 }
 
+void Missile::OnLeftPlayArea()
+{
+	Deactivate();
+}
+
 void Missile::Deactivate()
 {
 	m_isActive = false;
