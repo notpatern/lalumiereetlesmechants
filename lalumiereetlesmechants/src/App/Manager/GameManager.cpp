@@ -22,7 +22,8 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	m_missilesPool.Update(deltaTime);
 	m_enemiesPool.Update(deltaTime);
 
-	CheckMissilesHits(m_enemiesPool, Team::Enemy);
+	CheckMissilesHits(m_enemiesPool);
+	CheckMissilesHits(m_player);
 	CheckPlayerContact();
 	CheckPlayAreaExits();
 }
@@ -67,26 +68,36 @@ void GameManager::CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& 
 }
 
 template <Hittable Target>
-void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam)
+void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets)
 {
 	m_missilesPool.ForEachActive([&](Missile& missile)
 	{
-		if (missile.getTeam() == targetTeam)
-		{
-			return;
-		}
-
 		targets.ForEachActive([&](Target& target)
 		{
-			if (!missile.getIsActive())
-			{
-				return;
-			}
-
-			if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), target.getHitboxRect()))
-			{
-				missile.OnHit(target);
-			}
+			TryHit(missile, target);
 		});
 	});
+}
+
+template <Hittable Target>
+void GameManager::CheckMissilesHits(Target& target)
+{
+	m_missilesPool.ForEachActive([&](Missile& missile)
+	{
+		TryHit(missile, target);
+	});
+}
+
+template <Hittable Target>
+void GameManager::TryHit(Missile& missile, Target& target)
+{
+	if (!missile.getIsActive() || !target.getIsActive() || missile.getTeam() == target.getTeam())
+	{
+		return;
+	}
+
+	if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), target.getHitboxRect()))
+	{
+		missile.OnHit(target);
+	}
 }

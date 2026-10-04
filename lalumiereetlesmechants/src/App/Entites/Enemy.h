@@ -26,6 +26,8 @@ public:
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_currentPosition); }
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
 
+	Team getTeam() const { return Team::Enemy; }
+
 private:
 	static constexpr int MAX_HEALTH = 3;
 	static constexpr float HIT_FLASH_DURATION = 0.1f;

@@ -43,7 +43,13 @@ private:
 	void CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& area);
 
 	template <Hittable Target>
-	void CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam);
+	void CheckMissilesHits(Utility::Pool<Target>& targets);
+
+	template <Hittable Target>
+	void CheckMissilesHits(Target& target);
+
+	template <Hittable Target>
+	static void TryHit(Missile& missile, Target& target);
 
 	void CheckPlayerContact();
 };

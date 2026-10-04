@@ -30,6 +30,8 @@ public:
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
 
+	Team getTeam() const { return Team::Player; }
+
 private:
 	Sprite* m_sprite = nullptr;
 	Utility::Vector2<float> m_position;

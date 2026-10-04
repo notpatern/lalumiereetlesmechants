@@ -8,4 +8,5 @@ concept Hittable = std::derived_from<T, IDamageable> && requires(const T& target
 {
 	{ target.getIsActive() } -> std::same_as<bool>;
 	{ target.getHitboxRect() } -> std::same_as<Collision::CellRect>;
+	{target.getTeam() } -> std::same_as<Team>;
 };
