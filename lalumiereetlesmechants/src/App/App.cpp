@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include "Gameplay/Collision.h"
 #include "Manager/GameManager.h"
 #include "Player/Player.h"
 
@@ -25,35 +26,60 @@ App::~App()
 }
 
 void App::Run() {
-	m_renderer.Render();
-	// TEST
+	// --- TEST
 	static InputManager input;
 	static GameManager gameManager;
-	static Player player{ Utility::Vector2<float>(10.f, 10.f), gameManager.m_missilesPool };
-	static COORD previousCell{ -1, -1 };
+	const Player& player = gameManager.getPlayer();
 
 	const float dt = m_timer->getElapsedSeconds(true);
-	gameManager.Update(dt);
 	input.Update();
-	player.Update(dt, input);
+	gameManager.Update(dt, input);
 
-	const Utility::Vector2<float> position = player.getPosition();
-	const COORD cell{ static_cast<SHORT>(position.x), static_cast<SHORT>(position.y) };
+	m_renderer.Render();
 
-	if (cell.X != previousCell.X || cell.Y != previousCell.Y)
+	DWORD written = 0;
+	auto draw = [&](const Utility::Vector2<float>& position, char character)
 	{
-		DWORD written = 0;
-		FillConsoleOutputCharacterA(m_consoleHandle, ' ', 1, previousCell, &written);
-		FillConsoleOutputCharacterA(m_consoleHandle, '@', 1, cell, &written);
-		previousCell = cell;
+		const Utility::Vector2<int> cellPosition = Collision::ToCell(position);
+		const COORD cell{static_cast<SHORT>(cellPosition.x), static_cast<SHORT>(cellPosition.y)};
+		FillConsoleOutputCharacterA(m_consoleHandle, character, 1, cell, &written);
+		FillConsoleOutputAttribute(m_consoleHandle, 0x0F, 1, cell, &written);
+	};
 
-		const std::string title = "x = " + std::to_string(position.x) + "   y = " + std::to_string(position.y);
-		SetConsoleTitleA(title.c_str());
-
+	draw(player.getPosition(), '@');
+	int activeMissiles = 0;
+	for (const Missile& missile : gameManager.m_missilesPool.getObjects())
+	{
+		if (missile.getIsActive())
+		{
+			draw(missile.getCurrentPosition(), '|');
+			++activeMissiles;
+		}
 	}
-	// FON TEST
+	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
 
-	//m_renderer.Render();
+	for (const Enemy& enemy : gameManager.m_enemiesPool.getObjects())
+	{
+		if (!enemy.getIsActive())
+		{
+			continue;
+		}
+
+		// Debug : un '.' sur chaque case de la hitbox, puis le W par-dessus
+		const Collision::CellRect rect = enemy.getHitboxRect();
+		for (int y = rect.topLeftCell.y; y <= rect.bottomRightCell.y; ++y)
+		{
+			for (int x = rect.topLeftCell.x; x <= rect.bottomRightCell.x; ++x)
+			{
+				draw({ static_cast<float>(x), static_cast<float>(y) }, '.');
+			}
+		}
+
+		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
+	}
+
+	Sleep(16);
+	// --- FIN DU TEST ---
 }
 
 LONG_PTR App::setConsoleWindowStyle(INT n_index, LONG_PTR new_style)
