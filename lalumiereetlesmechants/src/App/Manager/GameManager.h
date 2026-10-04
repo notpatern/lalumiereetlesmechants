@@ -4,6 +4,7 @@
 #include "../../Utilities/Pool.h"
 #include "../Entites/Enemy.h"
 #include "../Gameplay/Hittable.h"
+#include "../Gameplay/PlayArea.h"
 #include "../Gameplay/WaveSpawner.h"
 #include "../Player/Player.h"
 
@@ -24,17 +25,14 @@ public:
 
 private:
 	static constexpr float MAX_DELTA_TIME = 0.1f;
-	static constexpr int PLAY_AREA_WIDTH = 80;
-	static constexpr int PLAY_AREA_HEIGHT = 40;
-	static constexpr int OFFSCREEN_MARGIN = 5;
 
 	static constexpr std::size_t INITIAL_MISSILES_POOL_SIZE = 6;
 	static constexpr std::size_t MAX_MISSILES_POOL_SIZE = 200;
 	static constexpr std::size_t INITIAL_ENEMIES_POOL_SIZE = 6;
 	static constexpr std::size_t MAX_ENEMIES_POOL_SIZE = 200;
 
-	static constexpr float PLAYER_START_X = 40.f;
-	static constexpr float PLAYER_START_Y = 20.f;
+	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
+	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
 
 	Player m_player;
 	WaveSpawner m_waveSpawner;

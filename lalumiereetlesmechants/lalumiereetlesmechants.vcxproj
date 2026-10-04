@@ -152,6 +152,7 @@
     <ClInclude Include="src\App\Gameplay\Hittable.h" />
     <ClInclude Include="src\App\Gameplay\IDamageable.h" />
     <ClInclude Include="src\App\Gameplay\IEnemyObserver.h" />
+    <ClInclude Include="src\App\Gameplay\PlayArea.h" />
     <ClInclude Include="src\App\Gameplay\Wave.h" />
     <ClInclude Include="src\App\Gameplay\WaveData.h" />
     <ClInclude Include="src\App\Gameplay\WaveSpawner.h" />

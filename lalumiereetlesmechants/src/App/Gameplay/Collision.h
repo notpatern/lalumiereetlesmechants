@@ -14,6 +14,11 @@ namespace Collision
 			return cell.x >= topLeftCell.x && cell.x <= bottomRightCell.x && cell.y >= topLeftCell.y && cell.y <= bottomRightCell.y;
 		}
 
+		bool Contains(const CellRect& other) const
+		{
+			return Contains(other.topLeftCell) && Contains(other.bottomRightCell);
+		}
+
 		bool Overlaps(const CellRect& other) const
 		{
 			return topLeftCell.x <= other.bottomRightCell.x && other.topLeftCell.x <= bottomRightCell.x

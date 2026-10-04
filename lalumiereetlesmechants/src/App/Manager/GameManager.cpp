@@ -29,10 +29,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 
 void GameManager::CheckPlayAreaExits()
 {
-	const Collision::CellRect area{
-		{-OFFSCREEN_MARGIN, -OFFSCREEN_MARGIN},
-		{PLAY_AREA_WIDTH - 1 + OFFSCREEN_MARGIN, PLAY_AREA_HEIGHT - 1 + OFFSCREEN_MARGIN}
-	};
+	const Collision::CellRect area = PlayArea::ExitBounds();
 
 	CheckExits(m_enemiesPool, area);
 	CheckExits(m_missilesPool, area);
