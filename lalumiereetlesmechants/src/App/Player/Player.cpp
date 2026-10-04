@@ -2,20 +2,43 @@
 #include <windows.h>
 
 
-Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles) : m_position(startPosition), m_missilePool(&missiles)
+Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles)
+	: m_position(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }
 {
 
 }
 
 void Player::Update(float dt, const InputManager& input)
 {
+	if (IsDead())
+	{
+		return;
+	}
+
 	m_fireCooldown.Update(dt);
+	m_invincibility.Update(dt);
 
 	Move(dt, ReadDirection(input));
 	if (ReadShoot(input))
 	{
 		TryShoot();
 	}
+}
+
+void Player::TakeDamage(const DamageInfos& damage)
+{
+	if (IsDead() || IsInvincible())
+	{
+		return;
+	}
+
+	m_health.TakeDamage(damage.amount);
+	m_invincibility.Start(HIT_INVINCIBILITY_DURATION);
+}
+
+DamageInfos Player::getContactDamage() const
+{
+	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Player, .position = m_position };
 }
 
 Utility::Vector2<int> Player::ReadDirection(const InputManager& input)

@@ -5,9 +5,12 @@
 #include "../Manager/InputManager.h"
 #include "../Render/Sprite.h"
 #include "../Entites//Missile.h"
+#include "../Gameplay/Collision.h"
+#include "../Gameplay/Health.h"
+#include "../Gameplay/IDamageable.h"
 
 
-class Player
+class Player : public IDamageable
 {
 public:
 	explicit Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles);
@@ -16,6 +19,16 @@ public:
 
 	Utility::Vector2<float> getPosition() const { return m_position; }
 	Sprite* getSprite() const { return m_sprite; }
+
+	void TakeDamage(const DamageInfos& damage) override;
+	bool IsDead() const override { return m_health.IsDead(); }
+	int getHealth() const {return m_health.getCurrent(); }
+
+	DamageInfos getContactDamage() const;
+
+	bool getIsActive() const { return !IsDead(); }
+	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
+	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
 
 private:
 	Sprite* m_sprite = nullptr;
@@ -31,6 +44,18 @@ private:
 
 	Utility::Countdown m_fireCooldown;
 	float m_fireDelay{0.25f};
+
+	static constexpr int MAX_HEALTH = 3;
+	static constexpr float HIT_INVINCIBILITY_DURATION = 1.5f;
+
+	static constexpr int HITBOX_WIDTH = 1;
+	static constexpr int HITBOX_HEIGHT = 1;
+
+	static constexpr int CONTACT_DAMAGE = 1000;
+
+	Health m_health;
+	Collision::Hitbox m_hitbox;
+	Utility::Countdown m_invincibility;
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
 	void Move(float dt, const Utility::Vector2<int>& direction);
