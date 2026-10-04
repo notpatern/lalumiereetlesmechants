@@ -13,7 +13,7 @@ class GameManager
 public:
 	GameManager();
 	GameManager(const GameManager&) = delete;
-	const GameManager& operator=(GameManager&) = delete;
+	GameManager& operator=(const GameManager&) = delete;
 
 	Utility::Pool<Missile> m_missilesPool;
 	Utility::Pool<Enemy> m_enemiesPool;

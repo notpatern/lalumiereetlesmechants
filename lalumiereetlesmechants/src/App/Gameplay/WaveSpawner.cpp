@@ -40,7 +40,7 @@ void WaveSpawner::Update(float deltaTime)
 	}
 }
 
-void WaveSpawner::OnEnemyRemoved(const EnemyRemovedEvent& event)
+void WaveSpawner::OnEnemyRemoved(const EnemyRemovedEvent&)
 {
 	if (m_aliveCount > 0)
 	{
@@ -75,7 +75,7 @@ void WaveSpawner::UpdateSpawning(float deltaTime)
 
 		if (m_entryIndex < entries.size())
 		{
-			m_timer.Start(entries[m_entryIndex].delay);
+			m_timer.Chain(entries[m_entryIndex].delay);
 		}
 	}
 

@@ -12,6 +12,10 @@ class WaveSpawner : public IEnemyObserver
 {
 public:
 	WaveSpawner(const std::vector<Wave>& waves, Utility::Pool<Enemy>& enemies);
+	WaveSpawner(std::vector<Wave>&&, Utility::Pool<Enemy>&) = delete;
+
+	WaveSpawner(const WaveSpawner&) = delete;
+	WaveSpawner& operator=(const WaveSpawner&) = delete;
 
 	void Update(float deltaTime);
 
