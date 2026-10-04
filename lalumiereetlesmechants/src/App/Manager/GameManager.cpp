@@ -64,7 +64,7 @@ void GameManager::CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& 
 	{
 		if (!area.Contains(Collision::ToCell(object.getCurrentPosition())))
 		{
-			object.Deactivate();
+			object.OnLeftPlayArea(); //TODO : Peut etre un concept
 		}
 	});
 }
