@@ -39,12 +39,6 @@ void Enemy::TakeDamage(const DamageInfos& damage)
 		return;
 	}
 
-	if (damage.type == DamageType::Collision)
-	{
-		Die();
-		return;
-	}
-
 	if (m_health.TakeDamage(damage.amount))
 	{
 		Die();
