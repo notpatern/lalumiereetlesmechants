@@ -21,7 +21,7 @@ namespace Utility
 
 		void Update(float dt);
 
-		template <typename Function>
+		template <std::invocable<T&> Function>
 		void ForEachActive(Function function)
 		{
 			for (std::size_t i = 0; i < m_objects.size(); ++i)
@@ -33,7 +33,6 @@ namespace Utility
 			}
 		}
 
-		std::deque<T>& getObjects() { return m_objects; }
 		const std::deque<T>& getObjects() const { return m_objects; }
 
 	private:
