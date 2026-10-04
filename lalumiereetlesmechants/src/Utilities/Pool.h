@@ -21,6 +21,18 @@ namespace Utility
 
 		void Update(float dt);
 
+		template <typename Function>
+		void ForEachActive(Function function)
+		{
+			for (std::size_t i = 0; i < m_objects.size(); ++i)
+			{
+				if (m_objects[i].getIsActive())
+				{
+					function(m_objects[i]);
+				}
+			}
+		}
+
 		std::deque<T>& getObjects() { return m_objects; }
 		const std::deque<T>& getObjects() const { return m_objects; }
 
@@ -70,13 +82,7 @@ namespace Utility
 	template <Poolable T>
 	void Pool<T>::Update(float dt)
 	{
-		for (std::size_t i = 0; i < m_objects.size(); ++i)
-		{
-			if (m_objects[i].getIsActive())
-			{
-				m_objects[i].Update(dt);
-			}
-		}
+		ForEachActive([dt](T& object) { object.Update(dt); });
 	}
 
 	template <Poolable T>
