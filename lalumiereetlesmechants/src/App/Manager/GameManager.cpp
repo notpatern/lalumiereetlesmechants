@@ -60,37 +60,36 @@ void GameManager::CheckPlayerContact()
 template <typename T>
 void GameManager::DeactivateOutside(Utility::Pool<T>& pool, const Collision::CellRect& area)
 {
-	for (T& object : pool.getObjects())
+	pool.ForEachActive([&](T& object)
 	{
-		if (object.getIsActive() && !area.Contains(Collision::ToCell(object.getCurrentPosition())))
+		if (!area.Contains(Collision::ToCell(object.getCurrentPosition())))
 		{
 			object.Deactivate();
 		}
-	}
+	});
 }
 
 template <Hittable Target>
 void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam)
 {
-	for (Missile& missile : m_missilesPool.getObjects())
+	m_missilesPool.ForEachActive([&](Missile& missile)
 	{
-		if (!missile.getIsActive() || missile.getTeam() == targetTeam)
+		if (missile.getTeam() == targetTeam)
 		{
-			continue;
+			return;
 		}
 
-		for (Target& target : targets.getObjects())
+		targets.ForEachActive([&](Target& target)
 		{
-			if (!target.getIsActive())
+			if (!missile.getIsActive())
 			{
-				continue;
+				return;
 			}
 
 			if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), target.getHitboxRect()))
 			{
 				missile.OnHit(target);
-				break;
 			}
-		}
-	}
+		});
+	});
 }
