@@ -22,6 +22,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	m_enemiesPool.Update(deltaTime);
 
 	CheckMissilesHits(m_enemiesPool, Team::Enemy);
+	CheckPlayerContact();
 	DeactivateOutOfArea();
 }
 
@@ -34,6 +35,27 @@ void GameManager::DeactivateOutOfArea()
 
 	DeactivateOutside(m_enemiesPool, area);
 	DeactivateOutside(m_missilesPool, area);
+}
+
+void GameManager::CheckPlayerContact()
+{
+	if (m_player.IsDead())
+	{
+		return;
+	}
+
+	const Collision::CellRect playerRect = m_player.getHitboxRect();
+
+	for (Enemy& enemy : m_enemiesPool.getObjects())
+	{
+		if (!enemy.getIsActive() || !playerRect.Overlaps(enemy.getHitboxRect()))
+		{
+			continue;
+		}
+
+		m_player.TakeDamage(enemy.getContactDamage());
+		enemy.TakeDamage(m_player.getContactDamage());
+	}
 }
 
 template <typename T>

@@ -39,6 +39,12 @@ void Enemy::TakeDamage(const DamageInfos& damage)
 		return;
 	}
 
+	if (damage.type == DamageType::Collision)
+	{
+		Die();
+		return;
+	}
+
 	if (m_health.TakeDamage(damage.amount))
 	{
 		Die();
@@ -47,6 +53,11 @@ void Enemy::TakeDamage(const DamageInfos& damage)
 	{
 		m_hitFlash.Start(HIT_FLASH_DURATION);
 	}
+}
+
+DamageInfos Enemy::getContactDamage() const
+{
+	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Enemy, .position = m_currentPosition };
 }
 
 void Enemy::Die()

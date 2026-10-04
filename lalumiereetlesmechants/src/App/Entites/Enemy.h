@@ -19,6 +19,8 @@ public:
 	void TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 
+	DamageInfos getContactDamage() const;
+
 	bool getIsActive() const { return m_isActive; }
 	Utility::Vector2<float> getCurrentPosition() const { return m_currentPosition; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_currentPosition); }
@@ -30,6 +32,8 @@ private:
 
 	static constexpr int HITBOX_WIDTH = 3;
 	static constexpr int HITBOX_HEIGHT = 2;
+
+	static constexpr int CONTACT_DAMAGE = 1;
 
 	Utility::Vector2<float> m_currentPosition;
 	Utility::Vector2<float> m_velocity;

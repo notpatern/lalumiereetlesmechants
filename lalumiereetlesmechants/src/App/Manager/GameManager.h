@@ -13,7 +13,7 @@ class GameManager
 public:
 	GameManager();
 	GameManager(const GameManager&) = delete;
-	GameManager& operator=(GameManager&) = delete;
+	const GameManager& operator=(GameManager&) = delete;
 
 	Utility::Pool<Missile> m_missilesPool;
 	Utility::Pool<Enemy> m_enemiesPool;
@@ -27,7 +27,6 @@ private:
 	static constexpr int PLAY_AREA_WIDTH = 80;
 	static constexpr int PLAY_AREA_HEIGHT = 40;
 	static constexpr int OFFSCREEN_MARGIN = 5;
-
 
 	static constexpr std::size_t INITIAL_MISSILES_POOL_SIZE = 6;
 	static constexpr std::size_t MAX_MISSILES_POOL_SIZE = 200;
@@ -47,4 +46,6 @@ private:
 
 	template <Hittable Target>
 	void CheckMissilesHits(Utility::Pool<Target>& targets, Team targetTeam);
+
+	void CheckPlayerContact();
 };
