@@ -1,5 +1,4 @@
 #pragma once
-#include <filesystem>
 
 #include "../../Utilities/Vector2.h"
 
@@ -32,8 +31,6 @@ namespace Collision
 
 
 	Utility::Vector2<int> ToCell(const Utility::Vector2<float>& position);
-
-	bool IsSameCell(const Utility::Vector2<float>& a, const Utility::Vector2<float>& b);
 
 	bool CrossesRect(const Utility::Vector2<float>& from, const Utility::Vector2<float>& to, const CellRect& target);
 

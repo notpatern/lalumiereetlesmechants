@@ -3,11 +3,9 @@
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/IDamageable.h"
-
-class Sprite; //TODO : DEMANDER FORWARD DECLARATION PROF
+#include "../Render/Sprite.h"
 
 class Missile
-//TODO : DEMANDER A SASHA CE QUIL AVAIT PREVU POUR LHERITAGE PCQ JE SAIS PAS COMMENT FAIRE AVEC SES FONCTIONS FZKANFGEZGNB
 {
 public:
 	Missile();

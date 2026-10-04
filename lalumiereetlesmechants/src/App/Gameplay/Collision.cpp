@@ -1,6 +1,4 @@
 #include "Collision.h"
-
-#include <algorithm>
 #include <cmath>
 
 namespace Collision
@@ -18,11 +16,6 @@ namespace Collision
 	Utility::Vector2<int> ToCell(const Utility::Vector2<float>& position)
 	{
 		return { static_cast<int>(std::floor(position.x)), static_cast<int>(std::floor(position.y))};
-	}
-
-	bool IsSameCell(const Utility::Vector2<float>& a, const Utility::Vector2<float>& b)
-	{
-		return (ToCell(a) == ToCell(b));
 	}
 
 	// Algorithme de Bresenham : parcourt les cases entre le depart et l'arrivee
