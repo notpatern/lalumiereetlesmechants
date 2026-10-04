@@ -10,7 +10,8 @@ enum class Team
 enum class DamageType
 {
 	Basic,
-	Explosion
+	Explosion,
+	Collision
 };
 
 struct DamageInfos

@@ -1,4 +1,6 @@
 #pragma once
+#include <filesystem>
+
 #include "../../Utilities/Vector2.h"
 
 namespace Collision
@@ -11,6 +13,12 @@ namespace Collision
 		bool Contains(const Utility::Vector2<int>& cell) const
 		{
 			return cell.x >= topLeftCell.x && cell.x <= bottomRightCell.x && cell.y >= topLeftCell.y && cell.y <= bottomRightCell.y;
+		}
+
+		bool Overlaps(const CellRect& other) const
+		{
+			return topLeftCell.x <= other.bottomRightCell.x && other.topLeftCell.x <= bottomRightCell.x
+			&& topLeftCell.y <= other.bottomRightCell.y && other.topLeftCell.y <= bottomRightCell.y;
 		}
 	};
 
