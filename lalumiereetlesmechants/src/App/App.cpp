@@ -35,7 +35,7 @@ void App::Run() {
 	input.Update();
 	gameManager.Update(dt, input);
 
-	m_renderer.Render();
+	//m_renderer.Render();
 
 	DWORD written = 0;
 	auto draw = [&](const Utility::Vector2<float>& position, char character)

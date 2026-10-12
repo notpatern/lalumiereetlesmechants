@@ -34,7 +34,7 @@ void Renderer::Render()
 		{
 			if (CanAccessMap(*m_world, Utility::Vector2<int>(x, y)))
 			{
-				int lightValue = GetLightMapValue(*m_world, { x, y });
+				int lightValue = (int)GetLightMapValue(*m_world, { x, y });
 				char worldChar = (char)GetWorldMapValue(*m_world, { x, y });
 
 				buffer[y][x].Char.AsciiChar = worldChar;
@@ -52,7 +52,7 @@ void Renderer::Render()
 		dwBufferCoord, &rcRegion);
 
 	for (Sprite* currentSprite : m_renderQueue) {
-		currentSprite->Render();
+		currentSprite->Render(*m_world);
 	}
 }
 
