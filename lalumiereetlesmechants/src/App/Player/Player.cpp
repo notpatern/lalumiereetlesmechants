@@ -3,7 +3,9 @@
 
 
 Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles)
-	: m_position(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }
+	: m_position(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH),
+	  m_hitbox{ .offset = { HITBOX_OFFSET_X, HITBOX_OFFSET_Y }, .size = { HITBOX_WIDTH, HITBOX_HEIGHT } },
+	  m_body{ .size = { BODY_WIDTH, BODY_HEIGHT } }
 {
 
 }
@@ -78,7 +80,7 @@ void Player::Move(float dt, const Utility::Vector2<int>& direction, const Collis
 
 void Player::TryMoveTo(const Utility::Vector2<float>& target, const Collision::CellRect& bounds)
 {
-	if (bounds.Contains(m_hitbox.At(target)))
+	if (bounds.Contains(m_body.At(target)))
 	{
 		m_position = target;
 	}
@@ -98,7 +100,7 @@ void Player::TryShoot()
 
 	if (Missile* missile = m_missilePool->Acquire())
 	{
-		missile->Launch({ m_position.x, m_position.y - 1.f }, { 0.f, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
+		missile->Launch({ m_position.x + BODY_WIDTH / 2, m_position.y - 1.f }, { 0.f, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
 		m_fireCooldown.Start(m_fireDelay);
 		--m_remainingMissiles;
 	}

@@ -50,6 +50,11 @@ private:
 	static constexpr int MAX_HEALTH = 3;
 	static constexpr float HIT_INVINCIBILITY_DURATION = 1.5f;
 
+	static constexpr int BODY_WIDTH = 3;
+	static constexpr int BODY_HEIGHT = 2;
+
+	static constexpr int HITBOX_OFFSET_X = 1;
+	static constexpr int HITBOX_OFFSET_Y = 1;
 	static constexpr int HITBOX_WIDTH = 1;
 	static constexpr int HITBOX_HEIGHT = 1;
 
@@ -57,6 +62,7 @@ private:
 
 	Health m_health;
 	Collision::Hitbox m_hitbox;
+	Collision::Hitbox m_body;
 	Utility::Countdown m_invincibility;
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
