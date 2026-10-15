@@ -6,10 +6,36 @@
 
 void GameScreen::Update(float deltaTime, const InputManager& input)
 {
-	m_gameManager.Update(deltaTime, input);
+	m_request = ScreenRequest::None;
 
-	const bool isFinished = m_gameManager.IsGameOver() || m_gameManager.IsVictory();
-	m_request = isFinished && input.WasJustPressed('R') ? ScreenRequest::NewGame : ScreenRequest::None;
+	if (m_gameManager.IsGameOver() || m_gameManager.IsVictory())
+	{
+		if (input.WasJustPressed('R'))
+		{
+			m_request = ScreenRequest::NewGame;
+		}
+		else if (input.WasJustPressed(VK_ESCAPE))
+		{
+			m_request = ScreenRequest::Title;
+		}
+		return;
+	}
+
+	if (input.WasJustPressed(VK_ESCAPE))
+	{
+		m_isPaused = !m_isPaused;
+	}
+
+	if (m_isPaused)
+	{
+		if (input.WasJustPressed('Q'))
+		{
+			m_request = ScreenRequest::Title;
+		}
+		return;
+	}
+
+	m_gameManager.Update(deltaTime, input);
 }
 
 void GameScreen::Draw(Renderer& renderer) const
@@ -23,6 +49,10 @@ void GameScreen::Draw(Renderer& renderer) const
 	else if (m_gameManager.IsVictory())
 	{
 		DrawVictory(renderer);
+	}
+	else if (m_isPaused)
+	{
+		DrawPause(renderer);
 	}
 }
 
@@ -49,7 +79,11 @@ void GameScreen::DrawDebug(HANDLE console) const
 
 	if (m_gameManager.IsGameOver())
 	{
-		SetConsoleTitleA("GAME OVER : R pour recommencer");
+		SetConsoleTitleA("GAME OVER : R pour recommencer, Echap pour le menu");
+	}
+	else if (m_isPaused)
+	{
+		SetConsoleTitleA(PAUSE_TEXT.data());
 	}
 	else if (m_gameManager.IsVictory())
 	{
@@ -84,6 +118,11 @@ void GameScreen::DrawGameOver(Renderer& renderer)
 void GameScreen::DrawVictory(Renderer& renderer) const
 {
 	//TODO : Render la victoire
+}
+
+void GameScreen::DrawPause(Renderer& renderer)
+{
+	//TODO : La pause
 }
 
 int GameScreen::CenteredColumn(std::string_view text)
