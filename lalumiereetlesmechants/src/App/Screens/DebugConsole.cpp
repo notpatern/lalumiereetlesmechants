@@ -12,10 +12,13 @@ namespace DebugConsole
 		FillConsoleOutputCharacterA(console, ' ', info.dwSize.X * (PlayArea::HEIGHT + 2), { 0, 0 }, &written);
 	}
 
-	void WriteCentered(HANDLE console, std::string_view text, int row)
+	void WriteTexts(HANDLE console, const std::vector<ScreenText>& texts)
 	{
 		DWORD written = 0;
-		const SHORT column = static_cast<SHORT>((PlayArea::WIDTH - static_cast<int>(text.size())) / 2);
-		WriteConsoleOutputCharacterA(console, text.data(), static_cast<DWORD>(text.size()), { column, static_cast<SHORT>(row) }, &written);
+		for (const ScreenText& text : texts)
+		{
+			const COORD cell{ static_cast<SHORT>(text.position.x), static_cast<SHORT>(text.position.y) };
+			WriteConsoleOutputCharacterA(console, text.text.data(), static_cast<DWORD>(text.text.size()), cell, &written);
+		}
 	}
 }

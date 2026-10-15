@@ -20,16 +20,18 @@ void TitleScreen::Update(float, const InputManager& input)
 	}
 }
 
-void TitleScreen::Draw(Renderer& renderer) const
+std::vector<ScreenText> TitleScreen::getTexts() const
 {
-	//TODO titre du jeu + space
+	std::vector<ScreenText> texts;
+	texts.push_back(CenteredText(TITLE_TEXT, 10));
+	m_menu.AddTexts(texts, 14);
+	return texts;
 }
 
 void TitleScreen::DrawDebug(HANDLE console) const
 {
 	DebugConsole::Clear(console);
-	DebugConsole::WriteCentered(console, TITLE_TEXT, 10);
-	m_menu.DrawDebug(console, 14);
+	DebugConsole::WriteTexts(console, getTexts());
 
 	SetConsoleTitleA("La lumiere et les mechants");
 }

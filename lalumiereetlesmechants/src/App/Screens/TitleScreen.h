@@ -2,15 +2,15 @@
 #include "IScreen.h"
 #include "Menu.h"
 #include "../Manager/InputManager.h"
-#include "../Render/Renderer.h"
 #include <string_view>
 #include <windows.h>
+#include <vector>
 
 class TitleScreen : public IScreen
 {
 public:
 	void Update(float deltaTime, const InputManager& input) override;
-	void Draw(Renderer& renderer) const override;
+	std::vector<ScreenText> getTexts() const override;
 	void DrawDebug(HANDLE console) const override;
 	ScreenRequest getRequest() const override { return m_request; }
 

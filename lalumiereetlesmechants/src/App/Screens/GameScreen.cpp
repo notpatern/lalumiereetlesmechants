@@ -49,25 +49,31 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 	m_gameManager.Update(deltaTime, input);
 }
 
-void GameScreen::Draw(Renderer& renderer) const
+std::vector<ScreenText> GameScreen::getTexts() const
 {
-	//la jvais demander au renderer de dessiner les ennemis, les missiles et le joueur (sivisible), avec leurs sprites
+	std::vector<ScreenText> texts;
+
+	texts.push_back({ "Score : " + std::to_string(m_gameManager.getScore()), { 0, HUD_ROW } });
+	texts.push_back({ "Vies : " + std::to_string(m_gameManager.getPlayer().getHealth()), { LIVES_COLUMN, HUD_ROW } });
 
 	if (m_gameManager.IsGameOver())
 	{
-		DrawGameOver(renderer);
-		m_endMenu.Draw(renderer, 13);
+		texts.push_back(CenteredText(GAME_OVER_TEXT, 10));
+		m_endMenu.AddTexts(texts, 13);
 	}
 	else if (m_gameManager.IsVictory())
 	{
-		DrawVictory(renderer);
-		m_endMenu.Draw(renderer, 14);
+		texts.push_back(CenteredText(VICTORY_TEXT, 9));
+		texts.push_back(CenteredText("Score : " + std::to_string(m_gameManager.getScore()), 11));
+		m_endMenu.AddTexts(texts, 14);
 	}
 	else if (m_isPaused)
 	{
-		DrawPause(renderer);
-		m_pauseMenu.Draw(renderer, 13);
+		texts.push_back(CenteredText(PAUSE_TEXT, 10));
+		m_pauseMenu.AddTexts(texts, 13);
 	}
+
+	return texts;
 }
 
 void GameScreen::DrawDebug(HANDLE console) const
@@ -113,41 +119,5 @@ void GameScreen::DrawDebug(HANDLE console) const
 		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
 	});
 
-
-	if (m_gameManager.IsGameOver())
-	{
-		DebugConsole::WriteCentered(console, GAME_OVER_TEXT, 10);
-		m_endMenu.DrawDebug(console, 13);
-	}
-	else if (m_gameManager.IsVictory())
-	{
-		DebugConsole::WriteCentered(console, VICTORY_TEXT, 9);
-		DebugConsole::WriteCentered(console, "Score : " + std::to_string(m_gameManager.getScore()), 11);
-		m_endMenu.DrawDebug(console, 14);
-	}
-	else if (m_isPaused)
-	{
-		DebugConsole::WriteCentered(console, PAUSE_TEXT, 10);
-		m_pauseMenu.DrawDebug(console, 13);
-	}
-}
-
-void GameScreen::DrawGameOver(Renderer& renderer)
-{
-	//la jvais ecrire le game over au milieu de la zone de jeu, et la touche R pour recommencer en dessous
-}
-
-void GameScreen::DrawVictory(Renderer& renderer) const
-{
-	//TODO : Render la victoire
-}
-
-void GameScreen::DrawPause(Renderer& renderer)
-{
-	//TODO : La pause
-}
-
-int GameScreen::CenteredColumn(std::string_view text)
-{
-	return (PlayArea::WIDTH - static_cast<int>(text.size())) / 2;
+	DebugConsole::WriteTexts(console, getTexts());
 }

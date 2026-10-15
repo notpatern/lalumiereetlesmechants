@@ -1,6 +1,6 @@
 #pragma once
 #include "../Manager/InputManager.h"
-#include "../Render/Renderer.h"
+#include "ScreenText.h"
 #include <initializer_list>
 #include <string_view>
 #include <vector>
@@ -15,8 +15,7 @@ public:
 
 	int Update(const InputManager& input);
 
-	void Draw(Renderer& renderer, int firstRow) const;
-	void DrawDebug(HANDLE console, int firstRow) const;
+	void AddTexts(std::vector<ScreenText>& texts, int firstRow) const;
 
 private:
 	std::vector<std::string_view> m_options;

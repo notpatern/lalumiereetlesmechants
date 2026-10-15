@@ -7,21 +7,21 @@ void CreditsScreen::Update(float, const InputManager& input)
 	m_request = wantsBack ? ScreenRequest::Title : ScreenRequest::None;
 }
 
-void CreditsScreen::Draw(Renderer& renderer) const
+std::vector<ScreenText> CreditsScreen::getTexts() const
 {
-	//TODO ecrire options
+	std::vector<ScreenText> texts;
+	for (int i = 0; i < static_cast<int>(LINES.size()); ++i)
+	{
+		texts.push_back(CenteredText(LINES[i], 5 + i));
+	}
+	m_menu.AddTexts(texts, 20);
+	return texts;
 }
 
 void CreditsScreen::DrawDebug(HANDLE console) const
 {
 	DebugConsole::Clear(console);
-
-	for (int i = 0; i < static_cast<int>(LINES.size()); ++i)
-	{
-		DebugConsole::WriteCentered(console, LINES[i], 5 + i);
-	}
-
-	m_menu.DrawDebug(console, 20);
+	DebugConsole::WriteTexts(console, getTexts());
 
 	SetConsoleTitleA("Credits");
 }

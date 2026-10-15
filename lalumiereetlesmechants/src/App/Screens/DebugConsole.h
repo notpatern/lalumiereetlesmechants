@@ -1,9 +1,10 @@
 #pragma once
-#include <string_view>
+#include "ScreenText.h"
+#include <vector>
 #include <windows.h>
 
 namespace DebugConsole
 {
 	void Clear(HANDLE console);
-	void WriteCentered(HANDLE console, std::string_view text, int row);
+	void WriteTexts(HANDLE console, const std::vector<ScreenText>& texts);
 }
