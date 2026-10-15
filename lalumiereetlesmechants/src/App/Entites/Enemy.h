@@ -60,6 +60,8 @@ private:
 
 	void Die();
 
+	void RefreshSpriteType();
+
 	void Shoot(Utility::Pool<Missile>& missiles);
 
 	void RemoveFromPlay(EnemyRemovalReason reason);

@@ -3,7 +3,6 @@
 Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
 {
 	this->SetSpritePosition(&m_position);
-	m_spriteType = SpriteUtils::SpriteType::Enemy;
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
@@ -15,6 +14,7 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 	m_hitFlash.Start(0.f);
 	m_isActive = true;
 	m_observer = observer;
+	RefreshSpriteType();
 	SetInRenderQueue(true);
 }
 
@@ -30,6 +30,7 @@ void Enemy::Update(float dt, const EnemyUpdateContext& context)
 
 	m_hitFlash.Update(dt);
 
+	RefreshSpriteType();
 
 	if (m_weapon.Update(dt))
 	{
@@ -67,6 +68,11 @@ DamageInfos Enemy::getContactDamage() const
 void Enemy::Die()
 {
 	RemoveFromPlay(EnemyRemovalReason::Killed);
+}
+
+void Enemy::RefreshSpriteType()
+{
+	m_spriteType = IsFlashing() ? SpriteUtils::SpriteType::HunterHit : SpriteUtils::SpriteType::Hunter;
 }
 
 void Enemy::Shoot(Utility::Pool<Missile>& missiles)

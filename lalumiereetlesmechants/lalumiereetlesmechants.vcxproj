@@ -175,6 +175,7 @@
     <ClInclude Include="src\App\Entites\Enemy.h" />
     <ClInclude Include="src\App\Entites\Entities.h" />
     <ClInclude Include="src\App\App.h" />
+    <ClInclude Include="src\App\Render\SpriteDrawing.h" />
     <ClInclude Include="src\App\Render\SpriteType.h" />
     <ClInclude Include="src\App\Screens\CreditsScreen.h" />
     <ClInclude Include="src\App\Screens\DebugConsole.h" />
