@@ -29,6 +29,7 @@ public:
 	bool getIsActive() const { return !IsDead(); }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
+	bool IsVisible() const;
 
 	Team getTeam() const { return Team::Player; }
 
@@ -49,6 +50,7 @@ private:
 
 	static constexpr int MAX_HEALTH = 3;
 	static constexpr float HIT_INVINCIBILITY_DURATION = 1.5f;
+	static constexpr float BLINK_PERIOD = 0.1f;
 
 	static constexpr int BODY_WIDTH = 3;
 	static constexpr int BODY_HEIGHT = 2;

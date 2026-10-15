@@ -45,6 +45,17 @@ DamageInfos Player::getContactDamage() const
 	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Player, .position = m_position };
 }
 
+bool Player::IsVisible() const
+{
+	if (!IsInvincible())
+	{
+		return true;
+	}
+
+	const int blinkIndex = static_cast<int>(m_invincibility.getRemaining() / BLINK_PERIOD);
+	return blinkIndex % 2 == 0;
+}
+
 Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
 {
 	Utility::Vector2<int> direction;
