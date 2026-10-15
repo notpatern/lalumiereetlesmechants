@@ -27,8 +27,8 @@ public:
 	void Render();
 	void RenderSprite(Sprite* sprite);
 	void AddToRenderQueue(Sprite* sprite);
-	void AddToRenderQueue(IScreen* sprite);
+	void AddToRenderQueue(IScreen* screen);
 	void RemoveFromRenderQueue(Sprite* sprite);
-	void RemoveFromRenderQueue(IScreen* sprite);
+	void RemoveFromRenderQueue(IScreen* screen);
 };
 
