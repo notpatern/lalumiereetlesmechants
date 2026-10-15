@@ -2,8 +2,8 @@
 
 enum SpriteType
 {
-	Enemy,
-	Player,
+	EnemyType,
+	PlayerType,
 	PlayerMissile,
 	EnemyMissile,
 	NONE

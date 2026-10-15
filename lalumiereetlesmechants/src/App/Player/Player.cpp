@@ -8,7 +8,7 @@ Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missi
 	  m_body{ .size = { BODY_WIDTH, BODY_HEIGHT } }
 {
 	this->SetSpritePosition(&m_position);
-	m_spriteType = SpriteType::Player;
+	m_spriteType = SpriteType::PlayerType;
 }
 
 void Player::Update(float dt, const InputManager& input, const Collision::CellRect& bounds)
