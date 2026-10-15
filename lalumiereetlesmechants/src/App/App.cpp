@@ -1,13 +1,10 @@
 #include "App.h"
 #include <windows.h>
 #include <iostream>
-#include <string>
 #include <memory>
 
-#include "Gameplay/Collision.h"
-#include "Manager/GameManager.h"
+#include "Screens/IScreen.h"
 #include "Screens/GameScreen.h"
-#include "Player/Player.h"
 
 App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)), m_renderer(&m_world)
 {
@@ -28,71 +25,22 @@ App::~App()
 }
 
 void App::Run() {
-	// --- TEST
 	static InputManager input;
-	static std::unique_ptr<GameScreen> gameScreen = std::make_unique<GameScreen>();
+	static std::unique_ptr<IScreen> screen = std::make_unique<GameScreen>();
 
 	const float dt = m_timer->getElapsedSeconds(true);
 	input.Update();
-	gameScreen->Update(dt, input);
+	screen->Update(dt, input);
 
-	if (gameScreen->WantsRestart())
+	if (screen->getRequest() == ScreenRequest::NewGame)
 	{
-		gameScreen = std::make_unique<GameScreen>();
+		screen = std::make_unique<GameScreen>();
 	}
-
-	const GameManager& gameManager = gameScreen->getGameManager();
-	const Player& player = gameManager.getPlayer();
 
 	//m_renderer.Render();
-
-	DWORD written = 0;
-	auto draw = [&](const Utility::Vector2<float>& position, char character)
-	{
-		const Utility::Vector2<int> cellPosition = Collision::ToCell(position);
-		const COORD cell{static_cast<SHORT>(cellPosition.x), static_cast<SHORT>(cellPosition.y)};
-		FillConsoleOutputCharacterA(m_consoleHandle, character, 1, cell, &written);
-		FillConsoleOutputAttribute(m_consoleHandle, 0x0F, 1, cell, &written);
-	};
-
-	draw(player.getPosition(), '@');
-	int activeMissiles = 0;
-	gameManager.getMissiles().ForEachActive([&](const Missile& missile)
-	{
-		draw(missile.getCurrentPosition(), '|');
-		++activeMissiles;
-	});
-
-	if (gameManager.IsGameOver())
-	{
-		SetConsoleTitleA("GAME OVER : R pour recommencer");
-	}
-	else if (gameManager.IsVictory())
-	{
-		SetConsoleTitleA(("VICTOIRE ! Score : " + std::to_string(gameManager.getScore()) + " : R pour rejouer").c_str());
-	}
-	else
-	{
-		SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
-	}
-
-	gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
-	{
-		// Debug : un '.' sur chaque case de la hitbox, puis le W par-dessus
-		const Collision::CellRect rect = enemy.getHitboxRect();
-		for (int y = rect.topLeftCell.y; y <= rect.bottomRightCell.y; ++y)
-		{
-			for (int x = rect.topLeftCell.x; x <= rect.bottomRightCell.x; ++x)
-			{
-				draw({ static_cast<float>(x), static_cast<float>(y) }, '.');
-			}
-		}
-
-		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
-	});
+	screen->DrawDebug(m_consoleHandle);
 
 	Sleep(16);
-	// --- FIN DU TEST ---
 }
 
 LONG_PTR App::setConsoleWindowStyle(INT n_index, LONG_PTR new_style)
