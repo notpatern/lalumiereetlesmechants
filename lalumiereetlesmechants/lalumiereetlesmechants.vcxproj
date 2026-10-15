@@ -143,6 +143,7 @@
     <ClCompile Include="src\App\Entites\Enemy.cpp" />
     <ClCompile Include="src\App\Entites\Entities.cpp" />
     <ClCompile Include="src\App\App.cpp" />
+    <ClCompile Include="src\App\Screens\CreditsScreen.cpp" />
     <ClCompile Include="src\App\Screens\DebugConsole.cpp" />
     <ClCompile Include="src\App\Screens\GameScreen.cpp" />
     <ClCompile Include="src\App\Screens\Menu.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\App\Entites\Enemy.h" />
     <ClInclude Include="src\App\Entites\Entities.h" />
     <ClInclude Include="src\App\App.h" />
+    <ClInclude Include="src\App\Screens\CreditsScreen.h" />
     <ClInclude Include="src\App\Screens\DebugConsole.h" />
     <ClInclude Include="src\App\Screens\GameScreen.h" />
     <ClInclude Include="src\App\Screens\IScreen.h" />

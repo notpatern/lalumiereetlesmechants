@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../Gameplay/PlayArea.h"
+#include "../Gameplay/Collision.h"
 
 void GameScreen::Update(float deltaTime, const InputManager& input)
 {
@@ -11,13 +12,14 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 
 	if (m_gameManager.IsGameOver() || m_gameManager.IsVictory())
 	{
-		if (input.WasJustPressed('R'))
+		switch (m_endMenu.Update(input))
 		{
+		case END_RESTART_CHOICE:
 			m_request = ScreenRequest::NewGame;
-		}
-		else if (input.WasJustPressed(VK_ESCAPE))
-		{
+			break;
+		case END_MENU_CHOICE:
 			m_request = ScreenRequest::Title;
+			break;
 		}
 		return;
 	}
@@ -29,9 +31,17 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 
 	if (m_isPaused)
 	{
-		if (input.WasJustPressed('Q'))
+		switch (m_pauseMenu.Update(input))
 		{
+		case PAUSE_RESUME_CHOICE:
+			m_isPaused = false;
+			break;
+		case PAUSE_RESTART_CHOICE:
+			m_request = ScreenRequest::NewGame;
+			break;
+		case PAUSE_MENU_CHOICE:
 			m_request = ScreenRequest::Title;
+			break;
 		}
 		return;
 	}
@@ -46,14 +56,17 @@ void GameScreen::Draw(Renderer& renderer) const
 	if (m_gameManager.IsGameOver())
 	{
 		DrawGameOver(renderer);
+		m_endMenu.Draw(renderer, 13);
 	}
 	else if (m_gameManager.IsVictory())
 	{
 		DrawVictory(renderer);
+		m_endMenu.Draw(renderer, 14);
 	}
 	else if (m_isPaused)
 	{
 		DrawPause(renderer);
+		m_pauseMenu.Draw(renderer, 13);
 	}
 }
 
@@ -66,6 +79,10 @@ void GameScreen::DrawDebug(HANDLE console) const
 	auto draw = [&](const Utility::Vector2<float>& position, char character)
 	{
 		const Utility::Vector2<int> cellPosition = Collision::ToCell(position);
+		if (!PlayArea::Bounds().Contains(cellPosition))
+		{
+			return;
+		}
 		const COORD cell{static_cast<SHORT>(cellPosition.x), static_cast<SHORT>(cellPosition.y)};
 		FillConsoleOutputCharacterA(console, character, 1, cell, &written);
 		FillConsoleOutputAttribute(console, 0x0F, 1, cell, &written);
@@ -79,22 +96,7 @@ void GameScreen::DrawDebug(HANDLE console) const
 		++activeMissiles;
 	});
 
-	if (m_gameManager.IsGameOver())
-	{
-		SetConsoleTitleA("GAME OVER : R pour recommencer, Echap pour le menu");
-	}
-	else if (m_isPaused)
-	{
-		SetConsoleTitleA(PAUSE_TEXT.data());
-	}
-	else if (m_gameManager.IsVictory())
-	{
-		SetConsoleTitleA(("VICTOIRE ! Score : " + std::to_string(m_gameManager.getScore()) + " : R pour rejouer").c_str());
-	}
-	else
-	{
-		SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
-	}
+	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
 
 	m_gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
 	{
@@ -110,6 +112,24 @@ void GameScreen::DrawDebug(HANDLE console) const
 
 		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
 	});
+
+
+	if (m_gameManager.IsGameOver())
+	{
+		DebugConsole::WriteCentered(console, GAME_OVER_TEXT, 10);
+		m_endMenu.DrawDebug(console, 13);
+	}
+	else if (m_gameManager.IsVictory())
+	{
+		DebugConsole::WriteCentered(console, VICTORY_TEXT, 9);
+		DebugConsole::WriteCentered(console, "Score : " + std::to_string(m_gameManager.getScore()), 11);
+		m_endMenu.DrawDebug(console, 14);
+	}
+	else if (m_isPaused)
+	{
+		DebugConsole::WriteCentered(console, PAUSE_TEXT, 10);
+		m_pauseMenu.DrawDebug(console, 13);
+	}
 }
 
 void GameScreen::DrawGameOver(Renderer& renderer)

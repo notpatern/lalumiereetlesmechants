@@ -17,9 +17,10 @@ public:
 private:
 	static constexpr std::string_view TITLE_TEXT = "La lumiere et les mechants";
 	static constexpr int PLAY_CHOICE = 0;
-	static constexpr int QUIT_CHOICE = 1;
+	static constexpr int CREDITS_CHOICE = 1;
+	static constexpr int QUIT_CHOICE = 2;
 
-	Menu m_menu{ "Jouer", "Quitter" };
+	Menu m_menu{ "Jouer", "Credits", "Quitter" };
 
 	ScreenRequest m_request = ScreenRequest::None;
 };

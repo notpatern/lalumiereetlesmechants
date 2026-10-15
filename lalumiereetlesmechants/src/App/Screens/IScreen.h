@@ -8,6 +8,7 @@ enum class ScreenRequest
 	None,
 	NewGame,
 	Title,
+	Credits,
 	Quit
 };
 

@@ -5,8 +5,11 @@ namespace DebugConsole
 {
 	void Clear(HANDLE console)
 	{
+		CONSOLE_SCREEN_BUFFER_INFO info{};
+		GetConsoleScreenBufferInfo(console, &info);
+
 		DWORD written = 0;
-		FillConsoleOutputCharacterA(console, ' ', PlayArea::WIDTH * (PlayArea::HEIGHT + 2), { 0, 0 }, &written);
+		FillConsoleOutputCharacterA(console, ' ', info.dwSize.X * (PlayArea::HEIGHT + 2), { 0, 0 }, &written);
 	}
 
 	void WriteCentered(HANDLE console, std::string_view text, int row)

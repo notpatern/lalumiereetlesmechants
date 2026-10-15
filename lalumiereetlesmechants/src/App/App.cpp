@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 
+#include "Screens/CreditsScreen.h"
 #include "Screens/IScreen.h"
 #include "Screens/GameScreen.h"
 #include "Screens/TitleScreen.h"
@@ -40,6 +41,9 @@ void App::Run() {
 		break;
 	case ScreenRequest::Title:
 		screen = std::make_unique<TitleScreen>();
+		break;
+	case ScreenRequest::Credits:
+		screen = std::make_unique<CreditsScreen>();
 		break;
 	case ScreenRequest::Quit:
 		m_isRunning = false;
