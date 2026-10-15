@@ -23,6 +23,7 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 	}
 
 	m_isActive = true;
+	SetInRenderQueue(true);
 }
 
 DamageInfos Missile::getDamageInfos() const
@@ -38,6 +39,7 @@ void Missile::OnLeftPlayArea()
 void Missile::Deactivate()
 {
 	m_isActive = false;
+	SetInRenderQueue(false);
 }
 
 void Missile::Explode()

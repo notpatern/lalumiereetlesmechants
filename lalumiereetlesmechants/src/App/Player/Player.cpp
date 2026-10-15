@@ -9,6 +9,7 @@ Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missi
 {
 	this->SetSpritePosition(&m_position);
 	m_spriteType = SpriteUtils::SpriteType::Player;
+	SetInRenderQueue(true);
 }
 
 void Player::Update(float dt, const InputManager& input, const Collision::CellRect& bounds)
@@ -20,6 +21,7 @@ void Player::Update(float dt, const InputManager& input, const Collision::CellRe
 
 	m_fireCooldown.Update(dt);
 	m_invincibility.Update(dt);
+	SetInRenderQueue(IsVisible());
 
 	Move(dt, ReadDirection(input), bounds);
 	if (ReadShoot(input))
@@ -35,10 +37,14 @@ DamageResult Player::TakeDamage(const DamageInfos& damage)
 		return DamageResult::Ignored;
 	}
 
-	const bool killed = m_health.TakeDamage(damage.amount);
-	m_invincibility.Start(HIT_INVINCIBILITY_DURATION);
+	if (m_health.TakeDamage(damage.amount))
+	{
+		Die();
+		return DamageResult::Killed;
+	}
 
-	return killed ? DamageResult::Killed : DamageResult::Hit;
+	m_invincibility.Start(HIT_INVINCIBILITY_DURATION);
+	return DamageResult::Hit;
 }
 
 DamageInfos Player::getContactDamage() const
@@ -116,3 +122,9 @@ void Player::TryShoot()
 		m_fireCooldown.Start(m_fireDelay);
 	}
 }
+
+void Player::Die()
+{
+	SetInRenderQueue(false);
+}
+

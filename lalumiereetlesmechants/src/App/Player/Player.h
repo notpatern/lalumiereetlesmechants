@@ -20,7 +20,7 @@ public:
 
 	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
-	int getHealth() const {return m_health.getCurrent(); }
+	int getHealth() const { return m_health.getCurrent(); }
 
 	DamageInfos getContactDamage() const;
 
@@ -33,7 +33,7 @@ public:
 
 private:
 	Utility::Vector2<float> m_position;
-	Utility::Vector2<float> m_speed{ 30.f, 15.f };
+	Utility::Vector2<float> m_speed{30.f, 15.f};
 
 	static constexpr float MISSILE_SPEED = 45.f;
 	static constexpr int MISSILE_DAMAGE = 1;
@@ -68,4 +68,5 @@ private:
 
 	static bool ReadShoot(const InputManager& input);
 	void TryShoot();
+	void Die();
 };

@@ -15,6 +15,7 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 	m_hitFlash.Start(0.f);
 	m_isActive = true;
 	m_observer = observer;
+	SetInRenderQueue(true);
 }
 
 void Enemy::Update(float dt, const EnemyUpdateContext& context)
@@ -89,6 +90,7 @@ void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
 	}
 
 	m_isActive = false;
+	SetInRenderQueue(false);
 
 	if (m_observer)
 	{
