@@ -1,18 +1,27 @@
 #pragma once
+#include "Missile.h"
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/Collision.h"
+#include "../../Utilities/Pool.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
 #include "../Gameplay/IEnemyObserver.h"
+#include "../Gameplay/Wave.h"
+
+struct EnemyUpdateContext
+{
+	Utility::Pool<Missile>& missiles;
+};
+
 
 class Enemy : public IDamageable
 {
 public:
 	Enemy();
 
-	void Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, IEnemyObserver* observer);
-	void Update(float dt);
+	void Spawn(const SpawnEntry& entry, IEnemyObserver* observer);
+	void Update(float dt, const EnemyUpdateContext& context);
 	void OnLeftPlayArea();
 
 	// IDamageable
@@ -43,12 +52,15 @@ private:
 	Health m_health;
 	Collision::Hitbox m_hitbox;
 	Utility::Countdown m_hitFlash;
+	Weapon m_weapon;
 
 	IEnemyObserver* m_observer;
 
 	bool m_isActive;
 
 	void Die();
+
+	void Shoot(Utility::Pool<Missile>& missiles);
 
 	void RemoveFromPlay(EnemyRemovalReason reason);
 };

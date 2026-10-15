@@ -4,17 +4,18 @@ Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_
 {
 }
 
-void Enemy::Spawn(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, IEnemyObserver* observer)
+void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 {
-	m_currentPosition = position;
-	m_velocity = velocity;
+	m_currentPosition = entry.position;
+	m_velocity = entry.velocity;
+	m_weapon.Equip(entry.weapon);
 	m_health.Reset();
 	m_hitFlash.Start(0.f);
 	m_isActive = true;
 	m_observer = observer;
 }
 
-void Enemy::Update(float dt)
+void Enemy::Update(float dt, const EnemyUpdateContext& context)
 {
 	if (!m_isActive)
 	{
@@ -25,6 +26,12 @@ void Enemy::Update(float dt)
 	m_currentPosition.y += m_velocity.y * dt;
 
 	m_hitFlash.Update(dt);
+
+
+	if (m_weapon.Update(dt))
+	{
+		Shoot(context.missiles);
+	}
 }
 
 void Enemy::OnLeftPlayArea()
@@ -57,6 +64,19 @@ DamageInfos Enemy::getContactDamage() const
 void Enemy::Die()
 {
 	RemoveFromPlay(EnemyRemovalReason::Killed);
+}
+
+void Enemy::Shoot(Utility::Pool<Missile>& missiles)
+{
+	if (Missile* missile = missiles.Acquire())
+	{
+		const WeaponSettings& settings = m_weapon.getSettings();
+
+		const Utility::Vector2<float> muzzle{ m_currentPosition.x + HITBOX_WIDTH/2, m_currentPosition.y + HITBOX_HEIGHT};
+
+		missile->Launch(muzzle, {0.f, settings.missileSpeed}, Team::Enemy, settings.missileDamage);
+	}
+
 }
 
 void Enemy::RemoveFromPlay(EnemyRemovalReason reason)

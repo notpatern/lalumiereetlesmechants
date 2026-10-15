@@ -4,7 +4,7 @@
 namespace PlayArea
 {
 	inline constexpr int WIDTH = 80;
-	inline constexpr int HEIGHT = 40;
+	inline constexpr int HEIGHT = 28;
 	inline constexpr int OFFSCREEN_MARGIN = 5;
 	inline constexpr float SPAWN_Y = -2.f;
 

@@ -34,7 +34,7 @@ private:
 	Utility::Vector2<float> m_lastPosition;
 	Utility::Vector2<float> m_velocity;
 
-	static constexpr float LIFETIME = 2.f;
+	static constexpr float LIFETIME = 10.f;
 	Utility::Countdown m_lifetime;
 
 	Team m_team;

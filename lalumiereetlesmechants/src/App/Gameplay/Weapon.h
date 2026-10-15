@@ -12,7 +12,7 @@ class Weapon
 {
 public:
 	void Equip(const WeaponSettings& settings);
-	bool Update(float deltaTime);
+	[[nodiscard]] bool Update(float deltaTime);
 
 	const WeaponSettings& getSettings() const { return m_settings; }
 

@@ -89,7 +89,7 @@ void WaveSpawner::SpawnEnemy(const SpawnEntry& entry)
 {
 	if (Enemy* enemy = m_enemies->Acquire())
 	{
-		enemy->Spawn(entry.position, entry.velocity, this);
+		enemy->Spawn(entry, this);
 		++m_aliveCount;
 	}
 }

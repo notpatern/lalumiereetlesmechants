@@ -6,9 +6,14 @@
 namespace Utility
 {
 	template <typename T>
-	concept Poolable = std::default_initializable<T> && requires(T& object, float dt)
+	concept Poolable = std::default_initializable<T> && requires(const T& object)
 	{
 		{ object.getIsActive() } -> std::same_as<bool>;
+	};
+
+	template <typename T>
+	concept Updatable = requires(T& object, float dt)
+	{
 		object.Update(dt);
 	};
 
@@ -19,7 +24,10 @@ namespace Utility
 		Pool(std::size_t initialSize, std::size_t maxSize);
 		[[nodiscard]] T* Acquire();
 
-		void Update(float dt);
+		void Update(float dt) requires Updatable<T>
+		{
+			ForEachActive([dt](T& object) { object.Update(dt); });
+		}
 
 		template <std::invocable<T&> Function>
 		void ForEachActive(Function function)
@@ -76,12 +84,6 @@ namespace Utility
 		m_searchStart = firstNewIndex + 1;
 
 		return &m_objects[firstNewIndex];
-	}
-
-	template <Poolable T>
-	void Pool<T>::Update(float dt)
-	{
-		ForEachActive([dt](T& object) { object.Update(dt); });
 	}
 
 	template <Poolable T>

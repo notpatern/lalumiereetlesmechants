@@ -19,8 +19,13 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 
 	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
+
+	const EnemyUpdateContext enemyContext{ m_missilesPool };
+	m_enemiesPool.ForEachActive([&](Enemy& enemy)
+	{
+		enemy.Update(deltaTime, enemyContext);
+	});
 	m_missilesPool.Update(deltaTime);
-	m_enemiesPool.Update(deltaTime);
 
 	CheckMissilesHits(m_enemiesPool);
 	CheckMissilesHits(m_player);
