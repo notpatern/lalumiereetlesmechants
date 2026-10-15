@@ -104,7 +104,7 @@ bool Player::ReadShoot(const InputManager& input)
 
 void Player::TryShoot()
 {
-	if (!m_fireCooldown.IsFinished() || m_remainingMissiles <= 0)
+	if (!m_fireCooldown.IsFinished())
 	{
 		return;
 	}
@@ -113,6 +113,5 @@ void Player::TryShoot()
 	{
 		missile->Launch({ m_position.x + BODY_WIDTH / 2, m_position.y - 1.f }, { 0.f, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
 		m_fireCooldown.Start(m_fireDelay);
-		--m_remainingMissiles;
 	}
 }

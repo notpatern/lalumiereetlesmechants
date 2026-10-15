@@ -39,8 +39,6 @@ private:
 	static constexpr int MISSILE_DAMAGE = 1;
 
 	Utility::Pool<Missile>* m_missilePool;
-	int m_maxMissiles{100};
-	int m_remainingMissiles{m_maxMissiles};
 
 	Utility::Countdown m_fireCooldown;
 	float m_fireDelay{0.25f};
