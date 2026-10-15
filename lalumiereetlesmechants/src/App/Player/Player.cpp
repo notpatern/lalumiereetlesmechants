@@ -3,11 +3,10 @@
 
 
 Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles)
-	: m_position(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH),
+	: Entity(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH),
 	  m_hitbox{ .offset = { HITBOX_OFFSET_X, HITBOX_OFFSET_Y }, .size = { HITBOX_WIDTH, HITBOX_HEIGHT } },
 	  m_body{ .size = { BODY_WIDTH, BODY_HEIGHT } }
 {
-	this->SetSpritePosition(&m_position);
 	m_spriteType = SpriteUtils::SpriteType::Player;
 	SetInRenderQueue(true);
 }

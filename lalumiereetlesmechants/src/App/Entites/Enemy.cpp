@@ -5,7 +5,6 @@
 
 Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr), m_isActive(false)
 {
-	this->SetSpritePosition(&m_position);
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)

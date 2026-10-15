@@ -2,17 +2,17 @@
 
 #include "../Render/Renderer.h"
 
-Entity::Entity::Entity() : Sprite()
+Entity::Entity() : Sprite()
 {
-
+	SetSpritePosition(&m_position);
 }
 
-Entity::Entity::Entity(const Utility::Vector2<float>& position) : m_position( position )
+Entity::Entity(const Utility::Vector2<float>& position) : m_position( position )
 {
-
+	SetSpritePosition(&m_position);
 }
 
-Entity::Entity::~Entity()
+Entity::~Entity()
 {
 }
 

@@ -10,12 +10,15 @@ public:
 	Entity(const Utility::Vector2<float>& position);
 	~Entity();
 
-	inline Utility::Vector2<float>& getPosition()
+	Entity(const Entity&) = delete;
+	Entity& operator=(const Entity&) = delete;
+
+	const Utility::Vector2<float>& getPosition() const
 	{
 		return m_position;
 	}
 
-	void setPosition(Utility::Vector2<float>& newPos)
+	void setPosition(const Utility::Vector2<float>& newPos)
 	{
 		m_position = newPos;
 	}

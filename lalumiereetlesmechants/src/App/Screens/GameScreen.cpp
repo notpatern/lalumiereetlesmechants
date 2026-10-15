@@ -105,7 +105,7 @@ void GameScreen::DrawDebug(HANDLE console) const
 		{
 			for (int x = 0; x < size.x; ++x)
 			{
-				draw({ missile.getCurrentPosition().x + x, missile.getCurrentPosition().y + y }, character);
+				draw({ missile.getPosition().x + x, missile.getPosition().y + y }, character);
 			}
 		}
 		++activeMissiles;
@@ -124,7 +124,7 @@ void GameScreen::DrawDebug(HANDLE console) const
 			}
 		}
 
-		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : EnemyDebugCharacter(enemy.getType()));
+		draw(enemy.getPosition(), enemy.IsFlashing() ? '*' : EnemyDebugCharacter(enemy.getType()));
 	});
 
 	DebugConsole::WriteTexts(console, getTexts());

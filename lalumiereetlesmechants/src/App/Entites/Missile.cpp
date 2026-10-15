@@ -2,7 +2,6 @@
 
 Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
 {
-	this->SetSpritePosition(&m_position);
 }
 
 void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage, const Utility::Vector2<int>& hitboxSize)

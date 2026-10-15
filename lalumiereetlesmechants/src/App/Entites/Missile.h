@@ -12,7 +12,6 @@ class Missile : public Entity
 public:
 	Missile();
 
-	Utility::Vector2<float> getCurrentPosition() const { return m_position; }
 	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 
 	void Update(float dt);

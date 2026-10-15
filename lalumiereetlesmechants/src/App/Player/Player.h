@@ -16,8 +16,6 @@ public:
 
 	void Update(float dt, const InputManager& input, const Collision::CellRect& bounds);
 
-	Utility::Vector2<float> getPosition() const { return m_position; }
-
 	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 	int getHealth() const { return m_health.getCurrent(); }
@@ -37,7 +35,6 @@ public:
 	Team getTeam() const { return Team::Player; }
 
 private:
-	Utility::Vector2<float> m_position;
 	Utility::Vector2<float> m_speed{30.f, 15.f};
 
 	static constexpr float MISSILE_SPEED = 45.f;

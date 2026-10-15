@@ -70,7 +70,7 @@ void GameManager::CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& 
 {
 	pool.ForEachActive([&](T& object)
 	{
-		if (!area.Contains(Collision::ToCell(object.getCurrentPosition())))
+		if (!area.Contains(Collision::ToCell(object.getPosition())))
 		{
 			object.OnLeftPlayArea(); //TODO : Peut etre un concept
 		}
@@ -120,7 +120,7 @@ DamageResult GameManager::TryHit(Missile& missile, Target& target)
 	hitArea.topLeftCell.x -= missile.getHitboxSize().x - 1;
 	hitArea.topLeftCell.y -= missile.getHitboxSize().y - 1;
 
-	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), hitArea))
+	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getPosition(), hitArea))
 	{
 		return DamageResult::Ignored;
 	}
