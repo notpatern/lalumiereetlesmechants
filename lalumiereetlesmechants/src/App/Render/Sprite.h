@@ -12,11 +12,11 @@ private:
 	Utility::Vector2<int> m_size;
 
 protected:
-	SpriteType m_spriteType;
+	SpriteUtils::SpriteType m_spriteType;
 
 public:
 	Sprite();
-	Sprite(SpriteType spriteType);
+	Sprite(SpriteUtils::SpriteType spriteType);
 	~Sprite();
 
 	//void Render(const World& world);

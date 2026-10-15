@@ -3,10 +3,10 @@
 
 Sprite::Sprite()
 {
-	m_spriteType = SpriteType::NONE;
+	m_spriteType = SpriteUtils::SpriteType::NONE;
 }
 
-Sprite::Sprite(SpriteType spriteType) : m_spriteType(spriteType)
+Sprite::Sprite(SpriteUtils::SpriteType spriteType) : m_spriteType(spriteType)
 {
 	Renderer::getInstance().AddToRenderQueue(this);
 	//m_size.x = m_sprite[0].size();
@@ -14,6 +14,7 @@ Sprite::Sprite(SpriteType spriteType) : m_spriteType(spriteType)
 
 Sprite::~Sprite()
 {
+	Renderer::getInstance().RemoveFromRenderQueue(this);
 }
 
 //void Sprite::Render(const World& world) {

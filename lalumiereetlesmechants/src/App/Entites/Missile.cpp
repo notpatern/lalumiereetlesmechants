@@ -15,11 +15,11 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 	m_damage = damage;
 	if (team == Team::Enemy)
 	{
-		m_spriteType = SpriteType::EnemyMissile;
+		m_spriteType = SpriteUtils::SpriteType::EnemyMissile;
 	}
 	else
 	{
-		m_spriteType = SpriteType::PlayerMissile;
+		m_spriteType = SpriteUtils::SpriteType::PlayerMissile;
 	}
 
 	m_isActive = true;

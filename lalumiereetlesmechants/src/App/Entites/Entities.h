@@ -25,6 +25,4 @@ public:
 		m_position.x = x;
 		m_position.y = y;
 	}
-
-	virtual void Update() = 0;
 };

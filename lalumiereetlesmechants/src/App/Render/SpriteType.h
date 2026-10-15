@@ -1,10 +1,13 @@
 #pragma once
 
-enum SpriteType
+namespace SpriteUtils
 {
-	EnemyType,
-	PlayerType,
+enum class SpriteType
+{
+	Enemy,
+	Player,
 	PlayerMissile,
 	EnemyMissile,
 	NONE
 };
+}

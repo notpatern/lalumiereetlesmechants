@@ -3,7 +3,7 @@
 Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
 {
 	this->SetSpritePosition(&m_position);
-	m_spriteType = SpriteType::EnemyType;
+	m_spriteType = SpriteUtils::SpriteType::Enemy;
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)

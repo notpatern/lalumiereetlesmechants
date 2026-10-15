@@ -51,7 +51,7 @@ void Renderer::Render()
 	WriteConsoleOutput(hOutput, (CHAR_INFO*)buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);
 
-	for (Sprite* currentSprite : m_renderQueue) {
+	for (Sprite* currentSprite : m_spriteRenderQueue) {
 		RenderSprite(currentSprite);
 	}
 }
@@ -76,10 +76,20 @@ void Renderer::RenderSprite(Sprite* sprite) {
 
 void Renderer::AddToRenderQueue(Sprite* sprite)
 {
-	m_renderQueue.push_back(sprite);
+	m_spriteRenderQueue.push_back(sprite);
+}
+
+void Renderer::AddToRenderQueue(IScreen* screen)
+{
+	m_screenRenderQueue.push_back(screen);
 }
 
 void Renderer::RemoveFromRenderQueue(Sprite* sprite)
 {
-	m_renderQueue.erase(std::remove(m_renderQueue.begin(), m_renderQueue.end(), sprite), m_renderQueue.end());
+	m_spriteRenderQueue.erase(std::remove(m_spriteRenderQueue.begin(), m_spriteRenderQueue.end(), sprite), m_spriteRenderQueue.end());
+}
+
+void Renderer::RemoveFromRenderQueue(IScreen* screen)
+{
+	m_screenRenderQueue.erase(std::remove(m_screenRenderQueue.begin(), m_screenRenderQueue.end(), screen), m_screenRenderQueue.end());
 }
