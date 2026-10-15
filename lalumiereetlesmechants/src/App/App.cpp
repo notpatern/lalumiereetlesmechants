@@ -5,6 +5,7 @@
 
 #include "Screens/IScreen.h"
 #include "Screens/GameScreen.h"
+#include "Screens/TitleScreen.h"
 
 App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)), m_renderer(&m_world)
 {
@@ -26,15 +27,22 @@ App::~App()
 
 void App::Run() {
 	static InputManager input;
-	static std::unique_ptr<IScreen> screen = std::make_unique<GameScreen>();
+	static std::unique_ptr<IScreen> screen = std::make_unique<TitleScreen>();
 
 	const float dt = m_timer->getElapsedSeconds(true);
 	input.Update();
 	screen->Update(dt, input);
 
-	if (screen->getRequest() == ScreenRequest::NewGame)
+	switch (screen->getRequest())
 	{
+	case ScreenRequest::NewGame:
 		screen = std::make_unique<GameScreen>();
+		break;
+	case ScreenRequest::Title:
+		screen = std::make_unique<TitleScreen>();
+		break;
+	case ScreenRequest::None:
+		break;
 	}
 
 	//m_renderer.Render();
