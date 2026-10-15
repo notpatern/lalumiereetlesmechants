@@ -3,7 +3,6 @@
 #include "../../Utilities/Vector2.h"
 #include "../../Utilities/Countdown.h"
 #include "../Manager/InputManager.h"
-#include "../Render/Sprite.h"
 #include "../Entites/Missile.h"
 #include "../Gameplay/Collision.h"
 #include "../Gameplay/Health.h"
@@ -18,7 +17,6 @@ public:
 	void Update(float dt, const InputManager& input, const Collision::CellRect& bounds);
 
 	Utility::Vector2<float> getPosition() const { return m_position; }
-	Sprite* getSprite() const { return m_sprite; }
 
 	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
@@ -34,7 +32,6 @@ public:
 	Team getTeam() const { return Team::Player; }
 
 private:
-	Sprite* m_sprite = nullptr;
 	Utility::Vector2<float> m_position;
 	Utility::Vector2<float> m_speed{ 30.f, 15.f };
 

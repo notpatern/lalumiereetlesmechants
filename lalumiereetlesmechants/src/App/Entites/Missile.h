@@ -3,14 +3,12 @@
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/IDamageable.h"
-#include "../Render/Sprite.h"
 
 class Missile
 {
 public:
 	Missile();
 
-	Sprite* getSprite() const { return m_sprite; }
 	Utility::Vector2<float> getCurrentPosition() const { return m_currentPosition; }
 	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 
@@ -28,8 +26,6 @@ public:
 	void OnLeftPlayArea();
 
 private:
-	Sprite* m_sprite = nullptr;
-
 	Utility::Vector2<float> m_currentPosition;
 	Utility::Vector2<float> m_lastPosition;
 	Utility::Vector2<float> m_velocity;
