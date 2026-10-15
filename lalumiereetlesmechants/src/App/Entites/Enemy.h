@@ -25,7 +25,7 @@ public:
 	void OnLeftPlayArea();
 
 	// IDamageable
-	void TakeDamage(const DamageInfos& damage) override;
+	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 
 	DamageInfos getContactDamage() const;

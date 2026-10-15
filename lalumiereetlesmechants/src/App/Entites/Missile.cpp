@@ -36,10 +36,11 @@ void Missile::Explode()
 	Deactivate();
 }
 
-void Missile::OnHit(IDamageable& damageable)
+DamageResult Missile::OnHit(IDamageable& damageable)
 {
-	damageable.TakeDamage(getDamageInfos());
+	const DamageResult result = damageable.TakeDamage(getDamageInfos());
 	Explode();
+	return result;
 }
 
 void Missile::Update(float dt)

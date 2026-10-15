@@ -21,7 +21,7 @@ public:
 	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage);
 	void Explode();
 
-	void OnHit(IDamageable& damageable);
+	DamageResult OnHit(IDamageable& damageable);
 
 	Team getTeam() const { return m_team; }
 	DamageInfos getDamageInfos() const;

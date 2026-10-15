@@ -25,15 +25,17 @@ void Player::Update(float dt, const InputManager& input, const Collision::CellRe
 	}
 }
 
-void Player::TakeDamage(const DamageInfos& damage)
+DamageResult Player::TakeDamage(const DamageInfos& damage)
 {
 	if (IsDead() || IsInvincible())
 	{
-		return;
+		return DamageResult::Ignored;
 	}
 
-	m_health.TakeDamage(damage.amount);
+	const bool killed = m_health.TakeDamage(damage.amount);
 	m_invincibility.Start(HIT_INVINCIBILITY_DURATION);
+
+	return killed ? DamageResult::Killed : DamageResult::Hit;
 }
 
 DamageInfos Player::getContactDamage() const

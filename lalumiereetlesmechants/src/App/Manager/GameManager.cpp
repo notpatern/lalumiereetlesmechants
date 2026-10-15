@@ -79,7 +79,10 @@ void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets)
 	{
 		targets.ForEachActive([&](Target& target)
 		{
-			TryHit(missile, target);
+			if (TryHit(missile, target) == DamageResult::Killed)
+			{
+				m_score += POINTS_PER_KILL;
+			}
 		});
 	});
 }
@@ -94,22 +97,24 @@ void GameManager::CheckMissilesHits(Target& target)
 }
 
 template <Hittable Target>
-void GameManager::TryHit(Missile& missile, Target& target)
+DamageResult GameManager::TryHit(Missile& missile, Target& target)
 {
 	if (!missile.getIsActive() || !target.getIsActive() || missile.getTeam() == target.getTeam())
 	{
-		return;
+		return DamageResult::Ignored;
 	}
 
 	const Collision::CellRect targetRect = target.getHitboxRect();
 
 	if (!PlayArea::Bounds().Contains(targetRect))
 	{
-		return;
+		return DamageResult::Ignored;
 	}
 
-	if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), targetRect))
+	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), targetRect))
 	{
-		missile.OnHit(target);
+		return DamageResult::Ignored;
 	}
+
+	return missile.OnHit(target);
 }

@@ -7,6 +7,14 @@ enum class Team
 	Enemy
 };
 
+enum class DamageResult
+{
+	Ignored,
+	Hit,
+	Killed
+
+};
+
 enum class DamageType
 {
 	Basic,

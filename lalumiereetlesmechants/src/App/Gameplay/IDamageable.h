@@ -6,6 +6,6 @@ class IDamageable
 public:
 	virtual ~IDamageable() = default;
 
-	virtual void TakeDamage(const DamageInfos& damage) = 0;
+	virtual DamageResult TakeDamage(const DamageInfos& damage) = 0;
 	virtual bool IsDead() const = 0;
 };

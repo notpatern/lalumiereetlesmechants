@@ -20,7 +20,7 @@ public:
 	Utility::Vector2<float> getPosition() const { return m_position; }
 	Sprite* getSprite() const { return m_sprite; }
 
-	void TakeDamage(const DamageInfos& damage) override;
+	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 	int getHealth() const {return m_health.getCurrent(); }
 

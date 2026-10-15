@@ -39,21 +39,21 @@ void Enemy::OnLeftPlayArea()
 	RemoveFromPlay(EnemyRemovalReason::Escaped);
 }
 
-void Enemy::TakeDamage(const DamageInfos& damage)
+DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 {
 	if (!m_isActive)
 	{
-		return;
+		return DamageResult::Ignored;
 	}
 
 	if (m_health.TakeDamage(damage.amount))
 	{
 		Die();
+		return DamageResult::Killed;
 	}
-	else
-	{
-		m_hitFlash.Start(HIT_FLASH_DURATION);
-	}
+
+	m_hitFlash.Start(HIT_FLASH_DURATION);
+	return DamageResult::Hit;
 }
 
 DamageInfos Enemy::getContactDamage() const
