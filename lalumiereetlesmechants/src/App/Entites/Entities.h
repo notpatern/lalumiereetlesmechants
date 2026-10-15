@@ -21,11 +21,6 @@ public:
 		m_position = newPos;
 	}
 
-	void setPosition(Utility::Vector2<float>& newPos) {
-		m_position.x = (float)newPos.x;
-		m_position.y = (float)newPos.y;
-	}
-
 	void setPosition(float x, float y) {
 		m_position.x = x;
 		m_position.y = y;
