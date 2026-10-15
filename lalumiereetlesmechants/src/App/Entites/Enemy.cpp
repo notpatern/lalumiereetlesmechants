@@ -1,5 +1,8 @@
 #include "Enemy.h"
 
+#include "../../Utilities/ScreenDirection.h"
+#include "../Gameplay/PlayArea.h"
+
 Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr), m_isActive(false)
 {
 	this->SetSpritePosition(&m_position);
@@ -35,9 +38,9 @@ void Enemy::Update(float dt, const EnemyUpdateContext& context)
 
 	RefreshSpriteType();
 
-	if (m_weapon.Update(dt))
+	if (m_weapon.Update(dt) && PlayArea::Bounds().Contains(getHitboxRect()))
 	{
-		Shoot(context.missiles);
+		Shoot(context);
 	}
 }
 
@@ -79,17 +82,22 @@ void Enemy::RefreshSpriteType()
 	m_spriteType = IsFlashing() ? archetype.hitSprite : archetype.sprite;
 }
 
-void Enemy::Shoot(Utility::Pool<Missile>& missiles)
+void Enemy::Shoot(const EnemyUpdateContext& context)
 {
-	if (Missile* missile = missiles.Acquire())
+	if (Missile* missile = context.missiles.Acquire())
 	{
 		const WeaponSettings& settings = m_weapon.getSettings();
 
-		const Utility::Vector2<float> muzzle{ m_position.x + m_hitbox.size.x / 2, m_position.y + m_hitbox.size.y };
+		const Utility::Vector2<float> muzzle{ m_position.x + m_hitbox.size.x / 2 - settings.missileSize.x / 2, m_position.y + m_hitbox.size.y };
 
-		missile->Launch(muzzle, {0.f, settings.missileSpeed}, Team::Enemy, settings.missileDamage);
+		Utility::Vector2<float> direction{ 0.f, 1.f };
+		if (settings.aim == AimMode::AtPlayer)
+		{
+			direction = Utility::ScreenDirection(muzzle, context.playerCenter);
+		}
+
+		missile->Launch(muzzle, { direction.x * settings.missileSpeed, direction.y * settings.missileSpeed }, Team::Enemy, settings.missileDamage, settings.missileSize);
 	}
-
 }
 
 void Enemy::RemoveFromPlay(EnemyRemovalReason reason)

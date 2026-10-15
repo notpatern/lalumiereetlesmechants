@@ -26,6 +26,11 @@ public:
 
 	bool getIsActive() const { return !IsDead(); }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
+	Utility::Vector2<float> getAimPoint() const
+	{
+		const Collision::CellRect core = getHitboxRect();
+		return { core.topLeftCell.x + 0.5f, core.topLeftCell.y + 0.5f };
+	}
 	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
 	bool IsVisible() const;
 

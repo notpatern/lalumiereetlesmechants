@@ -98,7 +98,17 @@ void GameScreen::DrawDebug(HANDLE console) const
 	int activeMissiles = 0;
 	m_gameManager.getMissiles().ForEachActive([&](const Missile& missile)
 	{
-		draw(missile.getCurrentPosition(), '|');
+		// Debug : un caractere sur chaque case du missile, 'O' pour une grosse boule, 'o' pour un tir ennemi
+		const Utility::Vector2<int> size = missile.getHitboxSize();
+		const bool isBig = size.x > 1 || size.y > 1;
+		const char character = isBig ? 'O' : (missile.getTeam() == Team::Enemy ? 'o' : '|');
+		for (int y = 0; y < size.y; ++y)
+		{
+			for (int x = 0; x < size.x; ++x)
+			{
+				draw({ missile.getCurrentPosition().x + x, missile.getCurrentPosition().y + y }, character);
+			}
+		}
 		++activeMissiles;
 	});
 

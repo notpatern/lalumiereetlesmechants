@@ -16,6 +16,7 @@
 struct EnemyUpdateContext
 {
 	Utility::Pool<Missile>& missiles;
+	Utility::Vector2<float> playerCenter;
 };
 
 
@@ -63,7 +64,7 @@ private:
 
 	void RefreshSpriteType();
 
-	void Shoot(Utility::Pool<Missile>& missiles);
+	void Shoot(const EnemyUpdateContext& context);
 
 	void RemoveFromPlay(EnemyRemovalReason reason);
 };

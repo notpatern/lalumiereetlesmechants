@@ -5,7 +5,7 @@ Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
 	this->SetSpritePosition(&m_position);
 }
 
-void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage)
+void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage, const Utility::Vector2<int>& hitboxSize)
 {
 	m_lifetime.Start(LIFETIME);
 	m_lastPosition = position;
@@ -13,9 +13,11 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 	m_velocity = velocity;
 	m_team = team;
 	m_damage = damage;
+	m_hitboxSize = hitboxSize;
 	if (team == Team::Enemy)
 	{
-		m_spriteType = SpriteUtils::SpriteType::EnemyMissile;
+		const bool isBig = hitboxSize.x > 1 || hitboxSize.y > 1;
+		m_spriteType = isBig ? SpriteUtils::SpriteType::BigEnemyMissile : SpriteUtils::SpriteType::EnemyMissile;
 	}
 	else
 	{

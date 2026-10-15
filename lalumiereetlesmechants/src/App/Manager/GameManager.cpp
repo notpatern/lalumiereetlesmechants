@@ -25,7 +25,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
 
-	const EnemyUpdateContext enemyContext{ m_missilesPool };
+	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = m_player.getAimPoint() };
 	m_enemiesPool.ForEachActive([&](Enemy& enemy)
 	{
 		enemy.Update(deltaTime, enemyContext);
@@ -116,7 +116,11 @@ DamageResult GameManager::TryHit(Missile& missile, Target& target)
 		return DamageResult::Ignored;
 	}
 
-	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), targetRect))
+	Collision::CellRect hitArea = targetRect;
+	hitArea.topLeftCell.x -= missile.getHitboxSize().x - 1;
+	hitArea.topLeftCell.y -= missile.getHitboxSize().y - 1;
+
+	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), hitArea))
 	{
 		return DamageResult::Ignored;
 	}
