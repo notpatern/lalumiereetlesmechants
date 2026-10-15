@@ -5,7 +5,7 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 {
 	m_gameManager.Update(deltaTime, input);
 
-	m_wantsRestart = m_gameManager.IsGameOver() && input.WasJustPressed('R');
+	m_wantsRestart = (m_gameManager.IsGameOver() || m_gameManager.IsVictory()) && input.WasJustPressed('R');
 }
 
 void GameScreen::Draw(Renderer& renderer) const
@@ -16,11 +16,20 @@ void GameScreen::Draw(Renderer& renderer) const
 	{
 		DrawGameOver(renderer);
 	}
+	else if (m_gameManager.IsVictory())
+	{
+		DrawVictory(renderer);
+	}
 }
 
 void GameScreen::DrawGameOver(Renderer& renderer)
 {
 	//la jvais ecrire le game over au milieu de la zone de jeu, et la touche R pour recommencer en dessous
+}
+
+void GameScreen::DrawVictory(Renderer& renderer) const
+{
+	//TODO : Render la victoire
 }
 
 int GameScreen::CenteredColumn(std::string_view text)

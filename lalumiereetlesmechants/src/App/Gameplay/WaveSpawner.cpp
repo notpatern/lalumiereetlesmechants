@@ -1,7 +1,7 @@
 #include "WaveSpawner.h"
 
 WaveSpawner::WaveSpawner(const std::vector<Wave>& waves, Utility::Pool<Enemy>& enemies)
-	: m_waves(&waves), m_enemies(&enemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0),  m_aliveCount(0)
+	: m_waves(&waves), m_enemies(&enemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0), m_aliveCount(0)
 {
 	if (!m_waves->empty())
 	{
@@ -34,8 +34,18 @@ void WaveSpawner::Update(float deltaTime)
 		m_timer.Update(deltaTime);
 		if (m_timer.IsFinished())
 		{
-			StartWave((m_waveIndex + 1) % m_waves->size()); //TODO : Voir si on veut vraiment boucler ou win screen / boss
+			if (m_waveIndex + 1 < m_waves->size())
+			{
+				StartWave(m_waveIndex + 1);
+			}
+			else
+			{
+				m_state = State::Finished;
+			}
 		}
+		break;
+
+	case State::Finished:
 		break;
 	}
 }

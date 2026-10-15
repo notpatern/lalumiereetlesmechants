@@ -67,6 +67,10 @@ void App::Run() {
 	{
 		SetConsoleTitleA("GAME OVER : R pour recommencer");
 	}
+	else if (gameManager.IsVictory())
+	{
+		SetConsoleTitleA(("VICTOIRE ! Score : " + std::to_string(gameManager.getScore()) + " : R pour rejouer").c_str());
+	}
 	else
 	{
 		SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());

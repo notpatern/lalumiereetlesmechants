@@ -25,6 +25,7 @@ public:
 
 	int getScore() const { return m_score; }
 	bool IsGameOver() const { return m_player.IsDead(); }
+	bool IsVictory() const { return m_waveSpawner.IsFinished() && !m_player.IsDead(); }
 
 private:
 	static constexpr float MAX_DELTA_TIME = 0.1f;

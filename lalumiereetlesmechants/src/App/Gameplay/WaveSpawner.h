@@ -21,12 +21,15 @@ public:
 
 	void OnEnemyRemoved(const EnemyRemovedEvent& event) override;
 
+	bool IsFinished() const {return m_state == State::Finished;}
+
 private:
 	enum class State
 	{
 		Spawning,
 		WaitingForClear,
-		Pause
+		Pause,
+		Finished
 	};
 
 	const std::vector<Wave>* m_waves;

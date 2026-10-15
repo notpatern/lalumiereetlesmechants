@@ -12,7 +12,7 @@ GameManager::GameManager() :
 
 void GameManager::Update(float deltaTime, const InputManager& inputManager)
 {
-	if (IsGameOver())
+	if (IsGameOver() || IsVictory())
 	{
 		return;
 	}
