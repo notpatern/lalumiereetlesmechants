@@ -16,14 +16,15 @@ public:
 	GameManager(const GameManager&) = delete;
 	GameManager& operator=(const GameManager&) = delete;
 
-	Utility::Pool<Missile> m_missilesPool;
-	Utility::Pool<Enemy> m_enemiesPool;
-
 	void Update(float deltaTime, const InputManager& inputManager);
 
 	const Player& getPlayer() const { return m_player; }
 
+	const Utility::Pool<Enemy>& getEnemies() const { return m_enemiesPool; }
+	const Utility::Pool<Missile>& getMissiles() const { return m_missilesPool; }
+
 	int getScore() const { return m_score; }
+	bool IsGameOver() const { return m_player.IsDead(); }
 
 private:
 	static constexpr float MAX_DELTA_TIME = 0.1f;
@@ -37,6 +38,9 @@ private:
 
 	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
 	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
+
+	Utility::Pool<Missile> m_missilesPool;
+	Utility::Pool<Enemy> m_enemiesPool;
 
 	Player m_player;
 	WaveSpawner m_waveSpawner;

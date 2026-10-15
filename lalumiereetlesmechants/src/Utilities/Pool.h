@@ -41,7 +41,17 @@ namespace Utility
 			}
 		}
 
-		const std::deque<T>& getObjects() const { return m_objects; }
+		template <std::invocable<const T&> Function>
+		void ForEachActive(Function function) const
+		{
+			for (std::size_t i = 0; i < m_objects.size(); ++i)
+			{
+				if (m_objects[i].getIsActive())
+				{
+					function(m_objects[i]);
+				}
+			}
+		}
 
 	private:
 		std::deque<T> m_objects;

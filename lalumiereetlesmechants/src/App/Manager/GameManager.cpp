@@ -12,6 +12,11 @@ GameManager::GameManager() :
 
 void GameManager::Update(float deltaTime, const InputManager& inputManager)
 {
+	if (IsGameOver())
+	{
+		return;
+	}
+
 	if (deltaTime > MAX_DELTA_TIME)
 	{
 		deltaTime = MAX_DELTA_TIME;

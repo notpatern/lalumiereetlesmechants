@@ -2,9 +2,11 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include "Gameplay/Collision.h"
 #include "Manager/GameManager.h"
+#include "Screens/GameScreen.h"
 #include "Player/Player.h"
 
 App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)), m_renderer(&m_world)
@@ -28,12 +30,19 @@ App::~App()
 void App::Run() {
 	// --- TEST
 	static InputManager input;
-	static GameManager gameManager;
-	const Player& player = gameManager.getPlayer();
+	static std::unique_ptr<GameScreen> gameScreen = std::make_unique<GameScreen>();
 
 	const float dt = m_timer->getElapsedSeconds(true);
 	input.Update();
-	gameManager.Update(dt, input);
+	gameScreen->Update(dt, input);
+
+	if (gameScreen->WantsRestart())
+	{
+		gameScreen = std::make_unique<GameScreen>();
+	}
+
+	const GameManager& gameManager = gameScreen->getGameManager();
+	const Player& player = gameManager.getPlayer();
 
 	//m_renderer.Render();
 
@@ -48,23 +57,23 @@ void App::Run() {
 
 	draw(player.getPosition(), '@');
 	int activeMissiles = 0;
-	for (const Missile& missile : gameManager.m_missilesPool.getObjects())
+	gameManager.getMissiles().ForEachActive([&](const Missile& missile)
 	{
-		if (missile.getIsActive())
-		{
-			draw(missile.getCurrentPosition(), '|');
-			++activeMissiles;
-		}
+		draw(missile.getCurrentPosition(), '|');
+		++activeMissiles;
+	});
+
+	if (gameManager.IsGameOver())
+	{
+		SetConsoleTitleA("GAME OVER : R pour recommencer");
 	}
-	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
-
-	for (const Enemy& enemy : gameManager.m_enemiesPool.getObjects())
+	else
 	{
-		if (!enemy.getIsActive())
-		{
-			continue;
-		}
+		SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
+	}
 
+	gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
+	{
 		// Debug : un '.' sur chaque case de la hitbox, puis le W par-dessus
 		const Collision::CellRect rect = enemy.getHitboxRect();
 		for (int y = rect.topLeftCell.y; y <= rect.bottomRightCell.y; ++y)
@@ -76,7 +85,7 @@ void App::Run() {
 		}
 
 		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
-	}
+	});
 
 	Sleep(16);
 	// --- FIN DU TEST ---
