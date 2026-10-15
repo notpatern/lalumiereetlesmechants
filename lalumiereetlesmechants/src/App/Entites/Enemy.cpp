@@ -11,7 +11,7 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 
 	m_type = entry.type;
 	m_position = entry.position;
-	m_velocity = entry.velocity;
+	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target);
 	m_health = Health(archetype.maxHealth);
 	m_hitbox.size = archetype.hitboxSize;
 	m_weapon.Equip(archetype.weapon);
@@ -29,8 +29,7 @@ void Enemy::Update(float dt, const EnemyUpdateContext& context)
 		return;
 	}
 
-	m_position.x += m_velocity.x * dt;
-	m_position.y += m_velocity.y * dt;
+	m_position = m_movement.Update(dt);
 
 	m_hitFlash.Update(dt);
 

@@ -130,6 +130,7 @@
     <ClCompile Include="src\App\Gameplay\EnemyArchetype.cpp" />
     <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Health.cpp" />
+    <ClCompile Include="src\App\Gameplay\Movement.cpp" />
     <ClCompile Include="src\App\Gameplay\WaveData.cpp" />
     <ClCompile Include="src\App\Gameplay\WaveSpawner.cpp" />
     <ClCompile Include="src\App\Gameplay\Weapon.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\App\Gameplay\Hittable.h" />
     <ClInclude Include="src\App\Gameplay\IDamageable.h" />
     <ClInclude Include="src\App\Gameplay\IEnemyObserver.h" />
+    <ClInclude Include="src\App\Gameplay\Movement.h" />
     <ClInclude Include="src\App\Gameplay\PlayArea.h" />
     <ClInclude Include="src\App\Gameplay\Wave.h" />
     <ClInclude Include="src\App\Gameplay\WaveData.h" />
@@ -188,6 +190,7 @@
     <ClInclude Include="src\App\Screens\TitleScreen.h" />
     <ClInclude Include="src\Utilities\Countdown.h" />
     <ClInclude Include="src\Utilities\Pool.h" />
+    <ClInclude Include="src\Utilities\ScreenDirection.h" />
     <ClInclude Include="src\Utilities\Timer.h" />
     <ClInclude Include="src\Utilities\Vector2.h" />
     <ClInclude Include="src\App\World\World.h" />

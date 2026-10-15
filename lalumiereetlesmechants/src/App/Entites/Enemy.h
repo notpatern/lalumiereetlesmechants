@@ -7,6 +7,7 @@
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
 #include "../Gameplay/IEnemyObserver.h"
+#include "../Gameplay/Movement.h"
 #include "../Gameplay/Wave.h"
 #include "Entities.h"
 #include "../Gameplay/EnemyArchetype.h"
@@ -18,7 +19,7 @@ struct EnemyUpdateContext
 };
 
 
-class Enemy : public IDamageable, Entity
+class Enemy : public IDamageable, public Entity
 {
 public:
 	Enemy();
@@ -47,7 +48,7 @@ private:
 
 	EnemyType m_type;
 
-	Utility::Vector2<float> m_velocity;
+	Movement m_movement;
 
 	Health m_health;
 	Collision::Hitbox m_hitbox;
