@@ -9,7 +9,7 @@
 #include "../Gameplay/IDamageable.h"
 
 
-class Player : public IDamageable, Sprite
+class Player : public IDamageable, Entity
 {
 public:
 	explicit Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles);

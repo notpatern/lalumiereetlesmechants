@@ -1,15 +1,15 @@
 #include "Missile.h"
 
-Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false), Sprite()
+Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
 {
-	this->SetSpritePosition(Collision::ToCell(m_currentPosition));
+	this->SetSpritePosition(&m_position);
 }
 
 void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage)
 {
 	m_lifetime.Start(LIFETIME);
 	m_lastPosition = position;
-	m_currentPosition = position;
+	m_position = position;
 	m_velocity = velocity;
 	m_team = team;
 	m_damage = damage;
@@ -27,7 +27,7 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 
 DamageInfos Missile::getDamageInfos() const
 {
-	return { .amount = m_damage, .source = m_team, .position = m_currentPosition };
+	return { .amount = m_damage, .source = m_team, .position = m_position };
 }
 
 void Missile::OnLeftPlayArea()
@@ -59,10 +59,10 @@ void Missile::Update(float dt)
 		return;
 	}
 
-	m_lastPosition = m_currentPosition;
+	m_lastPosition = m_position;
 
-	m_currentPosition.x += m_velocity.x * dt;
-	m_currentPosition.y += m_velocity.y * dt;
+	m_position.x += m_velocity.x * dt;
+	m_position.y += m_velocity.y * dt;
 
 	m_lifetime.Update(dt);
 	if (m_lifetime.IsFinished())

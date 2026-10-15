@@ -3,39 +3,30 @@
 #include "../Render/Sprite.h"
 #include "../../Utilities/Vector2.h"
 
-class Entity
+class Entity : public Sprite
 {
 protected:
-	Utility::Vector2<int> m_position;
-	Sprite* m_sprite;
+	Utility::Vector2<float> m_position;
 
 public:
 	Entity();
-	Entity(const Utility::Vector2<int>& position, Sprite* sprite);
+	Entity(const Utility::Vector2<float>& position);
 	~Entity();
 
-	inline Sprite* getSprite() {
-		return m_sprite;
-	}
-
-	inline void setSprite(Sprite* sprite) {
-		m_sprite = sprite;
-	}
-
-	inline Utility::Vector2<int>& getPosition() {
+	inline Utility::Vector2<float>& getPosition() {
 		return m_position;
 	}
 
-	void setPosition(Utility::Vector2<int>& newPos) {
+	void setPosition(Utility::Vector2<float>& newPos) {
 		m_position = newPos;
 	}
 
 	void setPosition(Utility::Vector2<float>& newPos) {
-		m_position.x = (int)newPos.x;
-		m_position.y = (int)newPos.y;
+		m_position.x = (float)newPos.x;
+		m_position.y = (float)newPos.y;
 	}
 
-	void setPosition(int x, int y) {
+	void setPosition(float x, float y) {
 		m_position.x = x;
 		m_position.y = y;
 	}

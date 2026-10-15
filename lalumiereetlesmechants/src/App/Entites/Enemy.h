@@ -8,6 +8,7 @@
 #include "../Gameplay/IDamageable.h"
 #include "../Gameplay/IEnemyObserver.h"
 #include "../Gameplay/Wave.h"
+#include "Entities.h"
 
 struct EnemyUpdateContext
 {
@@ -15,7 +16,7 @@ struct EnemyUpdateContext
 };
 
 
-class Enemy : public IDamageable, Sprite
+class Enemy : public IDamageable, Entity
 {
 public:
 	Enemy();
@@ -31,8 +32,8 @@ public:
 	DamageInfos getContactDamage() const;
 
 	bool getIsActive() const { return m_isActive; }
-	Utility::Vector2<float> getCurrentPosition() const { return m_currentPosition; }
-	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_currentPosition); }
+	Utility::Vector2<float> getCurrentPosition() const { return m_position; }
+	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
 
 	Team getTeam() const { return Team::Enemy; }
@@ -46,7 +47,6 @@ private:
 
 	static constexpr int CONTACT_DAMAGE = 1;
 
-	Utility::Vector2<float> m_currentPosition;
 	Utility::Vector2<float> m_velocity;
 
 	Health m_health;

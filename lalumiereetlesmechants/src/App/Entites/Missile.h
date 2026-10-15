@@ -5,13 +5,14 @@
 #include "../Gameplay/IDamageable.h"
 #include "../Render/Sprite.h"
 #include "../Gameplay/Collision.h"
+#include "Entities.h"
 
-class Missile : public Sprite
+class Missile : public Entity
 {
 public:
 	Missile();
 
-	Utility::Vector2<float> getCurrentPosition() const { return m_currentPosition; }
+	Utility::Vector2<float> getCurrentPosition() const { return m_position; }
 	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 
 	void Update(float dt);
@@ -28,7 +29,6 @@ public:
 	void OnLeftPlayArea();
 
 private:
-	Utility::Vector2<float> m_currentPosition;
 	Utility::Vector2<float> m_lastPosition;
 	Utility::Vector2<float> m_velocity;
 

@@ -1,29 +1,14 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false),
-//	for (int y = 0; y < m_size.y; y++)
-//	{
-//		for (int x = 0; x < m_size.x; x++)
-//		{
-//			if (CanAccessMap(world,
-//				Utility::Vector2<int>(m_position.x + x, m_position.y + y))
-//				)
-//			{
-//				SetMapValue(world, Utility::Vector2<int>(
-//					m_position.x + x, m_position.y + y),
-//					m_sprite[y][x],
-//					world.getWorldMap());
-//			}
-//		}
-//	}
-Sprite(SpriteType::Enemy)
+Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
 {
-	this->SetSpritePosition(Collision::ToCell(m_currentPosition));	
+	this->SetSpritePosition(&m_position);
+	m_spriteType = SpriteType::Enemy;
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 {
-	m_currentPosition = entry.position;
+	m_position = entry.position;
 	m_velocity = entry.velocity;
 	m_weapon.Equip(entry.weapon);
 	m_health.Reset();
@@ -39,8 +24,8 @@ void Enemy::Update(float dt, const EnemyUpdateContext& context)
 		return;
 	}
 
-	m_currentPosition.x += m_velocity.x * dt;
-	m_currentPosition.y += m_velocity.y * dt;
+	m_position.x += m_velocity.x * dt;
+	m_position.y += m_velocity.y * dt;
 
 	m_hitFlash.Update(dt);
 
@@ -75,7 +60,7 @@ DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 
 DamageInfos Enemy::getContactDamage() const
 {
-	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Enemy, .position = m_currentPosition };
+	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Enemy, .position = m_position };
 }
 
 void Enemy::Die()
@@ -89,7 +74,7 @@ void Enemy::Shoot(Utility::Pool<Missile>& missiles)
 	{
 		const WeaponSettings& settings = m_weapon.getSettings();
 
-		const Utility::Vector2<float> muzzle{ m_currentPosition.x + HITBOX_WIDTH/2, m_currentPosition.y + HITBOX_HEIGHT};
+		const Utility::Vector2<float> muzzle{ m_position.x + HITBOX_WIDTH/2, m_position.y + HITBOX_HEIGHT};
 
 		missile->Launch(muzzle, {0.f, settings.missileSpeed}, Team::Enemy, settings.missileDamage);
 	}
@@ -107,7 +92,7 @@ void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
 
 	if (m_observer)
 	{
-		m_observer->OnEnemyRemoved({.reason = reason, .position = m_currentPosition});
+		m_observer->OnEnemyRemoved({.reason = reason, .position = m_position});
 		m_observer = nullptr;
 	}
 
