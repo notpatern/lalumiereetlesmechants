@@ -86,7 +86,7 @@ void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets)
 		{
 			if (TryHit(missile, target) == DamageResult::Killed)
 			{
-				m_score += POINTS_PER_KILL;
+				m_score += target.getPoints();
 			}
 		});
 	});

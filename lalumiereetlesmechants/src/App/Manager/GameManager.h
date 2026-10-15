@@ -35,8 +35,6 @@ private:
 	static constexpr std::size_t INITIAL_ENEMIES_POOL_SIZE = 6;
 	static constexpr std::size_t MAX_ENEMIES_POOL_SIZE = 200;
 
-	static constexpr int POINTS_PER_KILL = 100; // a voir si je le change en fonction du type d'ennemis
-
 	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
 	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
 

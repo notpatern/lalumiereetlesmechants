@@ -9,6 +9,8 @@
 #include "../Gameplay/IEnemyObserver.h"
 #include "../Gameplay/Wave.h"
 #include "Entities.h"
+#include "../Gameplay/EnemyArchetype.h"
+#include "../Gameplay/Weapon.h"
 
 struct EnemyUpdateContext
 {
@@ -31,6 +33,8 @@ public:
 
 	DamageInfos getContactDamage() const;
 
+	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
+
 	bool getIsActive() const { return m_isActive; }
 	Utility::Vector2<float> getCurrentPosition() const { return m_position; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
@@ -39,13 +43,9 @@ public:
 	Team getTeam() const { return Team::Enemy; }
 
 private:
-	static constexpr int MAX_HEALTH = 3;
 	static constexpr float HIT_FLASH_DURATION = 0.1f;
 
-	static constexpr int HITBOX_WIDTH = 3;
-	static constexpr int HITBOX_HEIGHT = 2;
-
-	static constexpr int CONTACT_DAMAGE = 1;
+	EnemyType m_type;
 
 	Utility::Vector2<float> m_velocity;
 

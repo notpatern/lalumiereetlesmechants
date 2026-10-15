@@ -1,16 +1,20 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
+Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr), m_isActive(false)
 {
 	this->SetSpritePosition(&m_position);
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 {
+	const EnemyArchetype& archetype = EnemyArchetypes::Get(entry.type);
+
+	m_type = entry.type;
 	m_position = entry.position;
 	m_velocity = entry.velocity;
-	m_weapon.Equip(entry.weapon);
-	m_health.Reset();
+	m_health = Health(archetype.maxHealth);
+	m_hitbox.size = archetype.hitboxSize;
+	m_weapon.Equip(archetype.weapon);
 	m_hitFlash.Start(0.f);
 	m_isActive = true;
 	m_observer = observer;
@@ -62,7 +66,7 @@ DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 
 DamageInfos Enemy::getContactDamage() const
 {
-	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Enemy, .position = m_position };
+	return { .amount = EnemyArchetypes::Get(m_type).contactDamage, .type = DamageType::Collision, .source = Team::Enemy, .position = m_position };
 }
 
 void Enemy::Die()
@@ -72,7 +76,8 @@ void Enemy::Die()
 
 void Enemy::RefreshSpriteType()
 {
-	m_spriteType = IsFlashing() ? SpriteUtils::SpriteType::HunterHit : SpriteUtils::SpriteType::Hunter;
+	const EnemyArchetype& archetype = EnemyArchetypes::Get(m_type);
+	m_spriteType = IsFlashing() ? archetype.hitSprite : archetype.sprite;
 }
 
 void Enemy::Shoot(Utility::Pool<Missile>& missiles)
@@ -81,7 +86,7 @@ void Enemy::Shoot(Utility::Pool<Missile>& missiles)
 	{
 		const WeaponSettings& settings = m_weapon.getSettings();
 
-		const Utility::Vector2<float> muzzle{ m_position.x + HITBOX_WIDTH/2, m_position.y + HITBOX_HEIGHT};
+		const Utility::Vector2<float> muzzle{ m_position.x + m_hitbox.size.x / 2, m_position.y + m_hitbox.size.y };
 
 		missile->Launch(muzzle, {0.f, settings.missileSpeed}, Team::Enemy, settings.missileDamage);
 	}
