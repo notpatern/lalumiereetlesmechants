@@ -41,6 +41,9 @@ void App::Run() {
 	case ScreenRequest::Title:
 		screen = std::make_unique<TitleScreen>();
 		break;
+	case ScreenRequest::Quit:
+		m_isRunning = false;
+		break;
 	case ScreenRequest::None:
 		break;
 	}

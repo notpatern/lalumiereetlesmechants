@@ -7,7 +7,8 @@ enum class ScreenRequest
 {
 	None,
 	NewGame,
-	Title
+	Title,
+	Quit
 };
 
 class IScreen

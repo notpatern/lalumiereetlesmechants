@@ -1,9 +1,20 @@
 #include "TitleScreen.h"
-#include "../Gameplay/PlayArea.h"
+#include "DebugConsole.h"
 
 void TitleScreen::Update(float, const InputManager& input)
 {
-	m_request = input.WasJustPressed(VK_SPACE) ? ScreenRequest::NewGame : ScreenRequest::None;
+	switch (m_menu.Update(input))
+	{
+	case PLAY_CHOICE:
+		m_request = ScreenRequest::NewGame;
+		break;
+	case QUIT_CHOICE:
+		m_request = ScreenRequest::Quit;
+		break;
+	default:
+		m_request = ScreenRequest::None;
+		break;
+	}
 }
 
 void TitleScreen::Draw(Renderer& renderer) const
@@ -13,13 +24,9 @@ void TitleScreen::Draw(Renderer& renderer) const
 
 void TitleScreen::DrawDebug(HANDLE console) const
 {
-	DWORD written = 0;
-	FillConsoleOutputCharacterA(console, ' ', PlayArea::WIDTH * PlayArea::HEIGHT, { 0, 0 }, &written);
-
-	const SHORT titleColumn = static_cast<SHORT>((PlayArea::WIDTH - static_cast<int>(TITLE_TEXT.size())) / 2);
-	const SHORT startColumn = static_cast<SHORT>((PlayArea::WIDTH - static_cast<int>(START_TEXT.size())) / 2);
-	WriteConsoleOutputCharacterA(console, TITLE_TEXT.data(), static_cast<DWORD>(TITLE_TEXT.size()), { titleColumn, 10 }, &written);
-	WriteConsoleOutputCharacterA(console, START_TEXT.data(), static_cast<DWORD>(START_TEXT.size()), { startColumn, 14 }, &written);
+	DebugConsole::Clear(console);
+	DebugConsole::WriteCentered(console, TITLE_TEXT, 10);
+	m_menu.DrawDebug(console, 14);
 
 	SetConsoleTitleA("La lumiere et les mechants");
 }

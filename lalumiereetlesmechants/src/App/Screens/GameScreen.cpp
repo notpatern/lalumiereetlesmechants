@@ -1,4 +1,5 @@
 #include "GameScreen.h"
+#include "DebugConsole.h"
 
 #include <string>
 
@@ -58,6 +59,7 @@ void GameScreen::Draw(Renderer& renderer) const
 
 void GameScreen::DrawDebug(HANDLE console) const
 {
+	DebugConsole::Clear(console);
 	const Player& player = m_gameManager.getPlayer();
 
 	DWORD written = 0;
