@@ -1,6 +1,7 @@
 #pragma once
 #include "IScreen.h"
 #include "Menu.h"
+#include "../Gameplay/EnemyArchetype.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/InputManager.h"
 #include <string_view>
@@ -37,4 +38,6 @@ private:
 	static constexpr int END_RESTART_CHOICE = 0;
 	static constexpr int END_MENU_CHOICE = 1;
 	Menu m_endMenu{ "Recommencer", "Menu" };
+
+	static char EnemyDebugCharacter(EnemyType type);
 };

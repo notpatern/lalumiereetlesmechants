@@ -98,7 +98,6 @@ void GameScreen::DrawDebug(HANDLE console) const
 	int activeMissiles = 0;
 	m_gameManager.getMissiles().ForEachActive([&](const Missile& missile)
 	{
-		// Debug : un caractere sur chaque case du missile, 'O' pour une grosse boule, 'o' pour un tir ennemi
 		const Utility::Vector2<int> size = missile.getHitboxSize();
 		const bool isBig = size.x > 1 || size.y > 1;
 		const char character = isBig ? 'O' : (missile.getTeam() == Team::Enemy ? 'o' : '|');
@@ -116,7 +115,6 @@ void GameScreen::DrawDebug(HANDLE console) const
 
 	m_gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
 	{
-		// Debug : un '.' sur chaque case de la hitbox, puis le W par-dessus
 		const Collision::CellRect rect = enemy.getHitboxRect();
 		for (int y = rect.topLeftCell.y; y <= rect.bottomRightCell.y; ++y)
 		{
@@ -126,8 +124,20 @@ void GameScreen::DrawDebug(HANDLE console) const
 			}
 		}
 
-		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : 'W');
+		draw(enemy.getCurrentPosition(), enemy.IsFlashing() ? '*' : EnemyDebugCharacter(enemy.getType()));
 	});
 
 	DebugConsole::WriteTexts(console, getTexts());
+}
+
+char GameScreen::EnemyDebugCharacter(EnemyType type)
+{
+	switch (type)
+	{
+	case EnemyType::Turret:
+		return 'T';
+	case EnemyType::Hunter:
+	default:
+		return 'C';
+	}
 }

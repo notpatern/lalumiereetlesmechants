@@ -24,7 +24,7 @@ namespace SpriteUtils
 		static const SpriteDrawing TURRET{ TURRET_LINES, 0x0D };
 		static const SpriteDrawing TURRET_HIT{ TURRET_LINES, 0x0F };
 		static const SpriteDrawing PLAYER_MISSILE{ { "|" }, 0x0B };
-		static const SpriteDrawing ENEMY_MISSILE{ { "!" }, 0x0D };
+		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
 		static const SpriteDrawing NOTHING{ {}, 0x0F };
 

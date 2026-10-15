@@ -14,7 +14,7 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 
 	m_type = entry.type;
 	m_position = entry.position;
-	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target);
+	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target, archetype.hitboxSize.x);
 	m_health = Health(archetype.maxHealth);
 	m_hitbox.size = archetype.hitboxSize;
 	m_weapon.Equip(archetype.weapon);

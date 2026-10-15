@@ -13,12 +13,13 @@ struct MovementSettings
 	float speed = 0.f;
 	float amplitude = 0.f;
 	float frequency = 0.f;
+	bool bounceOnEdges = false;
 };
 
 class Movement
 {
 public:
-	void Start(const MovementSettings& settings, const Utility::Vector2<float>& start, const Utility::Vector2<float>& velocity, const Utility::Vector2<float>& target);
+	void Start(const MovementSettings& settings, const Utility::Vector2<float>& start, const Utility::Vector2<float>& velocity, const Utility::Vector2<float>& target, int bodyWidth);
 	[[nodiscard]] Utility::Vector2<float> Update(float deltaTime);
 
 private:
@@ -26,4 +27,7 @@ private:
 	Utility::Vector2<float> m_basePosition;
 	Utility::Vector2<float> m_velocity;
 	float m_elapsed = 0.f;
+	float m_maxX = 0.f;
+
+	void BounceOnEdges();
 };
