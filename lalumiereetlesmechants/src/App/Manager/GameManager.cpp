@@ -96,7 +96,14 @@ void GameManager::TryHit(Missile& missile, Target& target)
 		return;
 	}
 
-	if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), target.getHitboxRect()))
+	const Collision::CellRect targetRect = target.getHitboxRect();
+
+	if (!PlayArea::Bounds().Contains(targetRect))
+	{
+		return;
+	}
+
+	if (Collision::CrossesRect(missile.getLastPosition(), missile.getCurrentPosition(), targetRect))
 	{
 		missile.OnHit(target);
 	}
