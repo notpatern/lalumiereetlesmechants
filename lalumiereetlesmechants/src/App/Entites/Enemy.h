@@ -15,7 +15,7 @@ struct EnemyUpdateContext
 };
 
 
-class Enemy : public IDamageable
+class Enemy : public IDamageable, Sprite
 {
 public:
 	Enemy();

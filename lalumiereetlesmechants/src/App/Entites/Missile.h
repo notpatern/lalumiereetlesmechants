@@ -3,8 +3,10 @@
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/IDamageable.h"
+#include "../Render/Sprite.h"
+#include "../Gameplay/Collision.h"
 
-class Missile
+class Missile : public Sprite
 {
 public:
 	Missile();

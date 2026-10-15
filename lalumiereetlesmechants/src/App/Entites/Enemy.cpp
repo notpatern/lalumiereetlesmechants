@@ -1,7 +1,24 @@
 #include "Enemy.h"
 
-Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false)
+Enemy::Enemy() : m_health(MAX_HEALTH), m_hitbox{ .size = { HITBOX_WIDTH, HITBOX_HEIGHT } }, m_observer(nullptr), m_isActive(false),
+//	for (int y = 0; y < m_size.y; y++)
+//	{
+//		for (int x = 0; x < m_size.x; x++)
+//		{
+//			if (CanAccessMap(world,
+//				Utility::Vector2<int>(m_position.x + x, m_position.y + y))
+//				)
+//			{
+//				SetMapValue(world, Utility::Vector2<int>(
+//					m_position.x + x, m_position.y + y),
+//					m_sprite[y][x],
+//					world.getWorldMap());
+//			}
+//		}
+//	}
+Sprite(SpriteType::Enemy)
 {
+	this->SetSpritePosition(Collision::ToCell(m_currentPosition));	
 }
 
 void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)

@@ -23,6 +23,7 @@ public:
     }
 
 	void Render();
+	void RenderSprite(Sprite* sprite);
 	void AddToRenderQueue(Sprite* sprite);
 	void RemoveFromRenderQueue(Sprite* sprite);
 };

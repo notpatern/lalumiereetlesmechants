@@ -52,8 +52,26 @@ void Renderer::Render()
 		dwBufferCoord, &rcRegion);
 
 	for (Sprite* currentSprite : m_renderQueue) {
-		currentSprite->Render(*m_world);
+		RenderSprite(currentSprite);
 	}
+}
+
+void Renderer::RenderSprite(Sprite* sprite) {
+//	for (int y = 0; y < m_size.y; y++)
+//	{
+//		for (int x = 0; x < m_size.x; x++)
+//		{
+//			if (CanAccessMap(world,
+//				Utility::Vector2<int>(m_position.x + x, m_position.y + y))
+//				)
+//			{
+//				SetMapValue(world, Utility::Vector2<int>(
+//					m_position.x + x, m_position.y + y),
+//					m_sprite[y][x],
+//					world.getWorldMap());
+//			}
+//		}
+//	}
 }
 
 void Renderer::AddToRenderQueue(Sprite* sprite)

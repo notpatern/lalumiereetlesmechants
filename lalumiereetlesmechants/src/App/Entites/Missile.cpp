@@ -1,7 +1,8 @@
 #include "Missile.h"
 
-Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
+Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false), Sprite()
 {
+	this->SetSpritePosition(Collision::ToCell(m_currentPosition));
 }
 
 void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage)
@@ -12,6 +13,14 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 	m_velocity = velocity;
 	m_team = team;
 	m_damage = damage;
+	if (team == Team::Enemy)
+	{
+		m_spriteType = SpriteType::EnemyMissile;
+	}
+	else
+	{
+		m_spriteType = SpriteType::PlayerMissile;
+	}
 
 	m_isActive = true;
 }
