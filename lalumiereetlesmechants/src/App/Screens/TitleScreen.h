@@ -5,13 +5,11 @@
 #include "../Manager/InputManager.h"
 #include <string_view>
 #include <vector>
-#include <windows.h>
 
 class TitleScreen : public IScreen
 {
 public:
 	void Update(float inDeltaTime, const InputManager& inInput) override;
-	void DrawDebug(HANDLE console) const override;
 
 	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }

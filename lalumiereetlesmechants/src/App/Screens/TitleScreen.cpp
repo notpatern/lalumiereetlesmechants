@@ -1,5 +1,4 @@
 #include "TitleScreen.h"
-#include "DebugConsole.h"
 
 void TitleScreen::Update(float, const InputManager& inInput)
 {
@@ -18,14 +17,6 @@ void TitleScreen::Update(float, const InputManager& inInput)
 		m_request = ScreenRequest::None;
 		break;
 	}
-}
-
-void TitleScreen::DrawDebug(HANDLE console) const
-{
-	DebugConsole::Clear(console);
-	DebugConsole::WriteTexts(console, getTexts());
-
-	SetConsoleTitleA("MAUVAIS CARACTERES");
 }
 
 std::vector<ScreenText> TitleScreen::getTexts() const

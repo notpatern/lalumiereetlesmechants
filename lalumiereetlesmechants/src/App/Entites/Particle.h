@@ -12,7 +12,6 @@ public:
 	void OnLeftPlayArea();
 
 	bool IsSmoke() const { return m_lifetime.getRemaining() <= SMOKE_DURATION; }
-	SpriteUtils::SpriteType getSpriteType() const { return m_spriteType; }
 
 private:
 	static constexpr float SPEED = 8.f;

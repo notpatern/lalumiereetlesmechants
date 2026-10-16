@@ -2,7 +2,6 @@
 #include "ScreenText.h"
 #include "../Manager/InputManager.h"
 #include <vector>
-#include <windows.h>
 #include "../../Utilities/Vector2.h"
 
 enum class ScreenRequest
@@ -25,7 +24,6 @@ public:
 	IScreen& operator=(const IScreen&) = delete;
 
 	virtual void Update(float inDeltaTime, const InputManager& inInput) = 0;
-	virtual void DrawDebug(HANDLE console) const = 0;
 
 	virtual std::vector<ScreenText> getTexts() const = 0;
 	virtual ScreenRequest getRequest() const = 0;

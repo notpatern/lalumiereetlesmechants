@@ -12,7 +12,6 @@ class CreditsScreen : public IScreen
 {
 public:
 	void Update(float inDeltaTime, const InputManager& inInput) override;
-	void DrawDebug(HANDLE console) const override;
 
 	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }

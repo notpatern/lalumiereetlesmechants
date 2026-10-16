@@ -1,7 +1,4 @@
 #include "GameScreen.h"
-#include "DebugConsole.h"
-#include "../Gameplay/Collision.h"
-#include "../Gameplay/PlayArea.h"
 #include <string>
 
 void GameScreen::Update(float inDeltaTime, const InputManager& inInput)
@@ -62,76 +59,6 @@ void GameScreen::Update(float inDeltaTime, const InputManager& inInput)
 	m_hud.Update(inDeltaTime);
 }
 
-void GameScreen::DrawDebug(HANDLE console) const
-{
-	DebugConsole::Clear(console);
-	const Player& player = m_gameManager.getPlayer();
-
-	const Utility::Vector2<int> cameraOffset = getCameraOffset();
-
-	DWORD written = 0;
-	auto draw = [&](const Utility::Vector2<float>& position, char character)
-	{
-		const Utility::Vector2<int> worldCell = Collision::ToCell(position);
-		const Utility::Vector2<int> cellPosition{ worldCell.x + cameraOffset.x, worldCell.y + cameraOffset.y };
-		if (!PlayArea::Bounds().ContainsCell(cellPosition))
-		{
-			return;
-		}
-		const COORD cell{static_cast<SHORT>(cellPosition.x), static_cast<SHORT>(cellPosition.y)};
-		FillConsoleOutputCharacterA(console, character, 1, cell, &written);
-		FillConsoleOutputAttribute(console, 0x0F, 1, cell, &written);
-	};
-
-	if (!player.IsDead() && player.IsVisible())
-	{
-		draw(player.getPosition(), '@');
-	}
-	int activeMissiles = 0;
-	m_gameManager.getMissiles().ForEachActive([&](const Missile& missile)
-	{
-		const Utility::Vector2<int> size = missile.getHitboxSize();
-		const char character = MissileDebugCharacter(missile.getType());
-		for (int y = 0; y < size.y; ++y)
-		{
-			for (int x = 0; x < size.x; ++x)
-			{
-				draw({ missile.getPosition().x + x, missile.getPosition().y + y }, character);
-			}
-		}
-		++activeMissiles;
-	});
-
-	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
-
-	m_gameManager.getParticles().ForEachActive([&](const Particle& particle)
-	{
-		const SpriteUtils::SpriteType type = particle.getSpriteType();
-		draw(particle.getPosition(), type == SpriteUtils::SpriteType::LevelUpSpark ? '+' : (type == SpriteUtils::SpriteType::Smoke ? ',' : '*'));
-	});
-
-	m_gameManager.getXpOrbs().ForEachActive([&](const XpOrb& orb)
-	{
-		draw(orb.getPosition(), '+');
-	});
-
-	m_gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
-	{
-		const Collision::CellRect rect = enemy.getHitboxRect();
-		for (int y = rect.topLeftCell.y; y <= rect.bottomRightCell.y; ++y)
-		{
-			for (int x = rect.topLeftCell.x; x <= rect.bottomRightCell.x; ++x)
-			{
-				draw({ static_cast<float>(x), static_cast<float>(y) }, '.');
-			}
-		}
-
-		draw(enemy.getPosition(), enemy.IsFlashing() ? '*' : (enemy.IsTelegraphing() ? '!' : EnemyDebugCharacter(enemy.getType())));
-	});
-
-	DebugConsole::WriteTexts(console, getTexts());
-}
-
 std::vector<ScreenText> GameScreen::getTexts() const
 {
 	std::vector<ScreenText> texts;
@@ -156,34 +83,4 @@ std::vector<ScreenText> GameScreen::getTexts() const
 	}
 
 	return texts;
-}
-
-char GameScreen::EnemyDebugCharacter(EnemyType type)
-{
-	switch (type)
-	{
-	case EnemyType::Turret:
-		return 'T';
-	case EnemyType::Charger:
-		return 'B';
-	case EnemyType::Swarm:
-		return 'N';
-	case EnemyType::Hunter:
-	default:
-		return 'C';
-	}
-}
-
-char GameScreen::MissileDebugCharacter(MissileType type)
-{
-	switch (type)
-	{
-	case MissileType::EnemyShot:
-		return 'o';
-	case MissileType::BigEnemyShot:
-		return 'O';
-	case MissileType::PlayerShot:
-	default:
-		return '|';
-	}
 }

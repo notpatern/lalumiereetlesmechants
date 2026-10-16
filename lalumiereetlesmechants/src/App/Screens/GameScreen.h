@@ -3,8 +3,6 @@
 #include "IScreen.h"
 #include "Menu.h"
 #include "ScreenText.h"
-#include "../Gameplay/EnemyArchetype.h"
-#include "../Gameplay/MissileArchetype.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/InputManager.h"
 #include "../../Utilities/Vector2.h"
@@ -16,7 +14,6 @@ class GameScreen : public IScreen
 {
 public:
 	void Update(float inDeltaTime, const InputManager& inInput) override;
-	void DrawDebug(HANDLE console) const override;
 
 	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }
@@ -45,7 +42,4 @@ private:
 
 	Menu m_endMenu{ "Recommencer", "Menu" };
 	float m_endElapsed = 0.f;
-
-	static char EnemyDebugCharacter(EnemyType type);
-	static char MissileDebugCharacter(MissileType type);
 };

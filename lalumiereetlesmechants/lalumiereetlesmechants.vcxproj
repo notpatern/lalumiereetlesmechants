@@ -141,8 +141,6 @@
     <ClCompile Include="src\App\Gameplay\Weapon.cpp" />
     <ClCompile Include="src\App\Manager\GameManager.cpp" />
     <ClCompile Include="src\App\Manager\InputManager.cpp" />
-    <ClCompile Include="src\App\Manager\SoundManager.cpp" />
-    <ClCompile Include="src\App\Render\Lightable.cpp" />
     <ClCompile Include="src\App\Player\Player.cpp" />
     <ClCompile Include="src\App\Render\Renderer.cpp" />
     <ClCompile Include="src\App\Entites\Missile.cpp" />
@@ -151,7 +149,6 @@
     <ClCompile Include="src\App\Entites\Entities.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\App\Screens\CreditsScreen.cpp" />
-    <ClCompile Include="src\App\Screens\DebugConsole.cpp" />
     <ClCompile Include="src\App\Screens\GameScreen.cpp" />
     <ClCompile Include="src\App\Screens\Hud.cpp" />
     <ClCompile Include="src\App\Screens\HudBar.cpp" />
@@ -183,8 +180,6 @@
     <ClInclude Include="src\App\Gameplay\Weapon.h" />
     <ClInclude Include="src\App\Manager\GameManager.h" />
     <ClInclude Include="src\App\Manager\InputManager.h" />
-    <ClInclude Include="src\App\Manager\SoundManager.h" />
-    <ClInclude Include="src\App\Render\Lightable.h" />
     <ClInclude Include="src\App\Player\Player.h" />
     <ClInclude Include="src\App\Render\Renderer.h" />
     <ClInclude Include="src\App\Entites\Missile.h" />
@@ -195,7 +190,6 @@
     <ClInclude Include="src\App\Render\SpriteDrawing.h" />
     <ClInclude Include="src\App\Render\SpriteType.h" />
     <ClInclude Include="src\App\Screens\CreditsScreen.h" />
-    <ClInclude Include="src\App\Screens\DebugConsole.h" />
     <ClInclude Include="src\App\Screens\GameScreen.h" />
     <ClInclude Include="src\App\Screens\Hud.h" />
     <ClInclude Include="src\App\Screens\HudBar.h" />

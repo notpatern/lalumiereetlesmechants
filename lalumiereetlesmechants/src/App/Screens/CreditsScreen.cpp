@@ -1,18 +1,9 @@
 #include "CreditsScreen.h"
-#include "DebugConsole.h"
 
 void CreditsScreen::Update(float, const InputManager& inInput)
 {
 	const bool wantsBack = m_menu.Update(inInput) != Menu::NO_CHOICE || inInput.WasJustPressed(VK_ESCAPE);
 	m_request = wantsBack ? ScreenRequest::Title : ScreenRequest::None;
-}
-
-void CreditsScreen::DrawDebug(HANDLE console) const
-{
-	DebugConsole::Clear(console);
-	DebugConsole::WriteTexts(console, getTexts());
-
-	SetConsoleTitleA("Credits");
 }
 
 std::vector<ScreenText> CreditsScreen::getTexts() const
