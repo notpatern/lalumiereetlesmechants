@@ -18,6 +18,9 @@ private:
 
 	World m_world{};
 
+	COORD m_lastBufferSize{};
+	SMALL_RECT m_lastWindow{};
+
 	static constexpr UINT TIMER_RESOLUTION_MS = 1;
 
 public:
@@ -27,6 +30,7 @@ public:
 	void Run();	
 	LONG_PTR setConsoleWindowStyle(INT n_index, LONG_PTR new_style);
 	void SetupConsole();
+	void KeepConsoleSize();
 
 	inline bool getIsRunning() {
 		return m_isRunning;

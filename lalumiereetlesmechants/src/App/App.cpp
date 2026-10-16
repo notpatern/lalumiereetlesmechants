@@ -14,8 +14,8 @@
 App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE))
 {
 	timeBeginPeriod(TIMER_RESOLUTION_MS);
-	LONG_PTR new_style =  WS_OVERLAPPEDWINDOW | WS_HSCROLL | WS_VSCROLL;
-    setConsoleWindowStyle(GWL_STYLE,new_style);
+	const LONG_PTR fixedSizeStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+	setConsoleWindowStyle(GWL_STYLE, fixedSizeStyle);
 	SetupConsole();
 
 	if (GetConsoleScreenBufferInfo(m_consoleHandle, &m_consoleInfo)) {
@@ -59,8 +59,8 @@ void App::Run()
 		break;
 	}
 
+	KeepConsoleSize();
 	Renderer::getInstance().Render();
-	//screen->DrawDebug(m_consoleHandle);
 
 	Sleep(16);
 }
@@ -101,4 +101,33 @@ void App::SetupConsole()
 	SetConsoleCursorInfo(m_consoleHandle, &cursorInfo);
 
 	SetConsoleTitleA("MAUVAIS CARACTERES");
+}
+
+void App::KeepConsoleSize()
+{
+	CONSOLE_SCREEN_BUFFER_INFO info{};
+	if (!GetConsoleScreenBufferInfo(m_consoleHandle, &info))
+	{
+		return;
+	}
+
+	const bool isSameBuffer = info.dwSize.X == m_lastBufferSize.X && info.dwSize.Y == m_lastBufferSize.Y;
+	const bool isSameWindow = info.srWindow.Left == m_lastWindow.Left && info.srWindow.Top == m_lastWindow.Top
+		&& info.srWindow.Right == m_lastWindow.Right && info.srWindow.Bottom == m_lastWindow.Bottom;
+	if (isSameBuffer && isSameWindow)
+	{
+		return;
+	}
+
+	DWORD written = 0;
+	const DWORD cellCount = static_cast<DWORD>(info.dwSize.X) * static_cast<DWORD>(info.dwSize.Y);
+	FillConsoleOutputCharacterA(m_consoleHandle, ' ', cellCount, { 0, 0 }, &written);
+	FillConsoleOutputAttribute(m_consoleHandle, 0, cellCount, { 0, 0 }, &written);
+	SetupConsole();
+
+	if (GetConsoleScreenBufferInfo(m_consoleHandle, &info))
+	{
+		m_lastBufferSize = info.dwSize;
+		m_lastWindow = info.srWindow;
+	}
 }
