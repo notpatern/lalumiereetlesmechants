@@ -1,7 +1,7 @@
 #include "WaveSpawner.h"
 
 WaveSpawner::WaveSpawner(const std::vector<Wave>& waves, Utility::Pool<Enemy>& enemies)
-	: m_waves(&waves), m_enemies(&enemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0), m_aliveCount(0)
+	: m_waves(&waves), m_enemies(&enemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0), m_spawnedFromEntry(0), m_aliveCount(0)
 {
 	if (!m_waves->empty())
 	{
@@ -80,7 +80,17 @@ void WaveSpawner::UpdateSpawning(float deltaTime)
 
 	while (m_entryIndex < entries.size() && m_timer.IsFinished())
 	{
-		SpawnEnemy(entries[m_entryIndex]);
+		const SpawnEntry& entry = entries[m_entryIndex];
+		SpawnEnemy(entry);
+		++m_spawnedFromEntry;
+
+		if (m_spawnedFromEntry < entry.count)
+		{
+			m_timer.Chain(entry.interval);
+			continue;
+		}
+
+		m_spawnedFromEntry = 0;
 		++m_entryIndex;
 
 		if (m_entryIndex < entries.size())

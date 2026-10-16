@@ -10,6 +10,8 @@ struct SpawnEntry
 	Utility::Vector2<float> position;
 	Utility::Vector2<float> velocity;
 	Utility::Vector2<float> target;
+	int count = 1;
+	float interval = 0.f;
 };
 
 struct Wave

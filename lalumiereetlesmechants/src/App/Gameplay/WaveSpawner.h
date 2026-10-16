@@ -37,6 +37,7 @@ private:
 	State m_state;
 	std::size_t m_waveIndex;
 	std::size_t m_entryIndex;
+	int m_spawnedFromEntry;
 	std::size_t m_aliveCount;
 	Utility::Countdown m_timer;
 
