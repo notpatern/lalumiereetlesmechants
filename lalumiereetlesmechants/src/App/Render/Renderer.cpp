@@ -116,8 +116,9 @@ void Renderer::RenderScreen(const IScreen* screen)
 		return;
 	}
 
-	std::vector<ScreenText> texts = screen->getTexts();
-	if (texts.empty())
+	m_texts.clear();
+	screen->AddTexts(m_texts);
+	if (m_texts.empty())
 	{
 		return;
 	}
@@ -129,7 +130,7 @@ void Renderer::RenderScreen(const IScreen* screen)
 		int right = 0;
 		int bottom = 0;
 
-		for (const ScreenText& text : texts)
+		for (const ScreenText& text : m_texts)
 		{
 			left = (std::min)(left, text.position.x);
 			top = (std::min)(top, text.position.y);
@@ -174,7 +175,7 @@ void Renderer::RenderScreen(const IScreen* screen)
 		}
 	}
 
-	for (const ScreenText& text : texts)
+	for (const ScreenText& text : m_texts)
 	{
 		WriteText(text.position.x, text.position.y, text.text, text.color);
 	}

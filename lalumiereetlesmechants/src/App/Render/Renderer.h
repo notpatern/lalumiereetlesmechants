@@ -24,6 +24,7 @@ private:
 	World* m_world = nullptr;
 	std::vector<Sprite*> m_spriteRenderQueue{};
 	std::vector<IScreen*> m_screenRenderQueue{};
+	std::vector<ScreenText> m_texts;
 
 	CHAR_INFO m_buffer[SCREEN_HEIGHT][SCREEN_WIDTH] = {};
 

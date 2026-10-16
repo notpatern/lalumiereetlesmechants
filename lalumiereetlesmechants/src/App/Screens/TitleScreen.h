@@ -10,8 +10,8 @@ class TitleScreen : public IScreen
 {
 public:
 	void Update(float inDeltaTime, const InputManager& inInput) override;
+	void AddTexts(std::vector<ScreenText>& outTexts) const override;
 
-	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }
 
 private:

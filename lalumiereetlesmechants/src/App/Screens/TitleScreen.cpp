@@ -19,10 +19,8 @@ void TitleScreen::Update(float, const InputManager& inInput)
 	}
 }
 
-std::vector<ScreenText> TitleScreen::getTexts() const
+void TitleScreen::AddTexts(std::vector<ScreenText>& outTexts) const
 {
-	std::vector<ScreenText> texts;
-	texts.push_back(MakeCenteredText(TITLE_TEXT, 10));
-	m_menu.AddTexts(texts, 14);
-	return texts;
+	outTexts.push_back(MakeCenteredText(TITLE_TEXT, 10));
+	m_menu.AddTexts(outTexts, 14);
 }

@@ -14,8 +14,8 @@ class GameScreen : public IScreen
 {
 public:
 	void Update(float inDeltaTime, const InputManager& inInput) override;
+	void AddTexts(std::vector<ScreenText>& outTexts) const override;
 
-	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }
 	Utility::Vector2<int> getCameraOffset() const override { return m_gameManager.getShakeOffset(); }
 	bool DrawsPanel() const override { return false; }

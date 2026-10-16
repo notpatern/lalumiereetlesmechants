@@ -59,28 +59,24 @@ void GameScreen::Update(float inDeltaTime, const InputManager& inInput)
 	m_hud.Update(inDeltaTime);
 }
 
-std::vector<ScreenText> GameScreen::getTexts() const
+void GameScreen::AddTexts(std::vector<ScreenText>& outTexts) const
 {
-	std::vector<ScreenText> texts;
-
-	m_hud.AddTexts(texts, m_gameManager);
+	m_hud.AddTexts(outTexts, m_gameManager);
 
 	if (m_gameManager.IsGameOver())
 	{
-		texts.push_back(MakeCenteredText(GAME_OVER_TEXT, 10));
-		m_endMenu.AddTexts(texts, 13);
+		outTexts.push_back(MakeCenteredText(GAME_OVER_TEXT, 10));
+		m_endMenu.AddTexts(outTexts, 13);
 	}
 	else if (m_gameManager.IsVictory())
 	{
-		texts.push_back(MakeCenteredText(VICTORY_TEXT, 9));
-		texts.push_back(MakeCenteredText("Score : " + std::to_string(m_gameManager.getScore()), 11));
-		m_endMenu.AddTexts(texts, 14);
+		outTexts.push_back(MakeCenteredText(VICTORY_TEXT, 9));
+		outTexts.push_back(MakeCenteredText("Score : " + std::to_string(m_gameManager.getScore()), 11));
+		m_endMenu.AddTexts(outTexts, 14);
 	}
 	else if (m_isPaused)
 	{
-		texts.push_back(MakeCenteredText(PAUSE_TEXT, 10));
-		m_pauseMenu.AddTexts(texts, 13);
+		outTexts.push_back(MakeCenteredText(PAUSE_TEXT, 10));
+		m_pauseMenu.AddTexts(outTexts, 13);
 	}
-
-	return texts;
 }

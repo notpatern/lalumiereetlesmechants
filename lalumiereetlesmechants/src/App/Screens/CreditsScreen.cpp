@@ -6,13 +6,11 @@ void CreditsScreen::Update(float, const InputManager& inInput)
 	m_request = wantsBack ? ScreenRequest::Title : ScreenRequest::None;
 }
 
-std::vector<ScreenText> CreditsScreen::getTexts() const
+void CreditsScreen::AddTexts(std::vector<ScreenText>& outTexts) const
 {
-	std::vector<ScreenText> texts;
 	for (int i = 0; i < static_cast<int>(LINES.size()); ++i)
 	{
-		texts.push_back(MakeCenteredText(LINES[i], 5 + i));
+		outTexts.push_back(MakeCenteredText(LINES[i], 5 + i));
 	}
-	m_menu.AddTexts(texts, 20);
-	return texts;
+	m_menu.AddTexts(outTexts, 20);
 }

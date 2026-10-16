@@ -24,8 +24,8 @@ public:
 	IScreen& operator=(const IScreen&) = delete;
 
 	virtual void Update(float inDeltaTime, const InputManager& inInput) = 0;
+	virtual void AddTexts(std::vector<ScreenText>& outTexts) const = 0;
 
-	virtual std::vector<ScreenText> getTexts() const = 0;
 	virtual ScreenRequest getRequest() const = 0;
 	virtual Utility::Vector2<int> getCameraOffset() const { return { 0, 0 }; }
 	virtual bool DrawsPanel() const { return true; }
