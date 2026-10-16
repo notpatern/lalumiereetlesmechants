@@ -13,6 +13,7 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 
 	if (m_gameManager.IsGameOver() || m_gameManager.IsVictory())
 	{
+		m_gameManager.Update(deltaTime, input);
 		m_endElapsed += deltaTime;
 		if (m_endElapsed < END_INPUT_DELAY)
 		{
@@ -53,8 +54,8 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 		return;
 	}
 
-	m_hud.Update(deltaTime);
 	m_gameManager.Update(deltaTime, input);
+	m_hud.Update(deltaTime);
 }
 
 std::vector<ScreenText> GameScreen::getTexts() const
@@ -88,10 +89,13 @@ void GameScreen::DrawDebug(HANDLE console) const
 	DebugConsole::Clear(console);
 	const Player& player = m_gameManager.getPlayer();
 
+	const Utility::Vector2<int> cameraOffset = getCameraOffset();
+
 	DWORD written = 0;
 	auto draw = [&](const Utility::Vector2<float>& position, char character)
 	{
-		const Utility::Vector2<int> cellPosition = Collision::ToCell(position);
+		const Utility::Vector2<int> worldCell = Collision::ToCell(position);
+		const Utility::Vector2<int> cellPosition{ worldCell.x + cameraOffset.x, worldCell.y + cameraOffset.y };
 		if (!PlayArea::Bounds().Contains(cellPosition))
 		{
 			return;

@@ -1,6 +1,7 @@
 #pragma once
 #include "ScreenText.h"
 #include "../Manager/InputManager.h"
+#include "../../Utilities/Vector2.h"
 #include <vector>
 #include <windows.h>
 
@@ -27,4 +28,6 @@ public:
 	virtual std::vector<ScreenText> getTexts() const = 0;
 	virtual void DrawDebug(HANDLE console) const = 0;
 	virtual ScreenRequest getRequest() const = 0;
+
+	virtual Utility::Vector2<int> getCameraOffset() const { return { 0, 0 }; }
 };

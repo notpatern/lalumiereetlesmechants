@@ -22,6 +22,8 @@ public:
 	void OnEnemyRemoved(const EnemyRemovedEvent& event) override;
 
 	bool IsFinished() const {return m_state == State::Finished;}
+	int getWaveNumber() const { return static_cast<int>(m_waveIndex) + 1; }
+	int getWaveCount() const { return static_cast<int>(m_waves->size()); }
 
 private:
 	enum class State

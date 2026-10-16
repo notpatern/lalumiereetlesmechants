@@ -36,6 +36,7 @@ public:
 	void Nudge(const Utility::Vector2<float>& offset);
 
 	bool IsTelegraphing() const { return m_chargePhase == ChargePhase::Telegraphing; }
+	bool HasChargeJustEnded() const { return m_chargeJustEnded; }
 
 private:
 	static constexpr float CLOSE_TURN_FACTOR = 1.25f;
@@ -59,6 +60,7 @@ private:
 	float m_maxY = 0.f;
 	ChargePhase m_chargePhase = ChargePhase::Entering;
 	Utility::Countdown m_chargeTimer;
+	bool m_chargeJustEnded = false;
 
 	void BounceOnEdges();
 	void UpdateCharge(float deltaTime, const Utility::Vector2<float>& playerCenter);

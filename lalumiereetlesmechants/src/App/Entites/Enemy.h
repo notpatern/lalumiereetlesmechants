@@ -39,11 +39,13 @@ public:
 	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
 	int getXp() const { return EnemyArchetypes::Get(m_type).xp; }
 	const MovementSettings& getMovementSettings() const { return EnemyArchetypes::Get(m_type).movement; }
+	const EnemyArchetype& getArchetype() const { return EnemyArchetypes::Get(m_type); }
 
 	EnemyType getType() const { return m_type; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
 	bool IsTelegraphing() const { return m_movement.IsTelegraphing(); }
+	bool HasChargeJustEnded() const { return m_movement.HasChargeJustEnded(); }
 
 	Team getTeam() const { return Team::Enemy; }
 

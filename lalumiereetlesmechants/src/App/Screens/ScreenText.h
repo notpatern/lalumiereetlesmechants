@@ -13,7 +13,7 @@ struct ScreenText
 	WORD color = 0x0F;
 };
 
-inline ScreenText CenteredText(std::string_view text, int row)
+inline ScreenText CenteredText(std::string_view text, int row, WORD color = 0x0F)
 {
-	return { std::string(text), { (PlayArea::WIDTH - static_cast<int>(text.size())) / 2, row } };
+	return { std::string(text), { (PlayArea::WIDTH - static_cast<int>(text.size())) / 2, row }, color };
 }

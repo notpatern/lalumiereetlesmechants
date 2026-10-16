@@ -1,4 +1,5 @@
 #pragma once
+#include "ImpactFeedback.h"
 #include "Movement.h"
 #include "Weapon.h"
 #include "../Render/SpriteType.h"
@@ -24,6 +25,8 @@ struct EnemyArchetype
 	SpriteUtils::SpriteType sprite = SpriteUtils::SpriteType::Hunter;
 	SpriteUtils::SpriteType hitSprite = SpriteUtils::SpriteType::HunterHit;
 	SpriteUtils::SpriteType telegraphSprite = SpriteUtils::SpriteType::NONE;
+	ImpactFeedback killFeedback{ .shakeX = 1, .shakeDuration = 0.1f };
+	ImpactFeedback chargeEndFeedback;
 };
 
 namespace EnemyArchetypes

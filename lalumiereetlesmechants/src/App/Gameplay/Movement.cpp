@@ -45,6 +45,7 @@ void Movement::Start(const MovementSettings& settings, const Utility::Vector2<fl
 Utility::Vector2<float> Movement::Update(float deltaTime, const Utility::Vector2<float>& playerCenter)
 {
 	m_elapsed += deltaTime;
+	m_chargeJustEnded = false;
 
 	switch (m_settings.type)
 	{
@@ -122,6 +123,7 @@ void Movement::UpdateCharge(float deltaTime, const Utility::Vector2<float>& play
 	case ChargePhase::Charging:
 		if (BrakeToTarget(m_settings.chargeSpeed, deltaTime))
 		{
+			m_chargeJustEnded = true;
 			StartPhase(ChargePhase::Pausing, m_settings.pauseBetweenCharges);
 		}
 		break;

@@ -13,6 +13,7 @@ void Hud::AddTexts(std::vector<ScreenText>& texts, const GameManager& gameManage
 	texts.push_back({ "Score : " + std::to_string(gameManager.getScore()), { 0, SCORE_ROW } });
 	AddLifeBar(texts, gameManager.getPlayer());
 	AddXpBar(texts, gameManager.getPlayer().getExperience());
+	texts.push_back({ "Vague " + std::to_string(gameManager.getWaveNumber()) + "/" + std::to_string(gameManager.getWaveCount()), { WAVE_LABEL_COLUMN, WAVE_LABEL_ROW } });
 }
 
 void Hud::AddLifeBar(std::vector<ScreenText>& texts, const Player& player) const

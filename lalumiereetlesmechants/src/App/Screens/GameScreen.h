@@ -5,6 +5,7 @@
 #include "../Gameplay/MissileArchetype.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/InputManager.h"
+#include "../../Utilities/Vector2.h"
 #include <string_view>
 #include <windows.h>
 #include <vector>
@@ -18,6 +19,7 @@ public:
 	std::vector<ScreenText> getTexts() const override;
 	void DrawDebug(HANDLE console) const override;
 	ScreenRequest getRequest() const override { return m_request; }
+	Utility::Vector2<int> getCameraOffset() const override { return m_gameManager.getShakeOffset(); }
 
 private:
 	static constexpr std::string_view GAME_OVER_TEXT = "Defaite";

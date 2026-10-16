@@ -28,6 +28,7 @@ namespace EnemyArchetypes
 			.weapon = { .fireInterval = 1.2f, .missile = MissileType::BigEnemyShot },
 			.sprite = SpriteUtils::SpriteType::Turret,
 			.hitSprite = SpriteUtils::SpriteType::TurretHit,
+			.killFeedback = { .hitStop = 0.08f, .shakeX = 2, .shakeY = 1, .shakeDuration = 0.25f },
 		};
 
 		static const EnemyArchetype CHARGER
@@ -41,6 +42,8 @@ namespace EnemyArchetypes
 			.sprite = SpriteUtils::SpriteType::Charger,
 			.hitSprite = SpriteUtils::SpriteType::ChargerHit,
 			.telegraphSprite = SpriteUtils::SpriteType::ChargerTelegraph,
+			.killFeedback = { .hitStop = 0.08f, .shakeX = 2, .shakeY = 1, .shakeDuration = 0.25f },
+			.chargeEndFeedback = { .shakeX = 1, .shakeDuration = 0.1f },
 		};
 
 		static const EnemyArchetype SWARM

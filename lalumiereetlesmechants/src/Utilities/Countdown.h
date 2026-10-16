@@ -7,6 +7,13 @@ namespace Utility
 	public:
 		void Start(float duration) { m_remaining = duration; }
 		void Chain(float duration) { m_remaining += duration; }
+		void StartIfLonger(float duration)
+		{
+			if (duration > m_remaining)
+			{
+				m_remaining = duration;
+			}
+		}
 		void Update(float dt) { m_remaining -= dt; }
 		bool IsFinished() const { return m_remaining <= 0.f; }
 		float getRemaining() const { return m_remaining > 0.f ? m_remaining : 0.f; }

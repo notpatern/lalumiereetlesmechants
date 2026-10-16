@@ -27,6 +27,9 @@ private:
 	static constexpr int XP_BAR_CELLS = 20;
 	static constexpr WORD XP_TEXT_COLOR = 0x0E;
 
+	static constexpr int WAVE_LABEL_COLUMN = 68;
+	static constexpr int WAVE_LABEL_ROW = PlayArea::HEIGHT;
+
 	float m_elapsed = 0.f;
 
 	void AddLifeBar(std::vector<ScreenText>& texts, const Player& player) const;

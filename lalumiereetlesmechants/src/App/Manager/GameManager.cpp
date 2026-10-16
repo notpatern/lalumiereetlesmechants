@@ -17,14 +17,23 @@ GameManager::GameManager() :
 
 void GameManager::Update(float deltaTime, const InputManager& inputManager)
 {
+	if (deltaTime > MAX_DELTA_TIME)
+	{
+		deltaTime = MAX_DELTA_TIME;
+	}
+
+	m_shake.Update(deltaTime);
+	m_particlesPool.Update(deltaTime);
+
 	if (IsGameOver() || IsVictory())
 	{
 		return;
 	}
 
-	if (deltaTime > MAX_DELTA_TIME)
+	m_hitStop.Update(deltaTime);
+	if (!m_hitStop.IsFinished())
 	{
-		deltaTime = MAX_DELTA_TIME;
+		return;
 	}
 
 	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
@@ -36,13 +45,16 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	m_enemiesPool.ForEachActive([&](Enemy& enemy)
 	{
 		enemy.Update(deltaTime, enemyContext);
+		if (enemy.HasChargeJustEnded())
+		{
+			PlayFeedback(enemy.getArchetype().chargeEndFeedback);
+		}
 	});
 	m_missilesPool.Update(deltaTime);
 	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
 	{
 		orb.Update(deltaTime, playerCenter);
 	});
-	m_particlesPool.Update(deltaTime);
 
 	CheckMissilesHits(m_enemiesPool);
 	CheckMissilesHits(m_player);
@@ -116,14 +128,12 @@ void GameManager::CheckPlayerContact()
 	{
 		if (playerRect.Overlaps(enemy.getHitboxRect()))
 		{
-			if (m_player.TakeDamage(enemy.getContactDamage()) != DamageResult::Ignored)
-			{
-				SpawnExplosion(playerRect.getCenter(), HIT_PARTICLE_COUNT);
-			}
+			OnPlayerDamaged(m_player.TakeDamage(enemy.getContactDamage()), playerRect.getCenter());
 
 			if (enemy.TakeDamage(m_player.getContactDamage()) == DamageResult::Killed)
 			{
 				SpawnExplosion(enemy.getHitboxRect().getCenter(), EXPLOSION_PARTICLE_COUNT);
+				PlayFeedback(enemy.getArchetype().killFeedback);
 			}
 		}
 	});
@@ -136,6 +146,31 @@ void GameManager::OnEnemyKilled(const Enemy& enemy)
 	const Utility::Vector2<float> center = enemy.getHitboxRect().getCenter();
 	DropXpOrbs(center, enemy.getXp());
 	SpawnExplosion(center, EXPLOSION_PARTICLE_COUNT);
+	PlayFeedback(enemy.getArchetype().killFeedback);
+}
+
+void GameManager::OnPlayerDamaged(DamageResult result, const Utility::Vector2<float>& center)
+{
+	if (result == DamageResult::Ignored)
+	{
+		return;
+	}
+
+	if (result == DamageResult::Killed)
+	{
+		SpawnExplosion(center, PLAYER_EXPLOSION_PARTICLE_COUNT);
+		PlayFeedback(PLAYER_KILLED_FEEDBACK);
+		return;
+	}
+
+	SpawnExplosion(center, HIT_PARTICLE_COUNT);
+	PlayFeedback(PLAYER_HIT_FEEDBACK);
+}
+
+void GameManager::PlayFeedback(const ImpactFeedback& feedback)
+{
+	m_hitStop.StartIfLonger(feedback.hitStop);
+	m_shake.Start({ feedback.shakeX, feedback.shakeY }, feedback.shakeDuration);
 }
 
 void GameManager::DropXpOrbs(const Utility::Vector2<float>& center, int count)
@@ -160,6 +195,7 @@ void GameManager::DropXpOrbs(const Utility::Vector2<float>& center, int count)
 void GameManager::CollectXpOrbs()
 {
 	const Collision::CellRect playerBody = m_player.getBodyRect();
+	const int levelBefore = m_player.getExperience().getLevel();
 
 	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
 	{
@@ -169,6 +205,12 @@ void GameManager::CollectXpOrbs()
 			orb.Collect();
 		}
 	});
+
+	if (m_player.getExperience().getLevel() > levelBefore)
+	{
+		SpawnExplosion(m_player.getAimPoint(), LEVEL_UP_PARTICLE_COUNT);
+		PlayFeedback(LEVEL_UP_FEEDBACK);
+	}
 }
 
 void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int particleCount)
@@ -216,10 +258,7 @@ void GameManager::CheckMissilesHits(Target& target)
 {
 	m_missilesPool.ForEachActive([&](Missile& missile)
 	{
-		if (TryHit(missile, target) != DamageResult::Ignored)
-		{
-			SpawnExplosion(target.getHitboxRect().getCenter(), HIT_PARTICLE_COUNT);
-		}
+		OnPlayerDamaged(TryHit(missile, target), target.getHitboxRect().getCenter());
 	});
 }
 
