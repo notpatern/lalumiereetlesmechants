@@ -17,7 +17,6 @@ private:
 	Utility::Vector2<int> m_windowSize{};
 
 	World m_world{};
-	Renderer m_renderer;
 
 public:
 	App(Utility::Timer* timer);

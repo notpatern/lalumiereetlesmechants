@@ -10,7 +10,8 @@ bool InputManager::ReadKeyFromWindows(int virtualKey)
 
 bool InputManager::ConsoleHasFocus()
 {
-	return GetForegroundWindow() == GetAncestor(GetConsoleWindow(), GA_ROOTOWNER);
+	//return GetForegroundWindow() == GetAncestor(GetConsoleWindow(), GA_ROOTOWNER);
+	return true;
 }
 
 bool InputManager::IsDown(int virtualKey) const

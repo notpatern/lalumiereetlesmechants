@@ -1,9 +1,9 @@
 #pragma once
 #include "ScreenText.h"
 #include "../Manager/InputManager.h"
-#include "../../Utilities/Vector2.h"
 #include <vector>
 #include <windows.h>
+#include "../../Utilities/Vector2.h"
 
 enum class ScreenRequest
 {
@@ -29,5 +29,6 @@ public:
 	virtual void DrawDebug(HANDLE console) const = 0;
 	virtual ScreenRequest getRequest() const = 0;
 
+	virtual bool DrawsPanel() const { return true; }
 	virtual Utility::Vector2<int> getCameraOffset() const { return { 0, 0 }; }
 };

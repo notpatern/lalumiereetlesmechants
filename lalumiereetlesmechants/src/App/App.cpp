@@ -8,8 +8,7 @@
 #include "Screens/GameScreen.h"
 #include "Screens/TitleScreen.h"
 
-App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)), m_renderer(&m_world)
-{
+App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)){
 	LONG_PTR new_style =  WS_OVERLAPPEDWINDOW | WS_HSCROLL | WS_VSCROLL;
     setConsoleWindowStyle(GWL_STYLE,new_style);
 
@@ -26,7 +25,8 @@ App::~App()
 	delete m_timer;
 }
 
-void App::Run() {
+void App::Run()
+{
 	static InputManager input;
 	static std::unique_ptr<IScreen> screen = std::make_unique<TitleScreen>();
 
@@ -52,8 +52,8 @@ void App::Run() {
 		break;
 	}
 
-	//m_renderer.Render();
-	screen->DrawDebug(m_consoleHandle);
+	Renderer::getInstance().Render();
+	//screen->DrawDebug(m_consoleHandle);
 
 	Sleep(16);
 }

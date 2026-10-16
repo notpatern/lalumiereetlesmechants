@@ -24,4 +24,14 @@ public:
 	{
 		m_position = position;
 	}
+
+	inline SpriteUtils::SpriteType GetType()
+	{
+		return m_spriteType;
+	}
+
+	inline Utility::Vector2<float> GetPosition()
+	{
+		return *m_position;
+	}
 };
