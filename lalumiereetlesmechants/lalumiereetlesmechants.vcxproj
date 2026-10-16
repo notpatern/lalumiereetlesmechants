@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App\Entites\Particle.cpp" />
     <ClCompile Include="src\App\Entites\PooledEntity.cpp" />
     <ClCompile Include="src\App\Entites\XpOrb.cpp" />
     <ClCompile Include="src\App\Gameplay\EnemyArchetype.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\Entites\Particle.h" />
     <ClInclude Include="src\App\Entites\PooledEntity.h" />
     <ClInclude Include="src\App\Entites\XpOrb.h" />
     <ClInclude Include="src\App\Gameplay\EnemyArchetype.h" />

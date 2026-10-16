@@ -32,6 +32,8 @@ namespace SpriteUtils
 		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
 		static const SpriteDrawing XP_ORB{ { "+" }, 0x0A };
+		static const SpriteDrawing SPARK{ { "*" }, 0x0C };
+		static const SpriteDrawing SMOKE{ { "," }, 0x08 };
 		static const SpriteDrawing NOTHING{ {}, 0x0F };
 
 		switch (type)
@@ -62,6 +64,10 @@ namespace SpriteUtils
 			return BIG_ENEMY_MISSILE;
 		case SpriteType::XpOrb:
 			return XP_ORB;
+		case SpriteType::Spark:
+			return SPARK;
+		case SpriteType::Smoke:
+			return SMOKE;
 		default:
 			return NOTHING;
 		}

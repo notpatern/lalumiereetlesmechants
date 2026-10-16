@@ -13,6 +13,12 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 
 	if (m_gameManager.IsGameOver() || m_gameManager.IsVictory())
 	{
+		m_endElapsed += deltaTime;
+		if (m_endElapsed < END_INPUT_DELAY)
+		{
+			return;
+		}
+
 		switch (m_endMenu.Update(input))
 		{
 		case END_RESTART_CHOICE:
@@ -95,7 +101,10 @@ void GameScreen::DrawDebug(HANDLE console) const
 		FillConsoleOutputAttribute(console, 0x0F, 1, cell, &written);
 	};
 
-	draw(player.getPosition(), '@');
+	if (!player.IsDead() && player.IsVisible())
+	{
+		draw(player.getPosition(), '@');
+	}
 	int activeMissiles = 0;
 	m_gameManager.getMissiles().ForEachActive([&](const Missile& missile)
 	{
@@ -113,6 +122,11 @@ void GameScreen::DrawDebug(HANDLE console) const
 	});
 
 	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
+
+	m_gameManager.getParticles().ForEachActive([&](const Particle& particle)
+	{
+		draw(particle.getPosition(), particle.IsSmoke() ? ',' : '*');
+	});
 
 	m_gameManager.getXpOrbs().ForEachActive([&](const XpOrb& orb)
 	{

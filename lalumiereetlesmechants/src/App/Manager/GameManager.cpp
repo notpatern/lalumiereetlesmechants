@@ -2,11 +2,14 @@
 #include "../Gameplay/Collision.h"
 #include "../Gameplay/WaveData.h"
 #include "../../Utilities/ScreenDirection.h"
+#include <algorithm>
+#include <numbers>
 
 GameManager::GameManager() :
 	m_missilesPool{INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE},
 	m_enemiesPool{INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE},
 	m_xpOrbsPool{INITIAL_XP_ORBS_POOL_SIZE, MAX_XP_ORBS_POOL_SIZE},
+	m_particlesPool{INITIAL_PARTICLES_POOL_SIZE, MAX_PARTICLES_POOL_SIZE},
 	m_player{Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool},
 	m_waveSpawner{WaveData::GetWaves(), m_enemiesPool}
 {
@@ -39,6 +42,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	{
 		orb.Update(deltaTime, playerCenter);
 	});
+	m_particlesPool.Update(deltaTime);
 
 	CheckMissilesHits(m_enemiesPool);
 	CheckMissilesHits(m_player);
@@ -96,6 +100,7 @@ void GameManager::CheckPlayAreaExits()
 	CheckExits(m_enemiesPool, area);
 	CheckExits(m_missilesPool, area);
 	CheckExits(m_xpOrbsPool, PlayArea::Bounds());
+	CheckExits(m_particlesPool, PlayArea::Bounds());
 }
 
 void GameManager::CheckPlayerContact()
@@ -111,8 +116,15 @@ void GameManager::CheckPlayerContact()
 	{
 		if (playerRect.Overlaps(enemy.getHitboxRect()))
 		{
-			m_player.TakeDamage(enemy.getContactDamage());
-			enemy.TakeDamage(m_player.getContactDamage());
+			if (m_player.TakeDamage(enemy.getContactDamage()) != DamageResult::Ignored)
+			{
+				SpawnExplosion(playerRect.getCenter(), HIT_PARTICLE_COUNT);
+			}
+
+			if (enemy.TakeDamage(m_player.getContactDamage()) == DamageResult::Killed)
+			{
+				SpawnExplosion(enemy.getHitboxRect().getCenter(), EXPLOSION_PARTICLE_COUNT);
+			}
 		}
 	});
 }
@@ -121,9 +133,27 @@ void GameManager::OnEnemyKilled(const Enemy& enemy)
 {
 	m_score += enemy.getPoints();
 
-	if (XpOrb* orb = m_xpOrbsPool.Acquire())
+	const Utility::Vector2<float> center = enemy.getHitboxRect().getCenter();
+	DropXpOrbs(center, enemy.getXp());
+	SpawnExplosion(center, EXPLOSION_PARTICLE_COUNT);
+}
+
+void GameManager::DropXpOrbs(const Utility::Vector2<float>& center, int count)
+{
+	const float angleStep = 2.f * std::numbers::pi_v<float> / count;
+
+	for (int i = 0; i < count; ++i)
 	{
-		orb->Spawn(enemy.getHitboxRect().getCenter(), enemy.getXp());
+		XpOrb* orb = m_xpOrbsPool.Acquire();
+		if (!orb)
+		{
+			return;
+		}
+
+		const Utility::Vector2<float> offset = count > 1 ? Utility::ScreenVector(i * angleStep, XP_ORB_SPREAD) : Utility::Vector2<float>{ 0.f, 0.f };
+		const float x = std::clamp(center.x + offset.x, 0.f, PlayArea::WIDTH - 1.f);
+		const float y = std::clamp(center.y + offset.y, 0.f, PlayArea::HEIGHT - 1.f);
+		orb->Spawn({ x, y }, 1);
 	}
 }
 
@@ -139,6 +169,19 @@ void GameManager::CollectXpOrbs()
 			orb.Collect();
 		}
 	});
+}
+
+void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int particleCount)
+{
+	const float angleStep = 2.f * std::numbers::pi_v<float> / particleCount;
+
+	for (int i = 0; i < particleCount; ++i)
+	{
+		if (Particle* particle = m_particlesPool.Acquire())
+		{
+			particle->Spawn(center, i * angleStep);
+		}
+	}
 }
 
 template <typename T>
@@ -173,7 +216,10 @@ void GameManager::CheckMissilesHits(Target& target)
 {
 	m_missilesPool.ForEachActive([&](Missile& missile)
 	{
-		TryHit(missile, target);
+		if (TryHit(missile, target) != DamageResult::Ignored)
+		{
+			SpawnExplosion(target.getHitboxRect().getCenter(), HIT_PARTICLE_COUNT);
+		}
 	});
 }
 

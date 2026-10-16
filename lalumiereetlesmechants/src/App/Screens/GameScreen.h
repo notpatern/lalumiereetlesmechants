@@ -37,7 +37,9 @@ private:
 
 	static constexpr int END_RESTART_CHOICE = 0;
 	static constexpr int END_MENU_CHOICE = 1;
+	static constexpr float END_INPUT_DELAY = 1.f;
 	Menu m_endMenu{ "Recommencer", "Menu" };
+	float m_endElapsed = 0.f;
 
 	static char EnemyDebugCharacter(EnemyType type);
 };
