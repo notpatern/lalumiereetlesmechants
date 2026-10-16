@@ -1,7 +1,8 @@
 #pragma once
-#include <deque>
 #include <concepts>
 #include <cstddef>
+#include <memory>
+#include <vector>
 
 namespace Utility
 {
@@ -33,11 +34,16 @@ namespace Utility
 		template <std::invocable<T&> Function>
 		void ForEachActive(Function inFunction)
 		{
-			for (std::size_t i = 0; i < m_objects.size(); ++i)
+			for (std::size_t chunkIndex = 0; chunkIndex < m_chunks.size(); ++chunkIndex)
 			{
-				if (m_objects[i].IsActive())
+				const std::size_t chunkSize = GetChunkSize(chunkIndex);
+				for (std::size_t i = 0; i < chunkSize; ++i)
 				{
-					inFunction(m_objects[i]);
+					T& object = m_chunks[chunkIndex][i];
+					if (object.IsActive())
+					{
+						inFunction(object);
+					}
 				}
 			}
 		}
@@ -45,64 +51,90 @@ namespace Utility
 		template <std::invocable<const T&> Function>
 		void ForEachActive(Function inFunction) const
 		{
-			for (std::size_t i = 0; i < m_objects.size(); ++i)
+			for (std::size_t chunkIndex = 0; chunkIndex < m_chunks.size(); ++chunkIndex)
 			{
-				if (m_objects[i].IsActive())
+				const std::size_t chunkSize = GetChunkSize(chunkIndex);
+				for (std::size_t i = 0; i < chunkSize; ++i)
 				{
-					inFunction(m_objects[i]);
+					const T& object = m_chunks[chunkIndex][i];
+					if (object.IsActive())
+					{
+						inFunction(object);
+					}
 				}
 			}
 		}
 
 	private:
-		std::deque<T> m_objects;
+		std::vector<std::unique_ptr<T[]>> m_chunks;
+		std::size_t m_size;
 		std::size_t m_maxSize;
 		std::size_t m_growthStep;
 		std::size_t m_searchStart;
 
 		void Grow();
+		T& GetObjectAt(std::size_t inIndex);
+		std::size_t GetChunkSize(std::size_t inChunkIndex) const;
 	};
 
 	template <Poolable T>
-	Pool<T>::Pool(std::size_t inInitialSize, std::size_t inMaxSize) : m_objects(inInitialSize), m_maxSize(inMaxSize), m_growthStep(inInitialSize > 0 ? inInitialSize : 1), m_searchStart(0)
+	Pool<T>::Pool(std::size_t inInitialSize, std::size_t inMaxSize) : m_size(0), m_maxSize(inMaxSize), m_growthStep(inInitialSize > 0 ? inInitialSize : 1), m_searchStart(0)
 	{
+		if (inInitialSize > 0)
+		{
+			Grow();
+		}
 	}
 
 	template <Poolable T>
 	T* Pool<T>::Acquire()
 	{
-		const std::size_t count = m_objects.size();
-		for (std::size_t checked = 0; checked < count; ++checked)
+		for (std::size_t checked = 0; checked < m_size; ++checked)
 		{
-			const std::size_t index = (m_searchStart + checked) % count;
-			if (!m_objects[index].IsActive())
+			const std::size_t index = (m_searchStart + checked) % m_size;
+			T& object = GetObjectAt(index);
+			if (!object.IsActive())
 			{
 				m_searchStart = index + 1;
-				return &m_objects[index];
+				return &object;
 			}
 		}
 
-		if (m_objects.size() >= m_maxSize)
+		if (m_size >= m_maxSize)
 		{
 			return nullptr;
 		}
 
-		const std::size_t firstNewIndex = m_objects.size();
+		const std::size_t firstNewIndex = m_size;
 
 		Grow();
 		m_searchStart = firstNewIndex + 1;
 
-		return &m_objects[firstNewIndex];
+		return &GetObjectAt(firstNewIndex);
 	}
 
 	template <Poolable T>
 	void Pool<T>::Grow()
 	{
-		std::size_t newSize = m_objects.size() + m_growthStep;
-		if (newSize > m_maxSize)
+		std::size_t chunkSize = m_growthStep;
+		if (m_size + chunkSize > m_maxSize)
 		{
-			newSize = m_maxSize;
+			chunkSize = m_maxSize - m_size;
 		}
-		m_objects.resize(newSize);
+		m_chunks.push_back(std::make_unique<T[]>(chunkSize));
+		m_size += chunkSize;
+	}
+
+	template <Poolable T>
+	T& Pool<T>::GetObjectAt(std::size_t inIndex)
+	{
+		return m_chunks[inIndex / m_growthStep][inIndex % m_growthStep];
+	}
+
+	template <Poolable T>
+	std::size_t Pool<T>::GetChunkSize(std::size_t inChunkIndex) const
+	{
+		const std::size_t remaining = m_size - inChunkIndex * m_growthStep;
+		return remaining < m_growthStep ? remaining : m_growthStep;
 	}
 }
