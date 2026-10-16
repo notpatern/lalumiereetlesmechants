@@ -17,12 +17,16 @@ namespace SpriteUtils
 	{
 		static const std::vector<std::string_view> HUNTER_LINES = { "<o>", " V " };
 		static const std::vector<std::string_view> TURRET_LINES = { "[=O=]", " \\_/ " };
+		static const std::vector<std::string_view> CHARGER_LINES = { "/#\\", "\\V/" };
 
 		static const SpriteDrawing PLAYER{ { " ^ ", "/A\\" }, 0x0E };
 		static const SpriteDrawing HUNTER{ HUNTER_LINES, 0x0C };
 		static const SpriteDrawing HUNTER_HIT{ HUNTER_LINES, 0x0F };
 		static const SpriteDrawing TURRET{ TURRET_LINES, 0x0D };
 		static const SpriteDrawing TURRET_HIT{ TURRET_LINES, 0x0F };
+		static const SpriteDrawing CHARGER{ CHARGER_LINES, 0x06 };
+		static const SpriteDrawing CHARGER_HIT{ CHARGER_LINES, 0x0F };
+		static const SpriteDrawing CHARGER_TELEGRAPH{ CHARGER_LINES, 0x0E };
 		static const SpriteDrawing PLAYER_MISSILE{ { "|" }, 0x0B };
 		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
@@ -41,6 +45,12 @@ namespace SpriteUtils
 			return TURRET;
 		case SpriteType::TurretHit:
 			return TURRET_HIT;
+		case SpriteType::Charger:
+			return CHARGER;
+		case SpriteType::ChargerHit:
+			return CHARGER_HIT;
+		case SpriteType::ChargerTelegraph:
+			return CHARGER_TELEGRAPH;
 		case SpriteType::PlayerMissile:
 			return PLAYER_MISSILE;
 		case SpriteType::EnemyMissile:

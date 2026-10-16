@@ -1,5 +1,6 @@
 #include "XpOrb.h"
 #include <algorithm>
+#include "../Gameplay/PlayArea.h"
 #include "../../Utilities/ScreenDirection.h"
 
 void XpOrb::Spawn(const Utility::Vector2<float>& position, int value)
@@ -16,7 +17,7 @@ void XpOrb::Update(float dt, const Utility::Vector2<float>& playerCenter)
 {
 	if (!m_isAttracted && Utility::ScreenDistanceSquared(m_position, playerCenter) > MAGNET_RADIUS * MAGNET_RADIUS)
 	{
-		m_position.y += FALL_SPEED * dt;
+		m_position.y += PlayArea::SCROLL_SPEED * dt;
 		return;
 	}
 

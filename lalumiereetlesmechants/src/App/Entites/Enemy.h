@@ -41,6 +41,7 @@ public:
 	EnemyType getType() const { return m_type; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
+	bool IsTelegraphing() const { return m_movement.IsTelegraphing(); }
 
 	Team getTeam() const { return Team::Enemy; }
 

@@ -7,7 +7,8 @@
 enum class EnemyType
 {
 	Hunter,
-	Turret
+	Turret,
+	Charger
 };
 
 struct EnemyArchetype
@@ -21,6 +22,7 @@ struct EnemyArchetype
 	WeaponSettings weapon;
 	SpriteUtils::SpriteType sprite = SpriteUtils::SpriteType::Hunter;
 	SpriteUtils::SpriteType hitSprite = SpriteUtils::SpriteType::HunterHit;
+	SpriteUtils::SpriteType telegraphSprite = SpriteUtils::SpriteType::NONE;
 };
 
 namespace EnemyArchetypes

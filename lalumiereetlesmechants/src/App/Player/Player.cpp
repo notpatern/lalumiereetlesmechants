@@ -121,11 +121,17 @@ void Player::TryShoot()
 		return;
 	}
 
-	if (Missile* missile = m_missilePool->Acquire())
+	const ShotLevel& shot = SHOT_LEVELS[m_experience.getLevel() - 1];
+	for (int i = 0; i < shot.missileCount; ++i)
 	{
-		missile->Launch({ m_position.x + BODY_WIDTH / 2, m_position.y - 1.f }, { 0.f, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
-		m_fireCooldown.Start(m_fireDelay);
+		if (Missile* missile = m_missilePool->Acquire())
+		{
+			const float fromCenter = i - (shot.missileCount - 1) / 2.f;
+			const float missileX = m_position.x + BODY_WIDTH / 2 + fromCenter * shot.spacing;
+			missile->Launch({ missileX, m_position.y - 1.f }, { fromCenter * shot.spreadSpeed, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
+		}
 	}
+	m_fireCooldown.Start(shot.fireInterval);
 }
 
 void Player::Die()

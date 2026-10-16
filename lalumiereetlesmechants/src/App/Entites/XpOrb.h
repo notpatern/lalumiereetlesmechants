@@ -13,7 +13,6 @@ public:
 	int getValue() const { return m_value; }
 
 private:
-	static constexpr float FALL_SPEED = 4.f;
 	static constexpr float MAGNET_RADIUS = 6.f;
 	static constexpr float MAGNET_ACCELERATION = 60.f;
 	static constexpr float MAGNET_MAX_SPEED = 30.f;

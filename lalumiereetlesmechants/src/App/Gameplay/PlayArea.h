@@ -7,6 +7,7 @@ namespace PlayArea
 	inline constexpr int HEIGHT = 28;
 	inline constexpr int OFFSCREEN_MARGIN = 5;
 	inline constexpr float SPAWN_Y = -2.f;
+	inline constexpr float SCROLL_SPEED = 2.5f;
 
 	static_assert(SPAWN_Y >= -OFFSCREEN_MARGIN, "Les ennemis doivent apparaitre dans la marge, sinon ils sont desactives des leur apparition!!!");
 
