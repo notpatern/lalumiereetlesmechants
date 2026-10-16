@@ -6,11 +6,12 @@
 #include <numbers>
 
 GameManager::GameManager()
-	: m_missilesPool{ INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE },
+	: m_playerMissilesPool{ INITIAL_PLAYER_MISSILES_POOL_SIZE, MAX_PLAYER_MISSILES_POOL_SIZE },
+	m_enemyMissilesPool{ INITIAL_ENEMY_MISSILES_POOL_SIZE, MAX_ENEMY_MISSILES_POOL_SIZE },
 	m_enemiesPool{ INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE },
 	m_xpOrbsPool{ INITIAL_XP_ORBS_POOL_SIZE, MAX_XP_ORBS_POOL_SIZE },
 	m_particlesPool{ INITIAL_PARTICLES_POOL_SIZE, MAX_PARTICLES_POOL_SIZE },
-	m_player{ Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool },
+	m_player{ Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_playerMissilesPool },
 	m_waveSpawner{ WaveData::GetWaves(), m_enemiesPool }
 {
 }
@@ -38,7 +39,7 @@ void GameManager::Update(float inDeltaTime, const InputManager& inInputManager)
 	SeparateEnemies(deltaTime);
 
 	const Utility::Vector2<float> playerCenter = m_player.getAimPoint();
-	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = playerCenter };
+	const EnemyUpdateContext enemyContext{ .missiles = m_enemyMissilesPool, .playerCenter = playerCenter };
 	m_enemiesPool.ForEachActive([&](Enemy& outEnemy)
 	{
 		outEnemy.Update(deltaTime, enemyContext);
@@ -47,7 +48,8 @@ void GameManager::Update(float inDeltaTime, const InputManager& inInputManager)
 			PlayFeedback(outEnemy.getArchetype().chargeEndFeedback);
 		}
 	});
-	m_missilesPool.Update(deltaTime);
+	m_playerMissilesPool.Update(deltaTime);
+	m_enemyMissilesPool.Update(deltaTime);
 	m_xpOrbsPool.ForEachActive([&](XpOrb& outOrb)
 	{
 		outOrb.Update(deltaTime, playerCenter);
@@ -104,7 +106,7 @@ void GameManager::SeparateEnemies(float inDeltaTime)
 
 void GameManager::CheckMissilesHitEnemies(Utility::Pool<Enemy>& outEnemies)
 {
-	m_missilesPool.ForEachActive([&](Missile& outMissile)
+	m_playerMissilesPool.ForEachActive([&](Missile& outMissile)
 	{
 		outEnemies.ForEachActive([&](Enemy& outEnemy)
 		{
@@ -118,7 +120,7 @@ void GameManager::CheckMissilesHitEnemies(Utility::Pool<Enemy>& outEnemies)
 
 void GameManager::CheckMissilesHitPlayer()
 {
-	m_missilesPool.ForEachActive([&](Missile& outMissile)
+	m_enemyMissilesPool.ForEachActive([&](Missile& outMissile)
 	{
 		OnPlayerDamaged(TryHit(outMissile, m_player), m_player.getHitboxRect().getCenter());
 	});
@@ -127,7 +129,7 @@ void GameManager::CheckMissilesHitPlayer()
 template <Hittable Target>
 DamageResult GameManager::TryHit(Missile& outMissile, Target& outTarget)
 {
-	if (!outMissile.IsActive() || !outTarget.IsActive() || outMissile.getTeam() == outTarget.getTeam())
+	if (!outMissile.IsActive() || !outTarget.IsActive())
 	{
 		return DamageResult::Ignored;
 	}
@@ -200,7 +202,8 @@ void GameManager::CheckPlayAreaExits()
 	const Collision::CellRect area = PlayArea::ExitBounds();
 
 	CheckExits(m_enemiesPool, area);
-	CheckExits(m_missilesPool, area);
+	CheckExits(m_playerMissilesPool, area);
+	CheckExits(m_enemyMissilesPool, area);
 	CheckExits(m_xpOrbsPool, PlayArea::Bounds());
 	CheckExits(m_particlesPool, PlayArea::Bounds());
 }

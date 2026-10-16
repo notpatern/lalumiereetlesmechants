@@ -36,7 +36,8 @@ public:
 	const Player& getPlayer() const { return m_player; }
 
 	const Utility::Pool<Enemy>& getEnemies() const { return m_enemiesPool; }
-	const Utility::Pool<Missile>& getMissiles() const { return m_missilesPool; }
+	const Utility::Pool<Missile>& getPlayerMissiles() const { return m_playerMissilesPool; }
+	const Utility::Pool<Missile>& getEnemyMissiles() const { return m_enemyMissilesPool; }
 	const Utility::Pool<XpOrb>& getXpOrbs() const { return m_xpOrbsPool; }
 	const Utility::Pool<Particle>& getParticles() const { return m_particlesPool; }
 
@@ -51,8 +52,10 @@ public:
 private:
 	static constexpr float MAX_DELTA_TIME = 0.1f;
 
-	static constexpr std::size_t INITIAL_MISSILES_POOL_SIZE = 6;
-	static constexpr std::size_t MAX_MISSILES_POOL_SIZE = 200;
+	static constexpr std::size_t INITIAL_PLAYER_MISSILES_POOL_SIZE = 10;
+	static constexpr std::size_t MAX_PLAYER_MISSILES_POOL_SIZE = 50;
+	static constexpr std::size_t INITIAL_ENEMY_MISSILES_POOL_SIZE = 6;
+	static constexpr std::size_t MAX_ENEMY_MISSILES_POOL_SIZE = 200;
 	static constexpr std::size_t INITIAL_ENEMIES_POOL_SIZE = 6;
 	static constexpr std::size_t MAX_ENEMIES_POOL_SIZE = 200;
 	static constexpr std::size_t INITIAL_XP_ORBS_POOL_SIZE = 6;
@@ -73,7 +76,8 @@ private:
 	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
 	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
 
-	Utility::Pool<Missile> m_missilesPool;
+	Utility::Pool<Missile> m_playerMissilesPool;
+	Utility::Pool<Missile> m_enemyMissilesPool;
 	Utility::Pool<Enemy> m_enemiesPool;
 	Utility::Pool<XpOrb> m_xpOrbsPool;
 	Utility::Pool<Particle> m_particlesPool;

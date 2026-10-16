@@ -45,7 +45,6 @@ public:
 	const MovementSettings& getMovementSettings() const { return EnemyArchetypes::Get(m_type).movement; }
 	DamageInfos getContactDamage() const;
 
-	Team getTeam() const { return Team::Enemy; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }

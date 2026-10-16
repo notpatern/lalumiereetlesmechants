@@ -45,7 +45,6 @@ public:
 	const Experience& getExperience() const { return m_experience; }
 	DamageInfos getContactDamage() const;
 
-	Team getTeam() const { return Team::Player; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	Collision::CellRect getBodyRect() const { return m_body.At(m_position); }
 	Utility::Vector2<float> getAimPoint() const { return getHitboxRect().getCenter(); }

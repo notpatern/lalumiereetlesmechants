@@ -17,7 +17,6 @@ public:
 	void OnLeftPlayArea();
 
 	MissileType getType() const { return m_type; }
-	Team getTeam() const { return m_team; }
 	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 	Utility::Vector2<int> getHitboxSize() const { return m_hitboxSize; }
 	DamageInfos getDamageInfos() const;
