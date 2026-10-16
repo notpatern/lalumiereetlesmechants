@@ -22,4 +22,6 @@ namespace SpriteUtils
 		LevelUpSpark,
 		NONE
 	};
+	// nous permet de donner un flag à un sprite pour que le renderer
+	// sache quelle texture (préloadée) render pour le current sprite
 }

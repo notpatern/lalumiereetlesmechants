@@ -11,7 +11,9 @@ bool InputManager::ReadKeyFromWindows(int virtualKey)
 bool InputManager::ConsoleHasFocus()
 {
 	//return GetForegroundWindow() == GetAncestor(GetConsoleWindow(), GA_ROOTOWNER);
+
 	return true;
+	// always true parce que la CMD et le TERMINAL windows ne se comportent pas pareil et la scope du projet ne requiert pas d'archi plus complexe.
 }
 
 bool InputManager::IsDown(int virtualKey) const

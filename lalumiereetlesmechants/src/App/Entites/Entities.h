@@ -3,7 +3,7 @@
 #include "../Render/Sprite.h"
 #include "../../Utilities/Vector2.h"
 
-class Entity : public Sprite
+class Entity : public Sprite // un entity est forcement renderable et donc herite de Sprite
 {
 public:
 	Entity();

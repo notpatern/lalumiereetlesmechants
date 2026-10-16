@@ -9,4 +9,7 @@ int main()
 	while (app.getIsRunning()) {
 		app.Run();
 	}
+
+	// en gros ça tourne je met un commentaire juste pour dire que ça tourne et que le programme.cpp
+	// c'est juste le main en gros
 }

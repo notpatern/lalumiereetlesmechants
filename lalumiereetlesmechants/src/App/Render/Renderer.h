@@ -8,7 +8,7 @@
 #include <vector>
 #include <windows.h>
 
-class Renderer
+class Renderer // il render le monde, les sprites et les ecrans. Ses render queue se remplissent et se vident automatiquement avec les instanciation et destructions des Sprites et Screens
 {
 	static constexpr short SCREEN_WIDTH = 80;
 	static constexpr short SCREEN_HEIGHT = 40;
