@@ -1,39 +1,39 @@
 #pragma once
-#include <cmath>
 #include "Vector2.h"
+#include <cmath>
 
 namespace Utility
 {
 	inline constexpr float CELL_HEIGHT_IN_COLUMNS = 2.f;
 
-	inline float ScreenDistanceSquared(const Vector2<float>& from, const Vector2<float>& to)
+	inline float ScreenDistanceSquared(const Vector2<float>& inFrom, const Vector2<float>& inTo)
 	{
-		const float dxInRows = (to.x - from.x) / CELL_HEIGHT_IN_COLUMNS;
-		const float dy = to.y - from.y;
-		return dxInRows * dxInRows + dy * dy;
+		const float deltaXInRows = (inTo.x - inFrom.x) / CELL_HEIGHT_IN_COLUMNS;
+		const float deltaY = inTo.y - inFrom.y;
+		return deltaXInRows * deltaXInRows + deltaY * deltaY;
 	}
 
-	inline Vector2<float> ScreenDirection(const Vector2<float>& from, const Vector2<float>& to)
+	inline Vector2<float> ScreenDirection(const Vector2<float>& inFrom, const Vector2<float>& inTo)
 	{
-		const float dx = to.x - from.x;
-		const float dy = to.y - from.y;
-		const float length = std::sqrt(ScreenDistanceSquared(from, to));
+		const float deltaX = inTo.x - inFrom.x;
+		const float deltaY = inTo.y - inFrom.y;
+		const float length = std::sqrt(ScreenDistanceSquared(inFrom, inTo));
 
 		if (length <= 0.f)
 		{
 			return { 0.f, 1.f };
 		}
 
-		return { dx / length, dy / length };
+		return { deltaX / length, deltaY / length };
 	}
 
-	inline float ScreenAngle(const Vector2<float>& vector)
+	inline float ScreenAngle(const Vector2<float>& inVector)
 	{
-		return std::atan2(vector.y, vector.x / CELL_HEIGHT_IN_COLUMNS);
+		return std::atan2(inVector.y, inVector.x / CELL_HEIGHT_IN_COLUMNS);
 	}
 
-	inline Vector2<float> ScreenVector(float angle, float length)
+	inline Vector2<float> ScreenVector(float inAngle, float inLength)
 	{
-		return { std::cos(angle) * length * CELL_HEIGHT_IN_COLUMNS, std::sin(angle) * length };
+		return { std::cos(inAngle) * inLength * CELL_HEIGHT_IN_COLUMNS, std::sin(inAngle) * inLength };
 	}
 }

@@ -1,21 +1,20 @@
 #pragma once
-#include "../Manager/InputManager.h"
 #include "ScreenText.h"
+#include "../Manager/InputManager.h"
 #include <initializer_list>
 #include <string_view>
 #include <vector>
-#include <windows.h>
 
 class Menu
 {
 public:
 	static constexpr int NO_CHOICE = -1;
 
-	explicit Menu(std::initializer_list<std::string_view> options);
+	explicit Menu(std::initializer_list<std::string_view> inOptions);
 
-	int Update(const InputManager& input);
+	int Update(const InputManager& inInput);
 
-	void AddTexts(std::vector<ScreenText>& texts, int firstRow) const;
+	void AddTexts(std::vector<ScreenText>& outTexts, int inFirstRow) const;
 
 private:
 	std::vector<std::string_view> m_options;

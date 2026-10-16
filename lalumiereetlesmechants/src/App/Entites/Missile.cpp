@@ -4,15 +4,15 @@ Missile::Missile() : m_type(MissileType::PlayerShot), m_team(Team::Player)
 {
 }
 
-void Missile::Launch(MissileType type, const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity)
+void Missile::Launch(MissileType inType, const Utility::Vector2<float>& inPosition, const Utility::Vector2<float>& inVelocity)
 {
-	const MissileArchetype& archetype = MissileArchetypes::Get(type);
+	const MissileArchetype& archetype = MissileArchetypes::Get(inType);
 
 	m_lifetime.Start(LIFETIME);
-	m_lastPosition = position;
-	m_position = position;
-	m_velocity = velocity;
-	m_type = type;
+	m_lastPosition = inPosition;
+	m_position = inPosition;
+	m_velocity = inVelocity;
+	m_type = inType;
 	m_team = archetype.team;
 	m_hitboxSize = archetype.hitboxSize;
 	m_spriteType = archetype.sprite;
@@ -20,9 +20,25 @@ void Missile::Launch(MissileType type, const Utility::Vector2<float>& position, 
 	Activate();
 }
 
-DamageInfos Missile::getDamageInfos() const
+void Missile::Update(float inDeltaTime)
 {
-	return { .amount = MissileArchetypes::Get(m_type).damage, .source = m_team, .position = m_position };
+	m_lastPosition = m_position;
+
+	m_position.x += m_velocity.x * inDeltaTime;
+	m_position.y += m_velocity.y * inDeltaTime;
+
+	m_lifetime.Update(inDeltaTime);
+	if (m_lifetime.IsFinished())
+	{
+		Deactivate();
+	}
+}
+
+DamageResult Missile::OnHit(IDamageable& outDamageable)
+{
+	const DamageResult result = outDamageable.TakeDamage(getDamageInfos());
+	Deactivate();
+	return result;
 }
 
 void Missile::OnLeftPlayArea()
@@ -30,34 +46,7 @@ void Missile::OnLeftPlayArea()
 	Deactivate();
 }
 
-void Missile::Explode()
+DamageInfos Missile::getDamageInfos() const
 {
-	Deactivate();
+	return { .amount = MissileArchetypes::Get(m_type).damage, .source = m_team, .position = m_position };
 }
-
-DamageResult Missile::OnHit(IDamageable& damageable)
-{
-	const DamageResult result = damageable.TakeDamage(getDamageInfos());
-	Explode();
-	return result;
-}
-
-void Missile::Update(float dt)
-{
-	if (!getIsActive())
-	{
-		return;
-	}
-
-	m_lastPosition = m_position;
-
-	m_position.x += m_velocity.x * dt;
-	m_position.y += m_velocity.y * dt;
-
-	m_lifetime.Update(dt);
-	if (m_lifetime.IsFinished())
-	{
-		Deactivate();
-	}
-}
-

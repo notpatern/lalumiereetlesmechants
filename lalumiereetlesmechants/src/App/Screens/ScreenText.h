@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Utilities/Vector2.h"
 #include "../Gameplay/PlayArea.h"
+#include "../../Utilities/Vector2.h"
 #include <string>
 #include <string_view>
 #include <windows.h>
@@ -13,7 +13,7 @@ struct ScreenText
 	WORD color = 0x0F;
 };
 
-inline ScreenText CenteredText(std::string_view text, int row, WORD color = 0x0F)
+inline ScreenText MakeCenteredText(std::string_view inText, int inRow, WORD inColor = 0x0F)
 {
-	return { std::string(text), { (PlayArea::WIDTH - static_cast<int>(text.size())) / 2, row }, color };
+	return { std::string(inText), { (PlayArea::WIDTH - static_cast<int>(inText.size())) / 2, inRow }, inColor };
 }

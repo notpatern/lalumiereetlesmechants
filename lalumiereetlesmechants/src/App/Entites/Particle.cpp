@@ -2,22 +2,22 @@
 #include "../Gameplay/PlayArea.h"
 #include "../../Utilities/ScreenDirection.h"
 
-void Particle::Spawn(const Utility::Vector2<float>& position, float angle, SpriteUtils::SpriteType spark, SpriteUtils::SpriteType smoke)
+void Particle::Spawn(const Utility::Vector2<float>& inPosition, float inAngle, SpriteUtils::SpriteType inSpark, SpriteUtils::SpriteType inSmoke)
 {
-	m_position = position;
-	m_velocity = Utility::ScreenVector(angle, SPEED);
+	m_position = inPosition;
+	m_velocity = Utility::ScreenVector(inAngle, SPEED);
 	m_lifetime.Start(LIFETIME);
-	m_spriteType = spark;
-	m_smokeSprite = smoke;
+	m_spriteType = inSpark;
+	m_smokeSprite = inSmoke;
 	Activate();
 }
 
-void Particle::Update(float dt)
+void Particle::Update(float inDeltaTime)
 {
-	m_position.x += m_velocity.x * dt;
-	m_position.y += m_velocity.y * dt;
+	m_position.x += m_velocity.x * inDeltaTime;
+	m_position.y += m_velocity.y * inDeltaTime;
 
-	m_lifetime.Update(dt);
+	m_lifetime.Update(inDeltaTime);
 	if (m_lifetime.IsFinished())
 	{
 		Deactivate();
@@ -27,7 +27,7 @@ void Particle::Update(float dt)
 	if (IsSmoke())
 	{
 		m_spriteType = m_smokeSprite;
-		m_position.y += PlayArea::SCROLL_SPEED * dt;
+		m_position.y += PlayArea::SCROLL_SPEED * inDeltaTime;
 	}
 }
 

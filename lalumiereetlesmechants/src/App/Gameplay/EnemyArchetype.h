@@ -31,5 +31,5 @@ struct EnemyArchetype
 
 namespace EnemyArchetypes
 {
-	const EnemyArchetype& Get(EnemyType type);
+	const EnemyArchetype& Get(EnemyType inType);
 }

@@ -1,42 +1,41 @@
 #include "Player.h"
 #include <windows.h>
 
-
-Player::Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles)
-	: Entity(startPosition), m_missilePool(&missiles), m_health(MAX_HEALTH),
-	  m_hitbox{ .offset = { HITBOX_OFFSET_X, HITBOX_OFFSET_Y }, .size = { HITBOX_WIDTH, HITBOX_HEIGHT } },
-	  m_body{ .size = { BODY_WIDTH, BODY_HEIGHT } }
+Player::Player(const Utility::Vector2<float>& inStartPosition, Utility::Pool<Missile>& inMissiles)
+	: Entity(inStartPosition), m_missilePool(&inMissiles), m_health(MAX_HEALTH),
+	m_hitbox{ .offset = { HITBOX_OFFSET_X, HITBOX_OFFSET_Y }, .size = { HITBOX_WIDTH, HITBOX_HEIGHT } },
+	m_body{ .size = { BODY_WIDTH, BODY_HEIGHT } }
 {
 	m_spriteType = SpriteUtils::SpriteType::Player;
 	SetInRenderQueue(true);
 }
 
-void Player::Update(float dt, const InputManager& input, const Collision::CellRect& bounds)
+void Player::Update(float inDeltaTime, const InputManager& inInput, const Collision::CellRect& inBounds)
 {
 	if (IsDead())
 	{
 		return;
 	}
 
-	m_fireCooldown.Update(dt);
-	m_invincibility.Update(dt);
+	m_fireCooldown.Update(inDeltaTime);
+	m_invincibility.Update(inDeltaTime);
 	SetInRenderQueue(IsVisible());
 
-	Move(dt, ReadDirection(input), bounds);
-	if (ReadShoot(input))
+	Move(inDeltaTime, ReadDirection(inInput), inBounds);
+	if (ReadShoot(inInput))
 	{
 		TryShoot();
 	}
 }
 
-DamageResult Player::TakeDamage(const DamageInfos& damage)
+DamageResult Player::TakeDamage(const DamageInfos& inDamage)
 {
 	if (IsDead() || IsInvincible())
 	{
 		return DamageResult::Ignored;
 	}
 
-	if (m_health.TakeDamage(damage.amount))
+	if (m_health.TakeDamage(inDamage.amount))
 	{
 		Die();
 		return DamageResult::Killed;
@@ -46,20 +45,20 @@ DamageResult Player::TakeDamage(const DamageInfos& damage)
 	return DamageResult::Hit;
 }
 
-DamageInfos Player::getContactDamage() const
-{
-	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Player, .position = m_position };
-}
-
-void Player::AddXp(int amount)
+void Player::AddXp(int inAmount)
 {
 	const int levelBefore = m_experience.getLevel();
-	m_experience.AddXp(amount);
+	m_experience.AddXp(inAmount);
 
 	for (int level = levelBefore + 1; level <= m_experience.getLevel(); ++level)
 	{
 		m_health.Heal(LEVELS[level - 1].livesRestored);
 	}
+}
+
+DamageInfos Player::getContactDamage() const
+{
+	return { .amount = CONTACT_DAMAGE, .type = DamageType::Collision, .source = Team::Player, .position = m_position };
 }
 
 bool Player::IsVisible() const
@@ -73,23 +72,23 @@ bool Player::IsVisible() const
 	return blinkIndex % 2 == 0;
 }
 
-Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
+Utility::Vector2<int> Player::ReadDirection(const InputManager& inInput)
 {
 	Utility::Vector2<int> direction;
 
-	if (input.IsDown(VK_UP) || input.IsDown('Z') || input.IsDown('W'))
+	if (inInput.IsDown(VK_UP) || inInput.IsDown('Z') || inInput.IsDown('W'))
 	{
 		direction.y -= 1;
 	}
-	if (input.IsDown(VK_DOWN) || input.IsDown('S'))
+	if (inInput.IsDown(VK_DOWN) || inInput.IsDown('S'))
 	{
 		direction.y += 1;
 	}
-	if (input.IsDown(VK_LEFT) || input.IsDown('Q') || input.IsDown('A'))
+	if (inInput.IsDown(VK_LEFT) || inInput.IsDown('Q') || inInput.IsDown('A'))
 	{
 		direction.x -= 1;
 	}
-	if (input.IsDown(VK_RIGHT) || input.IsDown('D'))
+	if (inInput.IsDown(VK_RIGHT) || inInput.IsDown('D'))
 	{
 		direction.x += 1;
 	}
@@ -97,27 +96,27 @@ Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
 	return direction;
 }
 
-void Player::Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds)
+void Player::Move(float inDeltaTime, const Utility::Vector2<int>& inDirection, const Collision::CellRect& inBounds)
 {
-	const float diagonalFactor = (direction.x != 0 && direction.y != 0) ? DIAGONAL_FACTOR  : 1.f;
-	const float stepX = static_cast<float>(direction.x) * m_speed.x * diagonalFactor * dt;
-	const float stepY = static_cast<float>(direction.y) * m_speed.y * diagonalFactor * dt;
+	const float diagonalFactor = (inDirection.x != 0 && inDirection.y != 0) ? DIAGONAL_FACTOR : 1.f;
+	const float stepX = static_cast<float>(inDirection.x) * SPEED_X * diagonalFactor * inDeltaTime;
+	const float stepY = static_cast<float>(inDirection.y) * SPEED_Y * diagonalFactor * inDeltaTime;
 
-	TryMoveTo({ m_position.x + stepX, m_position.y }, bounds);
-	TryMoveTo({ m_position.x, m_position.y + stepY }, bounds);
+	TryMoveTo({ m_position.x + stepX, m_position.y }, inBounds);
+	TryMoveTo({ m_position.x, m_position.y + stepY }, inBounds);
 }
 
-void Player::TryMoveTo(const Utility::Vector2<float>& target, const Collision::CellRect& bounds)
+void Player::TryMoveTo(const Utility::Vector2<float>& inTarget, const Collision::CellRect& inBounds)
 {
-	if (bounds.Contains(m_body.At(target)))
+	if (inBounds.ContainsRect(m_body.At(inTarget)))
 	{
-		m_position = target;
+		m_position = inTarget;
 	}
 }
 
-bool Player::ReadShoot(const InputManager& input)
+bool Player::ReadShoot(const InputManager& inInput)
 {
-	return (input.IsDown(VK_SPACE) || input.IsDown('E'));
+	return (inInput.IsDown(VK_SPACE) || inInput.IsDown('E'));
 }
 
 void Player::TryShoot()
@@ -135,7 +134,7 @@ void Player::TryShoot()
 		{
 			const float fromCenter = i - (shot.missileCount - 1) / 2.f;
 			const float missileX = m_position.x + BODY_WIDTH / 2 + fromCenter * shot.spacing;
-			missile->Launch(shot.missile, { missileX, m_position.y - 1.f }, { fromCenter * shot.spreadSpeed, -missileSpeed });
+			missile->Launch(shot.missile, { missileX, m_position.y - MISSILE_SPAWN_OFFSET_Y }, { fromCenter * shot.spreadSpeed, -missileSpeed });
 		}
 	}
 	m_fireCooldown.Start(shot.fireInterval);
@@ -145,4 +144,3 @@ void Player::Die()
 {
 	SetInRenderQueue(false);
 }
-

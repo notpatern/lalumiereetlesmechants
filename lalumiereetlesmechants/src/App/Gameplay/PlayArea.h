@@ -13,11 +13,11 @@ namespace PlayArea
 
 	inline Collision::CellRect Bounds()
 	{
-		return {{0,0}, {WIDTH - 1, HEIGHT -1}};
+		return { { 0, 0 }, { WIDTH - 1, HEIGHT - 1 } };
 	}
 
 	inline Collision::CellRect ExitBounds()
 	{
-		return {{-OFFSCREEN_MARGIN, -OFFSCREEN_MARGIN}, {WIDTH - 1 + OFFSCREEN_MARGIN, HEIGHT -1 + OFFSCREEN_MARGIN}};
+		return { { -OFFSCREEN_MARGIN, -OFFSCREEN_MARGIN }, { WIDTH - 1 + OFFSCREEN_MARGIN, HEIGHT - 1 + OFFSCREEN_MARGIN } };
 	}
 }

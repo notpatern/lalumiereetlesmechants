@@ -11,8 +11,8 @@
 class Hud
 {
 public:
-	void Update(float deltaTime);
-	void AddTexts(std::vector<ScreenText>& texts, const GameManager& gameManager) const;
+	void Update(float inDeltaTime);
+	void AddTexts(std::vector<ScreenText>& outTexts, const GameManager& inGameManager) const;
 
 private:
 	static constexpr int SCORE_ROW = PlayArea::HEIGHT;
@@ -20,6 +20,7 @@ private:
 	static constexpr int XP_ROW = PlayArea::HEIGHT + 1;
 
 	static constexpr HudBar LIFE_BAR{ .segmentWidth = 6, .gap = 1, .filledColor = 0xC0, .emptyColor = 0x80 };
+	static constexpr int LOW_LIFE_HEALTH = 1;
 	static constexpr WORD LOW_LIFE_BLINK_COLOR = 0x40;
 	static constexpr float LOW_LIFE_BLINK_PERIOD = 0.4f;
 
@@ -32,6 +33,6 @@ private:
 
 	float m_elapsed = 0.f;
 
-	void AddLifeBar(std::vector<ScreenText>& texts, const Player& player) const;
-	static void AddXpBar(std::vector<ScreenText>& texts, const Experience& experience);
+	void AddLifeBar(std::vector<ScreenText>& outTexts, const Player& inPlayer) const;
+	static void AddXpBar(std::vector<ScreenText>& outTexts, const Experience& inExperience);
 };

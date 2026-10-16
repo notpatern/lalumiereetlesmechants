@@ -24,11 +24,11 @@ public:
 	IScreen(const IScreen&) = delete;
 	IScreen& operator=(const IScreen&) = delete;
 
-	virtual void Update(float deltaTime, const InputManager& input) = 0;
-	virtual std::vector<ScreenText> getTexts() const = 0;
+	virtual void Update(float inDeltaTime, const InputManager& inInput) = 0;
 	virtual void DrawDebug(HANDLE console) const = 0;
-	virtual ScreenRequest getRequest() const = 0;
 
-	virtual bool DrawsPanel() const { return true; }
+	virtual std::vector<ScreenText> getTexts() const = 0;
+	virtual ScreenRequest getRequest() const = 0;
 	virtual Utility::Vector2<int> getCameraOffset() const { return { 0, 0 }; }
+	virtual bool DrawsPanel() const { return true; }
 };

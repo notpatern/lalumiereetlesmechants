@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../../Utilities/Vector2.h"
 
 namespace Collision
@@ -9,20 +8,20 @@ namespace Collision
 		Utility::Vector2<int> topLeftCell;
 		Utility::Vector2<int> bottomRightCell;
 
-		bool Contains(const Utility::Vector2<int>& cell) const
+		bool ContainsCell(const Utility::Vector2<int>& inCell) const
 		{
-			return cell.x >= topLeftCell.x && cell.x <= bottomRightCell.x && cell.y >= topLeftCell.y && cell.y <= bottomRightCell.y;
+			return inCell.x >= topLeftCell.x && inCell.x <= bottomRightCell.x && inCell.y >= topLeftCell.y && inCell.y <= bottomRightCell.y;
 		}
 
-		bool Contains(const CellRect& other) const
+		bool ContainsRect(const CellRect& inOther) const
 		{
-			return Contains(other.topLeftCell) && Contains(other.bottomRightCell);
+			return ContainsCell(inOther.topLeftCell) && ContainsCell(inOther.bottomRightCell);
 		}
 
-		bool Overlaps(const CellRect& other) const
+		bool Overlaps(const CellRect& inOther) const
 		{
-			return topLeftCell.x <= other.bottomRightCell.x && other.topLeftCell.x <= bottomRightCell.x
-			&& topLeftCell.y <= other.bottomRightCell.y && other.topLeftCell.y <= bottomRightCell.y;
+			return topLeftCell.x <= inOther.bottomRightCell.x && inOther.topLeftCell.x <= bottomRightCell.x
+			&& topLeftCell.y <= inOther.bottomRightCell.y && inOther.topLeftCell.y <= bottomRightCell.y;
 		}
 
 		Utility::Vector2<float> getCenter() const
@@ -33,16 +32,13 @@ namespace Collision
 
 	struct Hitbox
 	{
-		Utility::Vector2<int> offset{0,0};        // decalage depuis la position (qui est coin haut gauche du sprite)
+		Utility::Vector2<int> offset{ 0, 0 }; // decalage depuis la position (qui est coin haut gauche du sprite)
 		Utility::Vector2<int> size{ 1, 1 };
 
-		CellRect At(const Utility::Vector2<float>& position) const;
+		CellRect At(const Utility::Vector2<float>& inPosition) const;
 	};
 
+	Utility::Vector2<int> ToCell(const Utility::Vector2<float>& inPosition);
 
-	Utility::Vector2<int> ToCell(const Utility::Vector2<float>& position);
-
-	bool CrossesRect(const Utility::Vector2<float>& from, const Utility::Vector2<float>& to, const CellRect& target);
-
+	bool CrossesRect(const Utility::Vector2<float>& inFrom, const Utility::Vector2<float>& inTo, const CellRect& inTarget);
 }
-

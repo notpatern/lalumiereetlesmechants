@@ -3,8 +3,10 @@
 #include "../../Utilities/Vector2.h"
 #include "../../Utilities/Countdown.h"
 #include "../Manager/InputManager.h"
+#include "../Entites/Entities.h"
 #include "../Entites/Missile.h"
 #include "../Gameplay/Collision.h"
+#include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/Experience.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
@@ -29,38 +31,48 @@ struct PlayerLevel
 class Player : public IDamageable, public Entity
 {
 public:
-	explicit Player(const Utility::Vector2<float>& startPosition, Utility::Pool<Missile>& missiles);
+	explicit Player(const Utility::Vector2<float>& inStartPosition, Utility::Pool<Missile>& inMissiles);
 
-	void Update(float dt, const InputManager& input, const Collision::CellRect& bounds);
+	void Update(float inDeltaTime, const InputManager& inInput, const Collision::CellRect& inBounds);
 
-	DamageResult TakeDamage(const DamageInfos& damage) override;
+	DamageResult TakeDamage(const DamageInfos& inDamage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
+
+	void AddXp(int inAmount);
+
 	int getHealth() const { return m_health.getCurrent(); }
 	int getMaxHealth() const { return m_health.getMax(); }
-
+	const Experience& getExperience() const { return m_experience; }
 	DamageInfos getContactDamage() const;
 
-	void AddXp(int amount);
-	const Experience& getExperience() const { return m_experience; }
-
-	bool getIsActive() const { return !IsDead(); }
+	Team getTeam() const { return Team::Player; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	Collision::CellRect getBodyRect() const { return m_body.At(m_position); }
 	Utility::Vector2<float> getAimPoint() const { return getHitboxRect().getCenter(); }
+
+	bool IsActive() const { return !IsDead(); }
 	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
 	bool IsVisible() const;
 
-	Team getTeam() const { return Team::Player; }
-
 private:
-	Utility::Vector2<float> m_speed{24.f, 12.f};
+	static constexpr float SPEED_X = 24.f;
+	static constexpr float SPEED_Y = 12.f;
 	static constexpr float DIAGONAL_FACTOR = 0.7071f;
 
-	Utility::Pool<Missile>* m_missilePool;
+	static constexpr int BODY_WIDTH = 3;
+	static constexpr int BODY_HEIGHT = 2;
 
-	Utility::Countdown m_fireCooldown;
+	static constexpr int HITBOX_OFFSET_X = 1;
+	static constexpr int HITBOX_OFFSET_Y = 1;
+	static constexpr int HITBOX_WIDTH = 1;
+	static constexpr int HITBOX_HEIGHT = 1;
 
 	static constexpr int MAX_HEALTH = 3;
+	static constexpr float HIT_INVINCIBILITY_DURATION = 0.8f;
+	static constexpr float BLINK_PERIOD = 0.1f;
+	static constexpr int CONTACT_DAMAGE = 1000;
+
+	static constexpr float MISSILE_SPAWN_OFFSET_Y = 1.f;
 
 	static constexpr std::array LEVELS
 	{
@@ -74,18 +86,9 @@ private:
 		PlayerLevel{ .shot = { .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.10f } },
 	};
 	static_assert(LEVELS.size() == Experience::MAX_LEVEL, "Il faut une fiche par niveau d'experience");
-	static constexpr float HIT_INVINCIBILITY_DURATION = 0.8f;
-	static constexpr float BLINK_PERIOD = 0.1f;
 
-	static constexpr int BODY_WIDTH = 3;
-	static constexpr int BODY_HEIGHT = 2;
-
-	static constexpr int HITBOX_OFFSET_X = 1;
-	static constexpr int HITBOX_OFFSET_Y = 1;
-	static constexpr int HITBOX_WIDTH = 1;
-	static constexpr int HITBOX_HEIGHT = 1;
-
-	static constexpr int CONTACT_DAMAGE = 1000;
+	Utility::Pool<Missile>* m_missilePool;
+	Utility::Countdown m_fireCooldown;
 
 	Health m_health;
 	Collision::Hitbox m_hitbox;
@@ -93,11 +96,12 @@ private:
 	Utility::Countdown m_invincibility;
 	Experience m_experience;
 
-	static Utility::Vector2<int> ReadDirection(const InputManager& input);
-	void Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds);
-	void TryMoveTo(const Utility::Vector2<float>& target, const Collision::CellRect& bounds);
+	static Utility::Vector2<int> ReadDirection(const InputManager& inInput);
+	void Move(float inDeltaTime, const Utility::Vector2<int>& inDirection, const Collision::CellRect& inBounds);
+	void TryMoveTo(const Utility::Vector2<float>& inTarget, const Collision::CellRect& inBounds);
 
-	static bool ReadShoot(const InputManager& input);
+	static bool ReadShoot(const InputManager& inInput);
 	void TryShoot();
+
 	void Die();
 };

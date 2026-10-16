@@ -1,11 +1,11 @@
 #include "HudBar.h"
 #include <string>
 
-void HudBar::AddTexts(std::vector<ScreenText>& texts, const Utility::Vector2<int>& position, int filledCount, int segmentCount) const
+void HudBar::AddTexts(std::vector<ScreenText>& outTexts, const Utility::Vector2<int>& inPosition, int inFilledCount, int inSegmentCount) const
 {
-	for (int i = 0; i < segmentCount; ++i)
+	for (int i = 0; i < inSegmentCount; ++i)
 	{
-		const WORD color = i < filledCount ? filledColor : emptyColor;
-		texts.push_back({ std::string(segmentWidth, ' '), { position.x + i * (segmentWidth + gap), position.y }, color });
+		const WORD color = i < inFilledCount ? filledColor : emptyColor;
+		outTexts.push_back({ std::string(segmentWidth, ' '), { inPosition.x + i * (segmentWidth + gap), inPosition.y }, color });
 	}
 }

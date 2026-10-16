@@ -18,8 +18,8 @@ struct WeaponSettings
 class Weapon
 {
 public:
-	void Equip(const WeaponSettings& settings);
-	[[nodiscard]] bool Update(float deltaTime);
+	void Equip(const WeaponSettings& inSettings);
+	[[nodiscard]] bool Update(float inDeltaTime);
 
 	const WeaponSettings& getSettings() const { return m_settings; }
 

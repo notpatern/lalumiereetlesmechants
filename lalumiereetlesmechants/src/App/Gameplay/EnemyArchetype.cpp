@@ -2,7 +2,7 @@
 
 namespace EnemyArchetypes
 {
-	const EnemyArchetype& Get(EnemyType type)
+	const EnemyArchetype& Get(EnemyType inType)
 	{
 		static const EnemyArchetype HUNTER
 		{
@@ -58,7 +58,7 @@ namespace EnemyArchetypes
 			.hitSprite = SpriteUtils::SpriteType::Swarm,
 		};
 
-		switch (type)
+		switch (inType)
 		{
 		case EnemyType::Turret:
 			return TURRET;

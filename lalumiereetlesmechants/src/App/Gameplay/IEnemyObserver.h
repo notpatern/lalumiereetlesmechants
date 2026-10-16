@@ -18,5 +18,5 @@ class IEnemyObserver
 public:
 	virtual ~IEnemyObserver() = default;
 
-	virtual void OnEnemyRemoved(const EnemyRemovedEvent& event) = 0;
+	virtual void OnEnemyRemoved(const EnemyRemovedEvent& inEvent) = 0;
 };

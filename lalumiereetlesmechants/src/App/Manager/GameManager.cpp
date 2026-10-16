@@ -5,22 +5,19 @@
 #include <algorithm>
 #include <numbers>
 
-GameManager::GameManager() :
-	m_missilesPool{INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE},
-	m_enemiesPool{INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE},
-	m_xpOrbsPool{INITIAL_XP_ORBS_POOL_SIZE, MAX_XP_ORBS_POOL_SIZE},
-	m_particlesPool{INITIAL_PARTICLES_POOL_SIZE, MAX_PARTICLES_POOL_SIZE},
-	m_player{Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool},
-	m_waveSpawner{WaveData::GetWaves(), m_enemiesPool}
+GameManager::GameManager()
+	: m_missilesPool{ INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE },
+	m_enemiesPool{ INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE },
+	m_xpOrbsPool{ INITIAL_XP_ORBS_POOL_SIZE, MAX_XP_ORBS_POOL_SIZE },
+	m_particlesPool{ INITIAL_PARTICLES_POOL_SIZE, MAX_PARTICLES_POOL_SIZE },
+	m_player{ Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool },
+	m_waveSpawner{ WaveData::GetWaves(), m_enemiesPool }
 {
 }
 
-void GameManager::Update(float deltaTime, const InputManager& inputManager)
+void GameManager::Update(float inDeltaTime, const InputManager& inInputManager)
 {
-	if (deltaTime > MAX_DELTA_TIME)
-	{
-		deltaTime = MAX_DELTA_TIME;
-	}
+	const float deltaTime = std::min(inDeltaTime, MAX_DELTA_TIME);
 
 	m_shake.Update(deltaTime);
 	m_particlesPool.Update(deltaTime);
@@ -36,38 +33,38 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 		return;
 	}
 
-	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
+	m_player.Update(deltaTime, inInputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
 	SeparateEnemies(deltaTime);
 
 	const Utility::Vector2<float> playerCenter = m_player.getAimPoint();
 	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = playerCenter };
-	m_enemiesPool.ForEachActive([&](Enemy& enemy)
+	m_enemiesPool.ForEachActive([&](Enemy& outEnemy)
 	{
-		enemy.Update(deltaTime, enemyContext);
-		if (enemy.HasChargeJustEnded())
+		outEnemy.Update(deltaTime, enemyContext);
+		if (outEnemy.HasChargeJustEnded())
 		{
-			PlayFeedback(enemy.getArchetype().chargeEndFeedback);
+			PlayFeedback(outEnemy.getArchetype().chargeEndFeedback);
 		}
 	});
 	m_missilesPool.Update(deltaTime);
-	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
+	m_xpOrbsPool.ForEachActive([&](XpOrb& outOrb)
 	{
-		orb.Update(deltaTime, playerCenter);
+		outOrb.Update(deltaTime, playerCenter);
 	});
 
-	CheckMissilesHits(m_enemiesPool);
-	CheckMissilesHits(m_player);
+	CheckMissilesHitEnemies(m_enemiesPool);
+	CheckMissilesHitPlayer();
 	CheckPlayerContact();
 	CollectXpOrbs();
 	CheckPlayAreaExits();
 }
 
-void GameManager::SeparateEnemies(float deltaTime)
+void GameManager::SeparateEnemies(float inDeltaTime)
 {
-	m_enemiesPool.ForEachActive([&](Enemy& enemy)
+	m_enemiesPool.ForEachActive([&](Enemy& outEnemy)
 	{
-		const MovementSettings& settings = enemy.getMovementSettings();
+		const MovementSettings& settings = outEnemy.getMovementSettings();
 		if (settings.separationRadius <= 0.f)
 		{
 			return;
@@ -76,20 +73,20 @@ void GameManager::SeparateEnemies(float deltaTime)
 		const float radiusSquared = settings.separationRadius * settings.separationRadius;
 		Utility::Vector2<float> push{ 0.f, 0.f };
 
-		m_enemiesPool.ForEachActive([&](const Enemy& other)
+		m_enemiesPool.ForEachActive([&](const Enemy& inOther)
 		{
-			if (&other == &enemy || other.getMovementSettings().separationRadius <= 0.f)
+			if (&inOther == &outEnemy || inOther.getMovementSettings().separationRadius <= 0.f)
 			{
 				return;
 			}
 
-			const float distanceSquared = Utility::ScreenDistanceSquared(other.getPosition(), enemy.getPosition());
+			const float distanceSquared = Utility::ScreenDistanceSquared(inOther.getPosition(), outEnemy.getPosition());
 			if (distanceSquared >= radiusSquared)
 			{
 				return;
 			}
 
-			const Utility::Vector2<float> away = Utility::ScreenDirection(other.getPosition(), enemy.getPosition());
+			const Utility::Vector2<float> away = Utility::ScreenDirection(inOther.getPosition(), outEnemy.getPosition());
 			const float strength = 1.f - distanceSquared / radiusSquared;
 			push.x += away.x * strength;
 			push.y += away.y * strength;
@@ -100,9 +97,102 @@ void GameManager::SeparateEnemies(float deltaTime)
 			push = Utility::ScreenDirection({ 0.f, 0.f }, push);
 		}
 
-		const float step = settings.separationSpeed * deltaTime;
-		enemy.Nudge({ push.x * step, push.y * step });
+		const float step = settings.separationSpeed * inDeltaTime;
+		outEnemy.Nudge({ push.x * step, push.y * step });
 	});
+}
+
+void GameManager::CheckMissilesHitEnemies(Utility::Pool<Enemy>& outEnemies)
+{
+	m_missilesPool.ForEachActive([&](Missile& outMissile)
+	{
+		outEnemies.ForEachActive([&](Enemy& outEnemy)
+		{
+			if (TryHit(outMissile, outEnemy) == DamageResult::Killed)
+			{
+				OnEnemyKilled(outEnemy);
+			}
+		});
+	});
+}
+
+void GameManager::CheckMissilesHitPlayer()
+{
+	m_missilesPool.ForEachActive([&](Missile& outMissile)
+	{
+		OnPlayerDamaged(TryHit(outMissile, m_player), m_player.getHitboxRect().getCenter());
+	});
+}
+
+template <Hittable Target>
+DamageResult GameManager::TryHit(Missile& outMissile, Target& outTarget)
+{
+	if (!outMissile.IsActive() || !outTarget.IsActive() || outMissile.getTeam() == outTarget.getTeam())
+	{
+		return DamageResult::Ignored;
+	}
+
+	const Collision::CellRect targetRect = outTarget.getHitboxRect();
+
+	if (!PlayArea::Bounds().ContainsRect(targetRect))
+	{
+		return DamageResult::Ignored;
+	}
+
+	Collision::CellRect hitArea = targetRect;
+	hitArea.topLeftCell.x -= outMissile.getHitboxSize().x - 1;
+	hitArea.topLeftCell.y -= outMissile.getHitboxSize().y - 1;
+
+	if (!Collision::CrossesRect(outMissile.getLastPosition(), outMissile.getPosition(), hitArea))
+	{
+		return DamageResult::Ignored;
+	}
+
+	return outMissile.OnHit(outTarget);
+}
+
+void GameManager::CheckPlayerContact()
+{
+	if (m_player.IsDead())
+	{
+		return;
+	}
+
+	const Collision::CellRect playerRect = m_player.getHitboxRect();
+
+	m_enemiesPool.ForEachActive([&](Enemy& outEnemy)
+	{
+		if (playerRect.Overlaps(outEnemy.getHitboxRect()))
+		{
+			OnPlayerDamaged(m_player.TakeDamage(outEnemy.getContactDamage()), playerRect.getCenter());
+
+			if (outEnemy.TakeDamage(m_player.getContactDamage()) == DamageResult::Killed)
+			{
+				SpawnExplosion(outEnemy.getHitboxRect().getCenter(), EXPLOSION_PARTICLE_COUNT);
+				PlayFeedback(outEnemy.getArchetype().killFeedback);
+			}
+		}
+	});
+}
+
+void GameManager::CollectXpOrbs()
+{
+	const Collision::CellRect playerBody = m_player.getBodyRect();
+	const int levelBefore = m_player.getExperience().getLevel();
+
+	m_xpOrbsPool.ForEachActive([&](XpOrb& outOrb)
+	{
+		if (playerBody.ContainsCell(Collision::ToCell(outOrb.getPosition())))
+		{
+			m_player.AddXp(outOrb.getValue());
+			outOrb.Collect();
+		}
+	});
+
+	if (m_player.getExperience().getLevel() > levelBefore)
+	{
+		SpawnExplosion(m_player.getAimPoint(), LEVEL_UP_PARTICLE_COUNT, SpriteUtils::SpriteType::LevelUpSpark, SpriteUtils::SpriteType::LevelUpSpark);
+	}
 }
 
 void GameManager::CheckPlayAreaExits()
@@ -115,69 +205,57 @@ void GameManager::CheckPlayAreaExits()
 	CheckExits(m_particlesPool, PlayArea::Bounds());
 }
 
-void GameManager::CheckPlayerContact()
+template <typename T>
+void GameManager::CheckExits(Utility::Pool<T>& outPool, const Collision::CellRect& inArea)
 {
-	if (m_player.IsDead())
+	outPool.ForEachActive([&](T& outObject)
 	{
-		return;
-	}
-
-	const Collision::CellRect playerRect = m_player.getHitboxRect();
-
-	m_enemiesPool.ForEachActive([&](Enemy& enemy)
-	{
-		if (playerRect.Overlaps(enemy.getHitboxRect()))
+		if (!inArea.ContainsCell(Collision::ToCell(outObject.getPosition())))
 		{
-			OnPlayerDamaged(m_player.TakeDamage(enemy.getContactDamage()), playerRect.getCenter());
-
-			if (enemy.TakeDamage(m_player.getContactDamage()) == DamageResult::Killed)
-			{
-				SpawnExplosion(enemy.getHitboxRect().getCenter(), EXPLOSION_PARTICLE_COUNT);
-				PlayFeedback(enemy.getArchetype().killFeedback);
-			}
+			outObject.OnLeftPlayArea();
 		}
 	});
 }
 
-void GameManager::OnEnemyKilled(const Enemy& enemy)
+void GameManager::OnEnemyKilled(const Enemy& inEnemy)
 {
-	m_score += enemy.getPoints();
+	m_score += inEnemy.getPoints();
 
-	const Utility::Vector2<float> center = enemy.getHitboxRect().getCenter();
-	DropXpOrbs(center, enemy.getXp());
+	const Utility::Vector2<float> center = inEnemy.getHitboxRect().getCenter();
+	DropXpOrbs(center, inEnemy.getXp());
 	SpawnExplosion(center, EXPLOSION_PARTICLE_COUNT);
-	PlayFeedback(enemy.getArchetype().killFeedback);
+	PlayFeedback(inEnemy.getArchetype().killFeedback);
 }
 
-void GameManager::OnPlayerDamaged(DamageResult result, const Utility::Vector2<float>& center)
+void GameManager::OnPlayerDamaged(DamageResult inResult, const Utility::Vector2<float>& inCenter)
 {
-	if (result == DamageResult::Ignored)
+	if (inResult == DamageResult::Ignored)
 	{
 		return;
 	}
 
-	if (result == DamageResult::Killed)
+	if (inResult == DamageResult::Killed)
 	{
-		SpawnExplosion(center, PLAYER_EXPLOSION_PARTICLE_COUNT);
+		SpawnExplosion(inCenter, PLAYER_EXPLOSION_PARTICLE_COUNT);
 		PlayFeedback(PLAYER_KILLED_FEEDBACK);
 		return;
 	}
 
-	SpawnExplosion(center, HIT_PARTICLE_COUNT);
+	SpawnExplosion(inCenter, HIT_PARTICLE_COUNT);
 	PlayFeedback(PLAYER_HIT_FEEDBACK);
 }
 
-void GameManager::PlayFeedback(const ImpactFeedback& feedback)
+void GameManager::PlayFeedback(const ImpactFeedback& inFeedback)
 {
-	m_hitStop.StartIfLonger(feedback.hitStop);
-	m_shake.Start({ feedback.shakeX, feedback.shakeY }, feedback.shakeDuration);
+	m_hitStop.StartIfLonger(inFeedback.hitStop);
+	m_shake.Start({ inFeedback.shakeX, inFeedback.shakeY }, inFeedback.shakeDuration);
 }
 
-void GameManager::DropXpOrbs(const Utility::Vector2<float>& center, int count)
+void GameManager::DropXpOrbs(const Utility::Vector2<float>& inCenter, int inCount)
 {
-	const float angleStep = 2.f * std::numbers::pi_v<float> / count;
+	const float angleStep = 2.f * std::numbers::pi_v<float> / inCount;
 
-	for (int i = 0; i < count; ++i)
+	for (int i = 0; i < inCount; ++i)
 	{
 		XpOrb* orb = m_xpOrbsPool.Acquire();
 		if (!orb)
@@ -185,105 +263,22 @@ void GameManager::DropXpOrbs(const Utility::Vector2<float>& center, int count)
 			return;
 		}
 
-		const Utility::Vector2<float> offset = count > 1 ? Utility::ScreenVector(i * angleStep, XP_ORB_SPREAD) : Utility::Vector2<float>{ 0.f, 0.f };
-		const float x = std::clamp(center.x + offset.x, 0.f, PlayArea::WIDTH - 1.f);
-		const float y = std::clamp(center.y + offset.y, 0.f, PlayArea::HEIGHT - 1.f);
-		orb->Spawn({ x, y }, 1);
+		const Utility::Vector2<float> offset = inCount > 1 ? Utility::ScreenVector(i * angleStep, XP_ORB_SPREAD) : Utility::Vector2<float>{ 0.f, 0.f };
+		const float x = std::clamp(inCenter.x + offset.x, 0.f, PlayArea::WIDTH - 1.f);
+		const float y = std::clamp(inCenter.y + offset.y, 0.f, PlayArea::HEIGHT - 1.f);
+		orb->Spawn({ x, y }, XP_ORB_VALUE);
 	}
 }
 
-void GameManager::CollectXpOrbs()
+void GameManager::SpawnExplosion(const Utility::Vector2<float>& inCenter, int inParticleCount, SpriteUtils::SpriteType inSpark, SpriteUtils::SpriteType inSmoke)
 {
-	const Collision::CellRect playerBody = m_player.getBodyRect();
-	const int levelBefore = m_player.getExperience().getLevel();
+	const float angleStep = 2.f * std::numbers::pi_v<float> / inParticleCount;
 
-	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
-	{
-		if (playerBody.Contains(Collision::ToCell(orb.getPosition())))
-		{
-			m_player.AddXp(orb.getValue());
-			orb.Collect();
-		}
-	});
-
-	if (m_player.getExperience().getLevel() > levelBefore)
-	{
-		SpawnExplosion(m_player.getAimPoint(), LEVEL_UP_PARTICLE_COUNT, SpriteUtils::SpriteType::LevelUpSpark, SpriteUtils::SpriteType::LevelUpSpark);
-	}
-}
-
-void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int particleCount, SpriteUtils::SpriteType spark, SpriteUtils::SpriteType smoke)
-{
-	const float angleStep = 2.f * std::numbers::pi_v<float> / particleCount;
-
-	for (int i = 0; i < particleCount; ++i)
+	for (int i = 0; i < inParticleCount; ++i)
 	{
 		if (Particle* particle = m_particlesPool.Acquire())
 		{
-			particle->Spawn(center, i * angleStep, spark, smoke);
+			particle->Spawn(inCenter, i * angleStep, inSpark, inSmoke);
 		}
 	}
-}
-
-template <typename T>
-void GameManager::CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& area)
-{
-	pool.ForEachActive([&](T& object)
-	{
-		if (!area.Contains(Collision::ToCell(object.getPosition())))
-		{
-			object.OnLeftPlayArea(); //TODO : Peut etre un concept
-		}
-	});
-}
-
-template <Hittable Target>
-void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets)
-{
-	m_missilesPool.ForEachActive([&](Missile& missile)
-	{
-		targets.ForEachActive([&](Target& target)
-		{
-			if (TryHit(missile, target) == DamageResult::Killed)
-			{
-				OnEnemyKilled(target);
-			}
-		});
-	});
-}
-
-template <Hittable Target>
-void GameManager::CheckMissilesHits(Target& target)
-{
-	m_missilesPool.ForEachActive([&](Missile& missile)
-	{
-		OnPlayerDamaged(TryHit(missile, target), target.getHitboxRect().getCenter());
-	});
-}
-
-template <Hittable Target>
-DamageResult GameManager::TryHit(Missile& missile, Target& target)
-{
-	if (!missile.getIsActive() || !target.getIsActive() || missile.getTeam() == target.getTeam())
-	{
-		return DamageResult::Ignored;
-	}
-
-	const Collision::CellRect targetRect = target.getHitboxRect();
-
-	if (!PlayArea::Bounds().Contains(targetRect))
-	{
-		return DamageResult::Ignored;
-	}
-
-	Collision::CellRect hitArea = targetRect;
-	hitArea.topLeftCell.x -= missile.getHitboxSize().x - 1;
-	hitArea.topLeftCell.y -= missile.getHitboxSize().y - 1;
-
-	if (!Collision::CrossesRect(missile.getLastPosition(), missile.getPosition(), hitArea))
-	{
-		return DamageResult::Ignored;
-	}
-
-	return missile.OnHit(target);
 }

@@ -5,8 +5,8 @@
 class XpOrb : public PooledEntity
 {
 public:
-	void Spawn(const Utility::Vector2<float>& position, int value);
-	void Update(float dt, const Utility::Vector2<float>& playerCenter);
+	void Spawn(const Utility::Vector2<float>& inPosition, int inValue);
+	void Update(float inDeltaTime, const Utility::Vector2<float>& inPlayerCenter);
 	void Collect();
 	void OnLeftPlayArea();
 
@@ -22,5 +22,5 @@ private:
 	float m_speed = 0.f;
 	bool m_isAttracted = false;
 
-	void FlyToward(const Utility::Vector2<float>& target, float dt);
+	void FlyToward(const Utility::Vector2<float>& inTarget, float inDeltaTime);
 };

@@ -1,7 +1,7 @@
 #include "WaveSpawner.h"
 
-WaveSpawner::WaveSpawner(const std::vector<Wave>& waves, Utility::Pool<Enemy>& enemies)
-	: m_waves(&waves), m_enemies(&enemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0), m_spawnedFromEntry(0), m_aliveCount(0)
+WaveSpawner::WaveSpawner(const std::vector<Wave>& inWaves, Utility::Pool<Enemy>& inEnemies)
+	: m_waves(&inWaves), m_enemies(&inEnemies), m_state(State::Spawning), m_waveIndex(0), m_entryIndex(0), m_spawnedFromEntry(0), m_aliveCount(0)
 {
 	if (!m_waves->empty())
 	{
@@ -9,7 +9,7 @@ WaveSpawner::WaveSpawner(const std::vector<Wave>& waves, Utility::Pool<Enemy>& e
 	}
 }
 
-void WaveSpawner::Update(float deltaTime)
+void WaveSpawner::Update(float inDeltaTime)
 {
 	if (m_waves->empty())
 	{
@@ -19,7 +19,7 @@ void WaveSpawner::Update(float deltaTime)
 	switch (m_state)
 	{
 	case State::Spawning:
-		UpdateSpawning(deltaTime);
+		UpdateSpawning(inDeltaTime);
 		break;
 
 	case State::WaitingForClear:
@@ -31,7 +31,7 @@ void WaveSpawner::Update(float deltaTime)
 		break;
 
 	case State::Pause:
-		m_timer.Update(deltaTime);
+		m_timer.Update(inDeltaTime);
 		if (m_timer.IsFinished())
 		{
 			StartNextWave();
@@ -50,9 +50,9 @@ void WaveSpawner::SkipToNextWave()
 		return;
 	}
 
-	m_enemies->ForEachActive([](Enemy& enemy)
+	m_enemies->ForEachActive([](Enemy& outEnemy)
 	{
-		enemy.OnLeftPlayArea();
+		outEnemy.OnLeftPlayArea();
 	});
 
 	StartNextWave();
@@ -66,9 +66,9 @@ void WaveSpawner::OnEnemyRemoved(const EnemyRemovedEvent&)
 	}
 }
 
-void WaveSpawner::StartWave(std::size_t waveIndex)
+void WaveSpawner::StartWave(std::size_t inWaveIndex)
 {
-	m_waveIndex = waveIndex;
+	m_waveIndex = inWaveIndex;
 	m_entryIndex = 0;
 	m_spawnedFromEntry = 0;
 	m_state = State::Spawning;
@@ -93,11 +93,11 @@ void WaveSpawner::StartNextWave()
 	}
 }
 
-void WaveSpawner::UpdateSpawning(float deltaTime)
+void WaveSpawner::UpdateSpawning(float inDeltaTime)
 {
 	const std::vector<SpawnEntry>& entries = (*m_waves)[m_waveIndex].spawnEntries;
 
-	m_timer.Update(deltaTime);
+	m_timer.Update(inDeltaTime);
 
 	while (m_entryIndex < entries.size() && m_timer.IsFinished())
 	{
@@ -126,11 +126,11 @@ void WaveSpawner::UpdateSpawning(float deltaTime)
 	}
 }
 
-void WaveSpawner::SpawnEnemy(const SpawnEntry& entry)
+void WaveSpawner::SpawnEnemy(const SpawnEntry& inEntry)
 {
 	if (Enemy* enemy = m_enemies->Acquire())
 	{
-		enemy->Spawn(entry, this);
+		enemy->Spawn(inEntry, this);
 		++m_aliveCount;
 	}
 }

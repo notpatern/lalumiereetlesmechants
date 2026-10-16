@@ -32,9 +32,9 @@ struct MovementSettings
 class Movement
 {
 public:
-	void Start(const MovementSettings& settings, const Utility::Vector2<float>& start, const Utility::Vector2<float>& velocity, const Utility::Vector2<float>& target, const Utility::Vector2<int>& bodySize);
-	[[nodiscard]] Utility::Vector2<float> Update(float deltaTime, const Utility::Vector2<float>& playerCenter);
-	void Nudge(const Utility::Vector2<float>& offset);
+	void Start(const MovementSettings& inSettings, const Utility::Vector2<float>& inStart, const Utility::Vector2<float>& inVelocity, const Utility::Vector2<float>& inTarget, const Utility::Vector2<int>& inBodySize);
+	[[nodiscard]] Utility::Vector2<float> Update(float inDeltaTime, const Utility::Vector2<float>& inPlayerCenter);
+	void Nudge(const Utility::Vector2<float>& inOffset);
 
 	bool IsTelegraphing() const { return m_chargePhase == ChargePhase::Telegraphing; }
 	bool HasChargeJustEnded() const { return m_chargeJustEnded; }
@@ -59,15 +59,18 @@ private:
 	float m_elapsed = 0.f;
 	float m_maxX = 0.f;
 	float m_maxY = 0.f;
+
 	ChargePhase m_chargePhase = ChargePhase::Entering;
 	Utility::Countdown m_chargeTimer;
 	bool m_chargeJustEnded = false;
 
+	void UpdateCharge(float inDeltaTime, const Utility::Vector2<float>& inPlayerCenter);
+	void StartPhase(ChargePhase inPhase, float inDuration);
+	void StartTelegraph(const Utility::Vector2<float>& inPlayerCenter);
+	[[nodiscard]] bool BrakeToTarget(float inMaxSpeed, float inDeltaTime);
+
+	void UpdateSeek(float inDeltaTime, const Utility::Vector2<float>& inPlayerCenter);
+
 	void BounceOnEdges();
-	void UpdateCharge(float deltaTime, const Utility::Vector2<float>& playerCenter);
-	void StartPhase(ChargePhase phase, float duration);
-	void StartTelegraph(const Utility::Vector2<float>& playerCenter);
-	[[nodiscard]] bool BrakeToTarget(float maxSpeed, float deltaTime);
-	void UpdateSeek(float deltaTime, const Utility::Vector2<float>& playerCenter);
-	Utility::Vector2<float> ClampInPlayArea(const Utility::Vector2<float>& position, float margin = 0.f) const;
+	Utility::Vector2<float> ClampInPlayArea(const Utility::Vector2<float>& inPosition, float inMargin = 0.f) const;
 };

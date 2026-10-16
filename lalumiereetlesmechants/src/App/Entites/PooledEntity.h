@@ -4,7 +4,7 @@
 class PooledEntity : public Entity
 {
 public:
-	bool getIsActive() const { return m_isActive; }
+	bool IsActive() const { return m_isActive; }
 
 protected:
 	void Activate();

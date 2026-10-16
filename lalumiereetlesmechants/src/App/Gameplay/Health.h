@@ -3,11 +3,10 @@
 class Health
 {
 public:
-	explicit Health(int maxHealth);
+	explicit Health(int inMaxHealth);
 
-	bool TakeDamage(int amount);
-	void Heal(int amount);
-	void Reset();
+	bool TakeDamage(int inAmount);
+	void Heal(int inAmount);
 
 	bool IsDead() const;
 	int getCurrent() const;

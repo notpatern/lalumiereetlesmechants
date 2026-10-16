@@ -2,7 +2,7 @@
 
 namespace MissileArchetypes
 {
-	const MissileArchetype& Get(MissileType type)
+	const MissileArchetype& Get(MissileType inType)
 	{
 		static const MissileArchetype PLAYER_SHOT
 		{
@@ -31,7 +31,7 @@ namespace MissileArchetypes
 			.sprite = SpriteUtils::SpriteType::BigEnemyMissile,
 		};
 
-		switch (type)
+		switch (inType)
 		{
 		case MissileType::EnemyShot:
 			return ENEMY_SHOT;

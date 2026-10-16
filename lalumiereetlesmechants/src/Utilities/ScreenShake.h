@@ -7,25 +7,28 @@ namespace Utility
 	class ScreenShake
 	{
 	public:
-		void Start(const Vector2<int>& amplitude, float duration)
+		void Start(const Vector2<int>& inAmplitude, float inDuration)
 		{
 			if (m_timer.IsFinished())
 			{
 				m_amplitude = { 0, 0 };
 			}
 
-			if (amplitude.x > m_amplitude.x)
+			if (inAmplitude.x > m_amplitude.x)
 			{
-				m_amplitude.x = amplitude.x;
+				m_amplitude.x = inAmplitude.x;
 			}
-			if (amplitude.y > m_amplitude.y)
+			if (inAmplitude.y > m_amplitude.y)
 			{
-				m_amplitude.y = amplitude.y;
+				m_amplitude.y = inAmplitude.y;
 			}
-			m_timer.StartIfLonger(duration);
+			m_timer.StartIfLonger(inDuration);
 		}
 
-		void Update(float realDeltaTime) { m_timer.Update(realDeltaTime); }
+		void Update(float inRealDeltaTime)
+		{
+			m_timer.Update(inRealDeltaTime);
+		}
 
 		Vector2<int> getOffset() const
 		{
@@ -44,10 +47,10 @@ namespace Utility
 		Vector2<int> m_amplitude;
 		Countdown m_timer;
 
-		int Alternate(int amplitude, float flipPeriod) const
+		int Alternate(int inAmplitude, float inFlipPeriod) const
 		{
-			const int flipCount = static_cast<int>(m_timer.getRemaining() / flipPeriod);
-			return flipCount % 2 == 0 ? amplitude : -amplitude;
+			const int flipCount = static_cast<int>(m_timer.getRemaining() / inFlipPeriod);
+			return flipCount % 2 == 0 ? inAmplitude : -inAmplitude;
 		}
 	};
 }

@@ -1,5 +1,4 @@
 #include "Enemy.h"
-
 #include "../../Utilities/ScreenDirection.h"
 #include "../Gameplay/PlayArea.h"
 
@@ -7,38 +6,33 @@ Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr)
 {
 }
 
-void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
+void Enemy::Spawn(const SpawnEntry& inEntry, IEnemyObserver* inObserver)
 {
-	const EnemyArchetype& archetype = EnemyArchetypes::Get(entry.type);
+	const EnemyArchetype& archetype = EnemyArchetypes::Get(inEntry.type);
 
-	m_type = entry.type;
-	m_position = entry.position;
-	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target, archetype.hitboxSize);
+	m_type = inEntry.type;
+	m_position = inEntry.position;
+	m_movement.Start(archetype.movement, inEntry.position, inEntry.velocity, inEntry.target, archetype.hitboxSize);
 	m_health = Health(archetype.maxHealth);
 	m_hitbox.size = archetype.hitboxSize;
 	m_weapon.Equip(archetype.weapon);
 	m_hitFlash.Start(0.f);
-	m_observer = observer;
+	m_observer = inObserver;
 	RefreshSpriteType();
 	Activate();
 }
 
-void Enemy::Update(float dt, const EnemyUpdateContext& context)
+void Enemy::Update(float inDeltaTime, const EnemyUpdateContext& inContext)
 {
-	if (!getIsActive())
-	{
-		return;
-	}
+	m_position = m_movement.Update(inDeltaTime, inContext.playerCenter);
 
-	m_position = m_movement.Update(dt, context.playerCenter);
-
-	m_hitFlash.Update(dt);
+	m_hitFlash.Update(inDeltaTime);
 
 	RefreshSpriteType();
 
-	if (m_weapon.Update(dt) && PlayArea::Bounds().Contains(getHitboxRect()))
+	if (m_weapon.Update(inDeltaTime) && PlayArea::Bounds().ContainsRect(getHitboxRect()))
 	{
-		Shoot(context);
+		Shoot(inContext);
 	}
 }
 
@@ -47,14 +41,14 @@ void Enemy::OnLeftPlayArea()
 	RemoveFromPlay(EnemyRemovalReason::Escaped);
 }
 
-DamageResult Enemy::TakeDamage(const DamageInfos& damage)
+DamageResult Enemy::TakeDamage(const DamageInfos& inDamage)
 {
-	if (!getIsActive())
+	if (!IsActive())
 	{
 		return DamageResult::Ignored;
 	}
 
-	if (m_health.TakeDamage(damage.amount))
+	if (m_health.TakeDamage(inDamage.amount))
 	{
 		Die();
 		return DamageResult::Killed;
@@ -68,11 +62,6 @@ DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 DamageInfos Enemy::getContactDamage() const
 {
 	return { .amount = EnemyArchetypes::Get(m_type).contactDamage, .type = DamageType::Collision, .source = Team::Enemy, .position = m_position };
-}
-
-void Enemy::Die()
-{
-	RemoveFromPlay(EnemyRemovalReason::Killed);
 }
 
 void Enemy::RefreshSpriteType()
@@ -93,9 +82,9 @@ void Enemy::RefreshSpriteType()
 	}
 }
 
-void Enemy::Shoot(const EnemyUpdateContext& context)
+void Enemy::Shoot(const EnemyUpdateContext& inContext) const
 {
-	if (Missile* missile = context.missiles.Acquire())
+	if (Missile* missile = inContext.missiles.Acquire())
 	{
 		const WeaponSettings& settings = m_weapon.getSettings();
 		const MissileArchetype& missileArchetype = MissileArchetypes::Get(settings.missile);
@@ -105,16 +94,21 @@ void Enemy::Shoot(const EnemyUpdateContext& context)
 		Utility::Vector2<float> direction{ 0.f, 1.f };
 		if (settings.aim == AimMode::AtPlayer)
 		{
-			direction = Utility::ScreenDirection(muzzle, context.playerCenter);
+			direction = Utility::ScreenDirection(muzzle, inContext.playerCenter);
 		}
 
 		missile->Launch(settings.missile, muzzle, { direction.x * missileArchetype.speed, direction.y * missileArchetype.speed });
 	}
 }
 
-void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
+void Enemy::Die()
 {
-	if (!getIsActive())
+	RemoveFromPlay(EnemyRemovalReason::Killed);
+}
+
+void Enemy::RemoveFromPlay(EnemyRemovalReason inReason)
+{
+	if (!IsActive())
 	{
 		return;
 	}
@@ -123,8 +117,7 @@ void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
 
 	if (m_observer)
 	{
-		m_observer->OnEnemyRemoved({.reason = reason, .position = m_position});
+		m_observer->OnEnemyRemoved({ .reason = inReason, .position = m_position });
 		m_observer = nullptr;
 	}
-
 }

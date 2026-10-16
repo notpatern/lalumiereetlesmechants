@@ -6,49 +6,50 @@
 namespace Utility
 {
 	template <typename T>
-	concept Poolable = std::default_initializable<T> && requires(const T& object)
+	concept Poolable = std::default_initializable<T> && requires(const T& inObject)
 	{
-		{ object.getIsActive() } -> std::same_as<bool>;
+		{ inObject.IsActive() } -> std::same_as<bool>;
 	};
 
 	template <typename T>
-	concept Updatable = requires(T& object, float dt)
+	concept Updatable = requires(T& outObject, float inDeltaTime)
 	{
-		object.Update(dt);
+		outObject.Update(inDeltaTime);
 	};
 
 	template <Poolable T>
 	class Pool
 	{
 	public:
-		Pool(std::size_t initialSize, std::size_t maxSize);
+		Pool(std::size_t inInitialSize, std::size_t inMaxSize);
+
 		[[nodiscard]] T* Acquire();
 
-		void Update(float dt) requires Updatable<T>
+		void Update(float inDeltaTime) requires Updatable<T>
 		{
-			ForEachActive([dt](T& object) { object.Update(dt); });
+			ForEachActive([inDeltaTime](T& outObject) { outObject.Update(inDeltaTime); });
 		}
 
 		template <std::invocable<T&> Function>
-		void ForEachActive(Function function)
+		void ForEachActive(Function inFunction)
 		{
 			for (std::size_t i = 0; i < m_objects.size(); ++i)
 			{
-				if (m_objects[i].getIsActive())
+				if (m_objects[i].IsActive())
 				{
-					function(m_objects[i]);
+					inFunction(m_objects[i]);
 				}
 			}
 		}
 
 		template <std::invocable<const T&> Function>
-		void ForEachActive(Function function) const
+		void ForEachActive(Function inFunction) const
 		{
 			for (std::size_t i = 0; i < m_objects.size(); ++i)
 			{
-				if (m_objects[i].getIsActive())
+				if (m_objects[i].IsActive())
 				{
-					function(m_objects[i]);
+					inFunction(m_objects[i]);
 				}
 			}
 		}
@@ -60,13 +61,11 @@ namespace Utility
 		std::size_t m_searchStart;
 
 		void Grow();
-
 	};
 
 	template <Poolable T>
-	Pool<T>::Pool(std::size_t initialSize, std::size_t maxSize) : m_objects(initialSize), m_maxSize(maxSize), m_growthStep(initialSize > 0 ? initialSize : 1), m_searchStart(0)
+	Pool<T>::Pool(std::size_t inInitialSize, std::size_t inMaxSize) : m_objects(inInitialSize), m_maxSize(inMaxSize), m_growthStep(inInitialSize > 0 ? inInitialSize : 1), m_searchStart(0)
 	{
-
 	}
 
 	template <Poolable T>
@@ -76,7 +75,7 @@ namespace Utility
 		for (std::size_t checked = 0; checked < count; ++checked)
 		{
 			const std::size_t index = (m_searchStart + checked) % count;
-			if (!m_objects[index].getIsActive())
+			if (!m_objects[index].IsActive())
 			{
 				m_searchStart = index + 1;
 				return &m_objects[index];

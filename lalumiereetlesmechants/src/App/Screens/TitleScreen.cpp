@@ -1,9 +1,9 @@
 #include "TitleScreen.h"
 #include "DebugConsole.h"
 
-void TitleScreen::Update(float, const InputManager& input)
+void TitleScreen::Update(float, const InputManager& inInput)
 {
-	switch (m_menu.Update(input))
+	switch (m_menu.Update(inInput))
 	{
 	case PLAY_CHOICE:
 		m_request = ScreenRequest::NewGame;
@@ -20,18 +20,18 @@ void TitleScreen::Update(float, const InputManager& input)
 	}
 }
 
-std::vector<ScreenText> TitleScreen::getTexts() const
-{
-	std::vector<ScreenText> texts;
-	texts.push_back(CenteredText(TITLE_TEXT, 10));
-	m_menu.AddTexts(texts, 14);
-	return texts;
-}
-
 void TitleScreen::DrawDebug(HANDLE console) const
 {
 	DebugConsole::Clear(console);
 	DebugConsole::WriteTexts(console, getTexts());
 
 	SetConsoleTitleA("Titre a trouver");
+}
+
+std::vector<ScreenText> TitleScreen::getTexts() const
+{
+	std::vector<ScreenText> texts;
+	texts.push_back(MakeCenteredText(TITLE_TEXT, 10));
+	m_menu.AddTexts(texts, 14);
+	return texts;
 }

@@ -1,13 +1,14 @@
 #pragma once
 #include "PooledEntity.h"
+#include "../Render/SpriteType.h"
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Vector2.h"
 
 class Particle : public PooledEntity
 {
 public:
-	void Spawn(const Utility::Vector2<float>& position, float angle, SpriteUtils::SpriteType spark = SpriteUtils::SpriteType::Spark, SpriteUtils::SpriteType smoke = SpriteUtils::SpriteType::Smoke);
-	void Update(float dt);
+	void Spawn(const Utility::Vector2<float>& inPosition, float inAngle, SpriteUtils::SpriteType inSpark = SpriteUtils::SpriteType::Spark, SpriteUtils::SpriteType inSmoke = SpriteUtils::SpriteType::Smoke);
+	void Update(float inDeltaTime);
 	void OnLeftPlayArea();
 
 	bool IsSmoke() const { return m_lifetime.getRemaining() <= SMOKE_DURATION; }

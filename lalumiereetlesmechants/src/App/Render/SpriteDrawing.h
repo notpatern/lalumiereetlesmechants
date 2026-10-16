@@ -10,10 +10,10 @@ namespace SpriteUtils
 	struct SpriteDrawing
 	{
 		std::vector<std::string_view> lines;
-		WORD color;
+		WORD color = 0x0F;
 	};
 
-	inline const SpriteDrawing& GetSpriteDrawing(SpriteType type)
+	inline const SpriteDrawing& GetSpriteDrawing(SpriteType inType)
 	{
 		static const std::vector<std::string_view> HUNTER_LINES = { "<o>", " V " };
 		static const std::vector<std::string_view> TURRET_LINES = { "[=O=]", " \\_/ " };
@@ -37,7 +37,7 @@ namespace SpriteUtils
 		static const SpriteDrawing LEVEL_UP_SPARK{ { "+" }, 0x0E };
 		static const SpriteDrawing NOTHING{ {}, 0x0F };
 
-		switch (type)
+		switch (inType)
 		{
 		case SpriteType::Player:
 			return PLAYER;

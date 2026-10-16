@@ -11,6 +11,10 @@ struct HudBar
 	WORD filledColor = 0xF0;
 	WORD emptyColor = 0x80;
 
-	constexpr int getWidth(int segmentCount) const { return segmentCount * segmentWidth + (segmentCount - 1) * gap; }
-	void AddTexts(std::vector<ScreenText>& texts, const Utility::Vector2<int>& position, int filledCount, int segmentCount) const;
+	constexpr int ComputeWidth(int inSegmentCount) const
+	{
+		return inSegmentCount * segmentWidth + (inSegmentCount - 1) * gap;
+	}
+
+	void AddTexts(std::vector<ScreenText>& outTexts, const Utility::Vector2<int>& inPosition, int inFilledCount, int inSegmentCount) const;
 };

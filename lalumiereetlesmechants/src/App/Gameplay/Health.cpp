@@ -1,19 +1,18 @@
 #include "Health.h"
 #include <algorithm>
 
-Health::Health(int maxHealth) : m_max(maxHealth), m_current(maxHealth)
+Health::Health(int inMaxHealth) : m_max(inMaxHealth), m_current(inMaxHealth)
 {
-
 }
 
-bool Health::TakeDamage(int amount)
+bool Health::TakeDamage(int inAmount)
 {
-	if (IsDead() || amount <= 0)
+	if (IsDead() || inAmount <= 0)
 	{
 		return false;
 	}
 
-	m_current -= amount;
+	m_current -= inAmount;
 	if (m_current < 0)
 	{
 		m_current = 0;
@@ -22,19 +21,14 @@ bool Health::TakeDamage(int amount)
 	return IsDead();
 }
 
-void Health::Heal(int amount)
+void Health::Heal(int inAmount)
 {
-	if (IsDead() || amount <= 0)
+	if (IsDead() || inAmount <= 0)
 	{
 		return;
 	}
 
-	m_current = std::min(m_current + amount, m_max);
-}
-
-void Health::Reset()
-{
-	m_current = m_max;
+	m_current = std::min(m_current + inAmount, m_max);
 }
 
 bool Health::IsDead() const

@@ -1,12 +1,13 @@
 #pragma once
-#include <concepts>
 #include "Collision.h"
+#include "DamageInfos.h"
 #include "IDamageable.h"
+#include <concepts>
 
 template <typename T>
-concept Hittable = std::derived_from<T, IDamageable> && requires(const T& target)
+concept Hittable = std::derived_from<T, IDamageable> && requires(const T& inTarget)
 {
-	{ target.getIsActive() } -> std::same_as<bool>;
-	{ target.getHitboxRect() } -> std::same_as<Collision::CellRect>;
-	{target.getTeam() } -> std::same_as<Team>;
+	{ inTarget.IsActive() } -> std::same_as<bool>;
+	{ inTarget.getHitboxRect() } -> std::same_as<Collision::CellRect>;
+	{ inTarget.getTeam() } -> std::same_as<Team>;
 };

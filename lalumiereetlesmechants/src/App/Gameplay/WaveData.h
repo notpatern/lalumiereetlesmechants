@@ -1,7 +1,6 @@
 #pragma once
-#include <vector>
-
 #include "Wave.h"
+#include <vector>
 
 namespace WaveData
 {

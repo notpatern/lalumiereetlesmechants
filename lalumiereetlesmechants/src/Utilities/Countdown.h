@@ -5,16 +5,29 @@ namespace Utility
 	class Countdown
 	{
 	public:
-		void Start(float duration) { m_remaining = duration; }
-		void Chain(float duration) { m_remaining += duration; }
-		void StartIfLonger(float duration)
+		void Start(float inDuration)
 		{
-			if (duration > m_remaining)
+			m_remaining = inDuration;
+		}
+
+		void Chain(float inDuration)
+		{
+			m_remaining += inDuration;
+		}
+
+		void StartIfLonger(float inDuration)
+		{
+			if (inDuration > m_remaining)
 			{
-				m_remaining = duration;
+				m_remaining = inDuration;
 			}
 		}
-		void Update(float dt) { m_remaining -= dt; }
+
+		void Update(float inDeltaTime)
+		{
+			m_remaining -= inDeltaTime;
+		}
+
 		bool IsFinished() const { return m_remaining <= 0.f; }
 		float getRemaining() const { return m_remaining > 0.f ? m_remaining : 0.f; }
 

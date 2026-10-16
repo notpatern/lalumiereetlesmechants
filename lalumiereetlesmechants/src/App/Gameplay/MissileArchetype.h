@@ -21,5 +21,5 @@ struct MissileArchetype
 
 namespace MissileArchetypes
 {
-	const MissileArchetype& Get(MissileType type);
+	const MissileArchetype& Get(MissileType inType);
 }

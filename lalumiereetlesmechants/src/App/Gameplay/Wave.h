@@ -1,11 +1,11 @@
 #pragma once
-#include <vector>
 #include "EnemyArchetype.h"
 #include "../../Utilities/Vector2.h"
+#include <vector>
 
 struct SpawnEntry
 {
-	float delay = 0.0f;
+	float delay = 0.f;
 	EnemyType type = EnemyType::Hunter;
 	Utility::Vector2<float> position;
 	Utility::Vector2<float> velocity;
@@ -17,5 +17,5 @@ struct SpawnEntry
 struct Wave
 {
 	std::vector<SpawnEntry> spawnEntries;
-	float pauseAfterWave = 2.0f;
+	float pauseAfterWave = 2.f;
 };

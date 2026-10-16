@@ -1,29 +1,37 @@
 #pragma once
 #include "InputManager.h"
-#include "../Entites/Missile.h"
-#include "../../Utilities/Countdown.h"
-#include "../../Utilities/Pool.h"
-#include "../../Utilities/ScreenShake.h"
-#include "../../Utilities/Vector2.h"
 #include "../Entites/Enemy.h"
-#include "../Entites/XpOrb.h"
+#include "../Entites/Missile.h"
 #include "../Entites/Particle.h"
+#include "../Entites/XpOrb.h"
+#include "../Gameplay/Collision.h"
+#include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/Hittable.h"
 #include "../Gameplay/ImpactFeedback.h"
 #include "../Gameplay/PlayArea.h"
 #include "../Gameplay/WaveSpawner.h"
 #include "../Player/Player.h"
-
+#include "../Render/SpriteType.h"
+#include "../../Utilities/Countdown.h"
+#include "../../Utilities/Pool.h"
+#include "../../Utilities/ScreenShake.h"
+#include "../../Utilities/Vector2.h"
+#include <cstddef>
 
 class GameManager
 {
 public:
 	GameManager();
+
 	GameManager(const GameManager&) = delete;
 	GameManager& operator=(const GameManager&) = delete;
 
-	void Update(float deltaTime, const InputManager& inputManager);
-	void SkipWave() { m_waveSpawner.SkipToNextWave(); }
+	void Update(float inDeltaTime, const InputManager& inInputManager);
+
+	void SkipWave()
+	{
+		m_waveSpawner.SkipToNextWave();
+	}
 
 	const Player& getPlayer() const { return m_player; }
 
@@ -35,9 +43,10 @@ public:
 	int getScore() const { return m_score; }
 	int getWaveNumber() const { return m_waveSpawner.getWaveNumber(); }
 	int getWaveCount() const { return m_waveSpawner.getWaveCount(); }
-	Utility::Vector2<int> getShakeOffset() const { return m_shake.getOffset(); }
 	bool IsGameOver() const { return m_player.IsDead(); }
 	bool IsVictory() const { return m_waveSpawner.IsFinished() && !m_player.IsDead(); }
+
+	Utility::Vector2<int> getShakeOffset() const { return m_shake.getOffset(); }
 
 private:
 	static constexpr float MAX_DELTA_TIME = 0.1f;
@@ -56,6 +65,7 @@ private:
 	static constexpr int PLAYER_EXPLOSION_PARTICLE_COUNT = 16;
 	static constexpr int LEVEL_UP_PARTICLE_COUNT = 12;
 	static constexpr float XP_ORB_SPREAD = 1.f;
+	static constexpr int XP_ORB_VALUE = 1;
 
 	static constexpr ImpactFeedback PLAYER_HIT_FEEDBACK{ .hitStop = 0.12f, .shakeX = 2, .shakeY = 1, .shakeDuration = 0.35f };
 	static constexpr ImpactFeedback PLAYER_KILLED_FEEDBACK{ .shakeX = 3, .shakeY = 2, .shakeDuration = 0.8f };
@@ -76,29 +86,24 @@ private:
 	Utility::Countdown m_hitStop;
 	Utility::ScreenShake m_shake;
 
-	void SeparateEnemies(float deltaTime);
+	void SeparateEnemies(float inDeltaTime);
 
-	void CheckPlayAreaExits();
-
-	template <typename T>
-	void CheckExits(Utility::Pool<T>& pool, const Collision::CellRect& area);
-
+	void CheckMissilesHitEnemies(Utility::Pool<Enemy>& outEnemies);
+	void CheckMissilesHitPlayer();
 	template <Hittable Target>
-	void CheckMissilesHits(Utility::Pool<Target>& targets);
-
-	template <Hittable Target>
-	void CheckMissilesHits(Target& target);
-
-	template <Hittable Target>
-	static DamageResult TryHit(Missile& missile, Target& target);
+	static DamageResult TryHit(Missile& outMissile, Target& outTarget);
 
 	void CheckPlayerContact();
-
-	void OnEnemyKilled(const Enemy& enemy);
-	void OnPlayerDamaged(DamageResult result, const Utility::Vector2<float>& center);
-	void PlayFeedback(const ImpactFeedback& feedback);
-	void DropXpOrbs(const Utility::Vector2<float>& center, int count);
-
 	void CollectXpOrbs();
-	void SpawnExplosion(const Utility::Vector2<float>& center, int particleCount, SpriteUtils::SpriteType spark = SpriteUtils::SpriteType::Spark, SpriteUtils::SpriteType smoke = SpriteUtils::SpriteType::Smoke);
+
+	void CheckPlayAreaExits();
+	template <typename T>
+	void CheckExits(Utility::Pool<T>& outPool, const Collision::CellRect& inArea);
+
+	void OnEnemyKilled(const Enemy& inEnemy);
+	void OnPlayerDamaged(DamageResult inResult, const Utility::Vector2<float>& inCenter);
+
+	void PlayFeedback(const ImpactFeedback& inFeedback);
+	void DropXpOrbs(const Utility::Vector2<float>& inCenter, int inCount);
+	void SpawnExplosion(const Utility::Vector2<float>& inCenter, int inParticleCount, SpriteUtils::SpriteType inSpark = SpriteUtils::SpriteType::Spark, SpriteUtils::SpriteType inSmoke = SpriteUtils::SpriteType::Smoke);
 };

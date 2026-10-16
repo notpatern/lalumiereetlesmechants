@@ -4,6 +4,7 @@
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/Collision.h"
 #include "../../Utilities/Pool.h"
+#include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
 #include "../Gameplay/IEnemyObserver.h"
@@ -19,35 +20,37 @@ struct EnemyUpdateContext
 	Utility::Vector2<float> playerCenter;
 };
 
-
 class Enemy : public IDamageable, public PooledEntity
 {
 public:
 	Enemy();
 
-	void Spawn(const SpawnEntry& entry, IEnemyObserver* observer);
-	void Update(float dt, const EnemyUpdateContext& context);
+	void Spawn(const SpawnEntry& inEntry, IEnemyObserver* inObserver);
+	void Update(float inDeltaTime, const EnemyUpdateContext& inContext);
 	void OnLeftPlayArea();
-	void Nudge(const Utility::Vector2<float>& offset) { m_movement.Nudge(offset); }
+
+	void Nudge(const Utility::Vector2<float>& inOffset)
+	{
+		m_movement.Nudge(inOffset);
+	}
 
 	// IDamageable
-	DamageResult TakeDamage(const DamageInfos& damage) override;
+	DamageResult TakeDamage(const DamageInfos& inDamage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 
-	DamageInfos getContactDamage() const;
-
+	EnemyType getType() const { return m_type; }
+	const EnemyArchetype& getArchetype() const { return EnemyArchetypes::Get(m_type); }
 	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
 	int getXp() const { return EnemyArchetypes::Get(m_type).xp; }
 	const MovementSettings& getMovementSettings() const { return EnemyArchetypes::Get(m_type).movement; }
-	const EnemyArchetype& getArchetype() const { return EnemyArchetypes::Get(m_type); }
+	DamageInfos getContactDamage() const;
 
-	EnemyType getType() const { return m_type; }
+	Team getTeam() const { return Team::Enemy; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
+
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
 	bool IsTelegraphing() const { return m_movement.IsTelegraphing(); }
 	bool HasChargeJustEnded() const { return m_movement.HasChargeJustEnded(); }
-
-	Team getTeam() const { return Team::Enemy; }
 
 private:
 	static constexpr float HIT_FLASH_DURATION = 0.1f;
@@ -63,11 +66,9 @@ private:
 
 	IEnemyObserver* m_observer;
 
-	void Die();
-
 	void RefreshSpriteType();
+	void Shoot(const EnemyUpdateContext& inContext) const;
 
-	void Shoot(const EnemyUpdateContext& context);
-
-	void RemoveFromPlay(EnemyRemovalReason reason);
+	void Die();
+	void RemoveFromPlay(EnemyRemovalReason inReason);
 };

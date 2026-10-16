@@ -1,19 +1,19 @@
 #include "Weapon.h"
 
-void Weapon::Equip(const WeaponSettings& settings)
+void Weapon::Equip(const WeaponSettings& inSettings)
 {
-	m_settings = settings;
-	m_cooldown.Start(settings.fireInterval);
+	m_settings = inSettings;
+	m_cooldown.Start(inSettings.fireInterval);
 }
 
-bool Weapon::Update(float deltaTime)
+bool Weapon::Update(float inDeltaTime)
 {
-	if (m_settings.fireInterval <= 0.0f)
+	if (m_settings.fireInterval <= 0.f)
 	{
 		return false;
 	}
 
-	m_cooldown.Update(deltaTime);
+	m_cooldown.Update(inDeltaTime);
 	if (!m_cooldown.IsFinished())
 	{
 		return false;

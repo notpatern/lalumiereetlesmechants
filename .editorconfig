@@ -26,6 +26,12 @@ cpp_new_line_before_open_brace_block = new_line
 cpp_new_line_before_else = true
 cpp_new_line_before_catch = true
 cpp_new_line_before_while_in_do_while = false
+cpp_namespace_declaration_braces = next_line
+cpp_type_declaration_braces = next_line
+cpp_invocable_declaration_braces = next_line
+cpp_anonymous_method_declaration_braces = next_line
+cpp_case_block_braces = next_line
+cpp_other_braces = next_line
 
 cpp_space_before_function_open_parenthesis = remove
 cpp_space_within_parameter_list_parentheses = false

@@ -12,7 +12,6 @@ enum class DamageResult
 	Ignored,
 	Hit,
 	Killed
-
 };
 
 enum class DamageType

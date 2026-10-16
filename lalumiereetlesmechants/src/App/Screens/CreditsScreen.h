@@ -1,18 +1,20 @@
 #pragma once
 #include "IScreen.h"
 #include "Menu.h"
+#include "ScreenText.h"
 #include "../Manager/InputManager.h"
 #include <array>
 #include <string_view>
-#include <windows.h>
 #include <vector>
+#include <windows.h>
 
 class CreditsScreen : public IScreen
 {
 public:
-	void Update(float deltaTime, const InputManager& input) override;
-	std::vector<ScreenText> getTexts() const override;
+	void Update(float inDeltaTime, const InputManager& inInput) override;
 	void DrawDebug(HANDLE console) const override;
+
+	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }
 
 private:

@@ -1,8 +1,8 @@
 #include "Experience.h"
 
-void Experience::AddXp(int amount)
+void Experience::AddXp(int inAmount)
 {
-	m_xpInLevel += amount;
+	m_xpInLevel += inAmount;
 
 	while (!IsMaxLevel() && m_xpInLevel >= getXpForNextLevel())
 	{
