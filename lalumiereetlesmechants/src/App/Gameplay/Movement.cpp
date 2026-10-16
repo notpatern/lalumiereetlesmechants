@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <numbers>
+
 #include "PlayArea.h"
 #include "../../Utilities/ScreenDirection.h"
 
@@ -44,9 +46,18 @@ Utility::Vector2<float> Movement::Update(float deltaTime, const Utility::Vector2
 {
 	m_elapsed += deltaTime;
 
-	if (m_settings.type == MovementType::Charge)
+	switch (m_settings.type)
 	{
+	case MovementType::Charge:
 		UpdateCharge(deltaTime, playerCenter);
+		break;
+
+	case MovementType::Seek:
+		UpdateSeek(deltaTime, playerCenter);
+		break;
+
+	default:
+		break;
 	}
 
 	m_basePosition.x += m_velocity.x * deltaTime;
@@ -55,6 +66,11 @@ Utility::Vector2<float> Movement::Update(float deltaTime, const Utility::Vector2
 	if (m_settings.bounceOnEdges)
 	{
 		BounceOnEdges();
+	}
+
+	if (m_settings.stayOnScreen)
+	{
+		m_basePosition = ClampInPlayArea(m_basePosition);
 	}
 
 	if (m_settings.type == MovementType::Sine)
@@ -146,6 +162,24 @@ bool Movement::BrakeToTarget(float maxSpeed, float deltaTime)
 	const Utility::Vector2<float> direction = Utility::ScreenDirection(m_basePosition, m_target);
 	m_velocity = { direction.x * speed, direction.y * speed };
 	return false;
+}
+
+void Movement::UpdateSeek(float deltaTime, const Utility::Vector2<float>& playerCenter)
+{
+	const Utility::Vector2<float> aim = ClampInPlayArea(playerCenter);
+	const float distance = std::sqrt(Utility::ScreenDistanceSquared(m_basePosition, aim));
+	if (distance <= 0.f)
+	{
+		return;
+	}
+
+	const float turnRate = std::max(m_settings.turnRate, m_settings.speed * CLOSE_TURN_FACTOR / distance);
+	const float maxTurn = turnRate * deltaTime;
+	const float angle = Utility::ScreenAngle(m_velocity);
+	const float wantedAngle = Utility::ScreenAngle(Utility::ScreenDirection(m_basePosition, aim));
+	const float turn = std::remainder(wantedAngle - angle, 2.f * std::numbers::pi_v<float>);
+
+	m_velocity = Utility::ScreenVector(angle + std::clamp(turn, -maxTurn, maxTurn), m_settings.speed);
 }
 
 Utility::Vector2<float> Movement::ClampInPlayArea(const Utility::Vector2<float>& position) const

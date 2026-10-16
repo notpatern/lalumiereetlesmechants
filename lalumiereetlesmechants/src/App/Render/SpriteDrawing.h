@@ -27,6 +27,7 @@ namespace SpriteUtils
 		static const SpriteDrawing CHARGER{ CHARGER_LINES, 0x06 };
 		static const SpriteDrawing CHARGER_HIT{ CHARGER_LINES, 0x0F };
 		static const SpriteDrawing CHARGER_TELEGRAPH{ CHARGER_LINES, 0x0E };
+		static const SpriteDrawing SWARM{ { "x" }, 0x09 };
 		static const SpriteDrawing PLAYER_MISSILE{ { "|" }, 0x0B };
 		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
@@ -51,6 +52,8 @@ namespace SpriteUtils
 			return CHARGER_HIT;
 		case SpriteType::ChargerTelegraph:
 			return CHARGER_TELEGRAPH;
+		case SpriteType::Swarm:
+			return SWARM;
 		case SpriteType::PlayerMissile:
 			return PLAYER_MISSILE;
 		case SpriteType::EnemyMissile:

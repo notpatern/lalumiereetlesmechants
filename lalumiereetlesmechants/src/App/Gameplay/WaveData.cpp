@@ -34,6 +34,11 @@ namespace WaveData
 		{
 			return { .delay = delay, .type = EnemyType::Charger, .position = { x, PlayArea::SPAWN_Y }, .target = { x, CHARGER_STOP_ROW } };
 		}
+
+		SpawnEntry Swarm(float delay, float x)
+		{
+			return { .delay = delay, .type = EnemyType::Swarm, .position = { x, PlayArea::SPAWN_Y }, .target = { x, static_cast<float>(PlayArea::HEIGHT) } };
+		}
 	}
 
 	const std::vector<Wave>& GetWaves()
@@ -63,6 +68,7 @@ namespace WaveData
 				{
 					TurretFromLeft(0.f, 3.f),
 					Hunter(3.f, 40.f, { 40.f, 22.f }),
+					Swarm(1.f, 15.f), Swarm(0.5f, 15.f), Swarm(0.5f, 15.f),
 				},
 				.pauseAfterWave = 2.f,
 			},
@@ -79,6 +85,7 @@ namespace WaveData
 				.spawnEntries =
 				{
 					TurretFromLeft(0.f, 2.f), TurretFromRight(0.f, 4.f),
+					Swarm(2.f, 60.f), Swarm(0.5f, 60.f), Swarm(0.5f, 60.f),
 				},
 				.pauseAfterWave = 3.f,
 			},

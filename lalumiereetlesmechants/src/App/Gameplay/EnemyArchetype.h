@@ -8,7 +8,8 @@ enum class EnemyType
 {
 	Hunter,
 	Turret,
-	Charger
+	Charger,
+	Swarm
 };
 
 struct EnemyArchetype

@@ -16,6 +16,7 @@ namespace SpriteUtils
 		Charger,
 		ChargerHit,
 		ChargerTelegraph,
+		Swarm,
 		NONE
 	};
 }

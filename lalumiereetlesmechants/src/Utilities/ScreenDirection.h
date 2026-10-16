@@ -26,4 +26,14 @@ namespace Utility
 
 		return { dx / length, dy / length };
 	}
+
+	inline float ScreenAngle(const Vector2<float>& vector)
+	{
+		return std::atan2(vector.y, vector.x / CELL_HEIGHT_IN_COLUMNS);
+	}
+
+	inline Vector2<float> ScreenVector(float angle, float length)
+	{
+		return { std::cos(angle) * length * CELL_HEIGHT_IN_COLUMNS, std::sin(angle) * length };
+	}
 }

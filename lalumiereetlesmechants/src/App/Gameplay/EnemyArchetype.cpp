@@ -43,12 +43,26 @@ namespace EnemyArchetypes
 			.telegraphSprite = SpriteUtils::SpriteType::ChargerTelegraph,
 		};
 
+		static const EnemyArchetype SWARM
+		{
+			.maxHealth = 1,
+			.hitboxSize = { 1, 1 },
+			.contactDamage = 1,
+			.points = 50,
+			.xp = 1,
+			.movement = { .type = MovementType::Seek, .speed = 10.f, .stayOnScreen = true, .turnRate = 3.f },
+			.sprite = SpriteUtils::SpriteType::Swarm,
+			.hitSprite = SpriteUtils::SpriteType::Swarm,
+		};
+
 		switch (type)
 		{
 		case EnemyType::Turret:
 			return TURRET;
 		case EnemyType::Charger:
 			return CHARGER;
+		case EnemyType::Swarm:
+			return SWARM;
 		case EnemyType::Hunter:
 		default:
 			return HUNTER;

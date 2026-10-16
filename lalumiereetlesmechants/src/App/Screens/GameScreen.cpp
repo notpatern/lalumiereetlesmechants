@@ -144,6 +144,8 @@ char GameScreen::EnemyDebugCharacter(EnemyType type)
 		return 'T';
 	case EnemyType::Charger:
 		return 'B';
+	case EnemyType::Swarm:
+		return 'N';
 	case EnemyType::Hunter:
 	default:
 		return 'C';

@@ -6,7 +6,8 @@ enum class MovementType
 {
 	Straight,
 	Sine,
-	Charge
+	Charge,
+	Seek
 };
 
 struct MovementSettings
@@ -16,11 +17,13 @@ struct MovementSettings
 	float amplitude = 0.f;
 	float frequency = 0.f;
 	bool bounceOnEdges = false;
+	bool stayOnScreen = false;
 	float deceleration = 0.f;
 	float telegraphDuration = 0.f;
 	float chargeSpeed = 0.f;
 	float chargeOvershoot = 0.f;
 	float pauseBetweenCharges = 0.f;
+	float turnRate = 0.f;
 };
 
 class Movement
@@ -32,6 +35,9 @@ public:
 	bool IsTelegraphing() const { return m_chargePhase == ChargePhase::Telegraphing; }
 
 private:
+	static constexpr float CLOSE_TURN_FACTOR = 1.25f;
+	static_assert(CLOSE_TURN_FACTOR > 1.f, "Le virage serre doit depasser 1, sinon une nuee qui rate le joueur peut lui tourner autour a l'infini!!!");
+
 	enum class ChargePhase
 	{
 		Entering,
@@ -56,5 +62,6 @@ private:
 	void StartPhase(ChargePhase phase, float duration);
 	void StartTelegraph(const Utility::Vector2<float>& playerCenter);
 	[[nodiscard]] bool BrakeToTarget(float maxSpeed, float deltaTime);
+	void UpdateSeek(float deltaTime, const Utility::Vector2<float>& playerCenter);
 	Utility::Vector2<float> ClampInPlayArea(const Utility::Vector2<float>& position) const;
 };
