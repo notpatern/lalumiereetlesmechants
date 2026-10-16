@@ -130,7 +130,7 @@ void GameScreen::DrawDebug(HANDLE console) const
 			}
 		}
 
-		draw(enemy.getPosition(), enemy.IsFlashing() ? '*' : EnemyDebugCharacter(enemy.getType()));
+		draw(enemy.getPosition(), enemy.IsFlashing() ? '*' : (enemy.IsTelegraphing() ? '!' : EnemyDebugCharacter(enemy.getType())));
 	});
 
 	DebugConsole::WriteTexts(console, getTexts());
@@ -142,6 +142,8 @@ char GameScreen::EnemyDebugCharacter(EnemyType type)
 	{
 	case EnemyType::Turret:
 		return 'T';
+	case EnemyType::Charger:
+		return 'B';
 	case EnemyType::Hunter:
 	default:
 		return 'C';

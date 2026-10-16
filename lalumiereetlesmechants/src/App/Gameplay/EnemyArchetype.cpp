@@ -30,10 +30,25 @@ namespace EnemyArchetypes
 			.hitSprite = SpriteUtils::SpriteType::TurretHit,
 		};
 
+		static const EnemyArchetype CHARGER
+		{
+			.maxHealth = 3,
+			.hitboxSize = { 3, 2 },
+			.contactDamage = 1,
+			.points = 150,
+			.xp = 3,
+			.movement = { .type = MovementType::Charge, .speed = 12.f, .deceleration = 60.f, .telegraphDuration = 1.f, .chargeSpeed = 30.f, .chargeOvershoot = 2.5f, .pauseBetweenCharges = 0.8f },
+			.sprite = SpriteUtils::SpriteType::Charger,
+			.hitSprite = SpriteUtils::SpriteType::ChargerHit,
+			.telegraphSprite = SpriteUtils::SpriteType::ChargerTelegraph,
+		};
+
 		switch (type)
 		{
 		case EnemyType::Turret:
 			return TURRET;
+		case EnemyType::Charger:
+			return CHARGER;
 		case EnemyType::Hunter:
 		default:
 			return HUNTER;

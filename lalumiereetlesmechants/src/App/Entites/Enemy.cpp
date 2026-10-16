@@ -13,7 +13,7 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 
 	m_type = entry.type;
 	m_position = entry.position;
-	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target, archetype.hitboxSize.x);
+	m_movement.Start(archetype.movement, entry.position, entry.velocity, entry.target, archetype.hitboxSize);
 	m_health = Health(archetype.maxHealth);
 	m_hitbox.size = archetype.hitboxSize;
 	m_weapon.Equip(archetype.weapon);
@@ -30,7 +30,7 @@ void Enemy::Update(float dt, const EnemyUpdateContext& context)
 		return;
 	}
 
-	m_position = m_movement.Update(dt);
+	m_position = m_movement.Update(dt, context.playerCenter);
 
 	m_hitFlash.Update(dt);
 
@@ -78,7 +78,19 @@ void Enemy::Die()
 void Enemy::RefreshSpriteType()
 {
 	const EnemyArchetype& archetype = EnemyArchetypes::Get(m_type);
-	m_spriteType = IsFlashing() ? archetype.hitSprite : archetype.sprite;
+
+	if (IsFlashing())
+	{
+		m_spriteType = archetype.hitSprite;
+	}
+	else if (IsTelegraphing())
+	{
+		m_spriteType = archetype.telegraphSprite;
+	}
+	else
+	{
+		m_spriteType = archetype.sprite;
+	}
 }
 
 void Enemy::Shoot(const EnemyUpdateContext& context)

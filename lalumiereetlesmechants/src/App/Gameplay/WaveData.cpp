@@ -11,6 +11,7 @@ namespace WaveData
 		constexpr float TURRET_SPEED = 8.f;
 		constexpr float TURRET_LEFT_X = -5.f;
 		constexpr float TURRET_RIGHT_X = static_cast<float>(PlayArea::WIDTH);
+		constexpr float CHARGER_STOP_ROW = 6.f;
 
 		static_assert(TURRET_LEFT_X >= -PlayArea::OFFSCREEN_MARGIN && TURRET_RIGHT_X <= PlayArea::WIDTH - 1 + PlayArea::OFFSCREEN_MARGIN, "Les tourelles doivent apparaitre dans la marge, sinon elles sont desactivees des leur apparition!!!");
 
@@ -27,6 +28,11 @@ namespace WaveData
 		SpawnEntry TurretFromRight(float delay, float row)
 		{
 			return { .delay = delay, .type = EnemyType::Turret, .position = { TURRET_RIGHT_X, row }, .velocity = { -TURRET_SPEED, 0.f } };
+		}
+
+		SpawnEntry Charger(float delay, float x)
+		{
+			return { .delay = delay, .type = EnemyType::Charger, .position = { x, PlayArea::SPAWN_Y }, .target = { x, CHARGER_STOP_ROW } };
 		}
 	}
 
@@ -48,6 +54,7 @@ namespace WaveData
 				{
 					Hunter(0.f, 5.f, { 60.f, 22.f }), Hunter(0.f, 75.f, { 20.f, 22.f }),
 					Hunter(1.5f, 20.f, { 55.f, 18.f }), Hunter(0.f, 60.f, { 25.f, 18.f }),
+					Charger(1.5f, 38.f),
 				},
 				.pauseAfterWave = 2.f,
 			},
@@ -84,6 +91,7 @@ namespace WaveData
 					Hunter(0.6f, 65.f, { 25.f, 22.f }),
 					Hunter(0.6f, 25.f, { 65.f, 22.f }),
 					Hunter(0.6f, 55.f, { 15.f, 22.f }),
+					Charger(1.f, 20.f),
 				},
 				.pauseAfterWave = 2.f,
 			},

@@ -13,6 +13,9 @@ namespace SpriteUtils
 		EnemyMissile,
 		BigEnemyMissile,
 		XpOrb,
+		Charger,
+		ChargerHit,
+		ChargerTelegraph,
 		NONE
 	};
 }
