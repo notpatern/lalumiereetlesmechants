@@ -18,7 +18,7 @@ namespace MissileArchetypes
 			.team = Team::Enemy,
 			.hitboxSize = { 1, 1 },
 			.damage = 1,
-			.speed = 14.f,
+			.speed = 12.f,
 			.sprite = SpriteUtils::SpriteType::EnemyMissile,
 		};
 
@@ -27,7 +27,7 @@ namespace MissileArchetypes
 			.team = Team::Enemy,
 			.hitboxSize = { 2, 2 },
 			.damage = 1,
-			.speed = 6.f,
+			.speed = 10.f,
 			.sprite = SpriteUtils::SpriteType::BigEnemyMissile,
 		};
 

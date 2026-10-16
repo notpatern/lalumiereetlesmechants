@@ -53,7 +53,7 @@ public:
 	Team getTeam() const { return Team::Player; }
 
 private:
-	Utility::Vector2<float> m_speed{30.f, 15.f};
+	Utility::Vector2<float> m_speed{24.f, 12.f};
 	static constexpr float DIAGONAL_FACTOR = 0.7071f;
 
 	Utility::Pool<Missile>* m_missilePool;
@@ -74,7 +74,7 @@ private:
 		PlayerLevel{ .shot = { .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.10f } },
 	};
 	static_assert(LEVELS.size() == Experience::MAX_LEVEL, "Il faut une fiche par niveau d'experience");
-	static constexpr float HIT_INVINCIBILITY_DURATION = 1.5f;
+	static constexpr float HIT_INVINCIBILITY_DURATION = 0.8f;
 	static constexpr float BLINK_PERIOD = 0.1f;
 
 	static constexpr int BODY_WIDTH = 3;

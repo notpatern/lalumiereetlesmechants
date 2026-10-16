@@ -4,7 +4,7 @@
 class Experience
 {
 public:
-	static constexpr std::array XP_FOR_NEXT_LEVEL{ 3, 7, 9, 11, 13, 16, 19 };
+	static constexpr std::array XP_FOR_NEXT_LEVEL{ 6, 18, 22, 24, 24, 25, 26 };
 	static constexpr int MAX_LEVEL = static_cast<int>(XP_FOR_NEXT_LEVEL.size()) + 1;
 
 	void AddXp(int amount);

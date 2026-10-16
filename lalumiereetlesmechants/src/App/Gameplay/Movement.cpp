@@ -71,7 +71,7 @@ Utility::Vector2<float> Movement::Update(float deltaTime, const Utility::Vector2
 
 	if (m_settings.stayOnScreen)
 	{
-		m_basePosition = ClampInPlayArea(m_basePosition);
+		m_basePosition = ClampInPlayArea(m_basePosition, STAY_ON_SCREEN_MARGIN);
 	}
 
 	if (m_settings.type == MovementType::Sine)
@@ -181,8 +181,7 @@ void Movement::UpdateSeek(float deltaTime, const Utility::Vector2<float>& player
 		return;
 	}
 
-	const float turnRate = std::max(m_settings.turnRate, m_settings.speed * CLOSE_TURN_FACTOR / distance);
-	const float maxTurn = turnRate * deltaTime;
+	const float maxTurn = m_settings.turnRate * deltaTime;
 	const float angle = Utility::ScreenAngle(m_velocity);
 	const float wantedAngle = Utility::ScreenAngle(Utility::ScreenDirection(m_basePosition, aim));
 	const float turn = std::remainder(wantedAngle - angle, 2.f * std::numbers::pi_v<float>);
@@ -190,7 +189,7 @@ void Movement::UpdateSeek(float deltaTime, const Utility::Vector2<float>& player
 	m_velocity = Utility::ScreenVector(angle + std::clamp(turn, -maxTurn, maxTurn), m_settings.speed);
 }
 
-Utility::Vector2<float> Movement::ClampInPlayArea(const Utility::Vector2<float>& position) const
+Utility::Vector2<float> Movement::ClampInPlayArea(const Utility::Vector2<float>& position, float margin) const
 {
-	return { std::clamp(position.x, 0.f, m_maxX), std::clamp(position.y, 0.f, m_maxY) };
+	return { std::clamp(position.x, -margin, m_maxX + margin), std::clamp(position.y, -margin, m_maxY + margin) };
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Vector2.h"
+#include "PlayArea.h"
 
 enum class MovementType
 {
@@ -39,8 +40,8 @@ public:
 	bool HasChargeJustEnded() const { return m_chargeJustEnded; }
 
 private:
-	static constexpr float CLOSE_TURN_FACTOR = 1.25f;
-	static_assert(CLOSE_TURN_FACTOR > 1.f, "Le virage serre doit depasser 1, sinon une nuee qui rate le joueur peut lui tourner autour a l'infini!!!");
+	static constexpr float STAY_ON_SCREEN_MARGIN = 3.f;
+	static_assert(STAY_ON_SCREEN_MARGIN < PlayArea::OFFSCREEN_MARGIN, "Une nuee qui sort pour faire demi-tour doit rester dans la marge, sinon elle est supprimee!!!");
 
 	enum class ChargePhase
 	{
@@ -68,5 +69,5 @@ private:
 	void StartTelegraph(const Utility::Vector2<float>& playerCenter);
 	[[nodiscard]] bool BrakeToTarget(float maxSpeed, float deltaTime);
 	void UpdateSeek(float deltaTime, const Utility::Vector2<float>& playerCenter);
-	Utility::Vector2<float> ClampInPlayArea(const Utility::Vector2<float>& position) const;
+	Utility::Vector2<float> ClampInPlayArea(const Utility::Vector2<float>& position, float margin = 0.f) const;
 };
