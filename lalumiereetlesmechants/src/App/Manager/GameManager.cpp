@@ -5,6 +5,7 @@
 GameManager::GameManager() :
 	m_missilesPool{INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE},
 	m_enemiesPool{INITIAL_ENEMIES_POOL_SIZE, MAX_ENEMIES_POOL_SIZE},
+	m_xpOrbsPool{INITIAL_XP_ORBS_POOL_SIZE, MAX_XP_ORBS_POOL_SIZE},
 	m_player{Utility::Vector2<float>(PLAYER_START_X, PLAYER_START_Y), m_missilesPool},
 	m_waveSpawner{WaveData::GetWaves(), m_enemiesPool}
 {
@@ -31,6 +32,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 		enemy.Update(deltaTime, enemyContext);
 	});
 	m_missilesPool.Update(deltaTime);
+	m_xpOrbsPool.Update(deltaTime);
 
 	CheckMissilesHits(m_enemiesPool);
 	CheckMissilesHits(m_player);
@@ -44,6 +46,7 @@ void GameManager::CheckPlayAreaExits()
 
 	CheckExits(m_enemiesPool, area);
 	CheckExits(m_missilesPool, area);
+	CheckExits(m_xpOrbsPool, PlayArea::Bounds());
 }
 
 void GameManager::CheckPlayerContact()
@@ -63,6 +66,16 @@ void GameManager::CheckPlayerContact()
 			enemy.TakeDamage(m_player.getContactDamage());
 		}
 	});
+}
+
+void GameManager::OnEnemyKilled(const Enemy& enemy)
+{
+	m_score += enemy.getPoints();
+
+	if (XpOrb* orb = m_xpOrbsPool.Acquire())
+	{
+		orb->Spawn(enemy.getHitboxRect().getCenter(), enemy.getXp());
+	}
 }
 
 template <typename T>
@@ -86,7 +99,7 @@ void GameManager::CheckMissilesHits(Utility::Pool<Target>& targets)
 		{
 			if (TryHit(missile, target) == DamageResult::Killed)
 			{
-				m_score += target.getPoints();
+				OnEnemyKilled(target);
 			}
 		});
 	});

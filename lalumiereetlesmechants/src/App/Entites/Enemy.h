@@ -36,6 +36,7 @@ public:
 	DamageInfos getContactDamage() const;
 
 	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
+	int getXp() const { return EnemyArchetypes::Get(m_type).xp; }
 
 	EnemyType getType() const { return m_type; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }

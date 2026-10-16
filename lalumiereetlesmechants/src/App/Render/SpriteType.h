@@ -12,6 +12,7 @@ namespace SpriteUtils
 		PlayerMissile,
 		EnemyMissile,
 		BigEnemyMissile,
+		XpOrb,
 		NONE
 	};
 }

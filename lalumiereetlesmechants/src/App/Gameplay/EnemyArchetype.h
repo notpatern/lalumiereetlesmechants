@@ -16,6 +16,7 @@ struct EnemyArchetype
 	Utility::Vector2<int> hitboxSize{ 3, 2 };
 	int contactDamage = 1;
 	int points = 100;
+	int xp = 1;
 	MovementSettings movement;
 	WeaponSettings weapon;
 	SpriteUtils::SpriteType sprite = SpriteUtils::SpriteType::Hunter;

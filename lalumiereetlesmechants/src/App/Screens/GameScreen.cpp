@@ -113,6 +113,11 @@ void GameScreen::DrawDebug(HANDLE console) const
 
 	SetConsoleTitleA(("Missiles actifs : " + std::to_string(activeMissiles)).c_str());
 
+	m_gameManager.getXpOrbs().ForEachActive([&](const XpOrb& orb)
+	{
+		draw(orb.getPosition(), '+');
+	});
+
 	m_gameManager.getEnemies().ForEachActive([&](const Enemy& enemy)
 	{
 		const Collision::CellRect rect = enemy.getHitboxRect();

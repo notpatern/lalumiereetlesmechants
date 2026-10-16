@@ -26,6 +26,7 @@ namespace SpriteUtils
 		static const SpriteDrawing PLAYER_MISSILE{ { "|" }, 0x0B };
 		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
+		static const SpriteDrawing XP_ORB{ { "+" }, 0x0A };
 		static const SpriteDrawing NOTHING{ {}, 0x0F };
 
 		switch (type)
@@ -46,6 +47,8 @@ namespace SpriteUtils
 			return ENEMY_MISSILE;
 		case SpriteType::BigEnemyMissile:
 			return BIG_ENEMY_MISSILE;
+		case SpriteType::XpOrb:
+			return XP_ORB;
 		default:
 			return NOTHING;
 		}

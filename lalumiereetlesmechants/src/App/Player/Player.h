@@ -5,6 +5,7 @@
 #include "../Manager/InputManager.h"
 #include "../Entites/Missile.h"
 #include "../Gameplay/Collision.h"
+#include "../Gameplay/Experience.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
 
@@ -21,6 +22,7 @@ public:
 	int getHealth() const { return m_health.getCurrent(); }
 
 	DamageInfos getContactDamage() const;
+	void AddXp(int amount);
 
 	bool getIsActive() const { return !IsDead(); }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
@@ -60,6 +62,7 @@ private:
 	Collision::Hitbox m_hitbox;
 	Collision::Hitbox m_body;
 	Utility::Countdown m_invincibility;
+	Experience m_experience;
 
 	static Utility::Vector2<int> ReadDirection(const InputManager& input);
 	void Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds);
