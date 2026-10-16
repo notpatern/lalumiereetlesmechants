@@ -20,6 +20,7 @@ namespace Collision
 
 	// Algorithme de Bresenham : parcourt les cases entre le depart et l'arrivee
 	// uniquement avec des entiers
+	// sinon un missile rapide saute des cases et traverse un ennemi sans le toucher
 	bool CrossesRect(const Utility::Vector2<float>& inFrom, const Utility::Vector2<float>& inTo, const CellRect& inTarget)
 	{
 		const Utility::Vector2<int> end = ToCell(inTo);

@@ -1,5 +1,6 @@
 #include "EnemyArchetype.h"
 
+// un ennemi = une fiche de donnees, on ajoute un ennemi sans ecrire de nouvelle classe
 namespace EnemyArchetypes
 {
 	const EnemyArchetype& Get(EnemyType inType)

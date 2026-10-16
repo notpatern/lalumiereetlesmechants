@@ -18,6 +18,7 @@ namespace Utility
 		outObject.Update(inDeltaTime);
 	};
 
+	// pas de new pendant la partie : au plafond Acquire rend nullptr, on prefere rater un tir qu'allouer en plein jeu
 	template <Poolable T>
 	class Pool
 	{
@@ -66,6 +67,7 @@ namespace Utility
 		}
 
 	private:
+		// des paquets et pas un vector : le renderer garde l'adresse des objets, ils ne doivent jamais bouger
 		std::vector<std::unique_ptr<T[]>> m_chunks;
 		std::size_t m_size;
 		std::size_t m_maxSize;

@@ -4,6 +4,7 @@
 
 namespace Utility
 {
+	// une case de console est 2x plus haute que large, sans ca tout irait 2x trop vite en vertical
 	inline constexpr float CELL_HEIGHT_IN_COLUMNS = 2.f;
 
 	inline float ScreenDistanceSquared(const Vector2<float>& inFrom, const Vector2<float>& inTo)

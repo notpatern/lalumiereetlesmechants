@@ -76,6 +76,7 @@ private:
 	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
 	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
 
+	// une pool par equipe : un tir ne peut pas toucher son camp, et les tirs ennemis ne bloquent jamais les notres
 	Utility::Pool<Missile> m_playerMissilesPool;
 	Utility::Pool<Missile> m_enemyMissilesPool;
 	Utility::Pool<Enemy> m_enemiesPool;

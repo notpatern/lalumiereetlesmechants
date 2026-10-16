@@ -62,6 +62,7 @@ void GameManager::Update(float inDeltaTime, const InputManager& inInputManager)
 	CheckPlayAreaExits();
 }
 
+// n^2 assume : une soixantaine d'ennemis max, une grille ne ferait rien gagner ici
 void GameManager::SeparateEnemies(float inDeltaTime)
 {
 	m_enemiesPool.ForEachActive([&](Enemy& outEnemy)
@@ -141,6 +142,7 @@ DamageResult GameManager::TryHit(Missile& outMissile, Target& outTarget)
 		return DamageResult::Ignored;
 	}
 
+	// la position d'un gros missile est son coin haut gauche, donc on agrandit la cible au lieu de tester tout le missile
 	Collision::CellRect hitArea = targetRect;
 	hitArea.topLeftCell.x -= outMissile.getHitboxSize().x - 1;
 	hitArea.topLeftCell.y -= outMissile.getHitboxSize().y - 1;
