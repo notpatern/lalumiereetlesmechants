@@ -25,7 +25,7 @@ void TitleScreen::DrawDebug(HANDLE console) const
 	DebugConsole::Clear(console);
 	DebugConsole::WriteTexts(console, getTexts());
 
-	SetConsoleTitleA("Titre a trouver");
+	SetConsoleTitleA("MAUVAIS CARACTERES");
 }
 
 std::vector<ScreenText> TitleScreen::getTexts() const

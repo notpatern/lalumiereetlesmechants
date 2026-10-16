@@ -20,7 +20,7 @@ public:
 private:
 	static constexpr std::array<std::string_view, 7> LINES =
 	{
-		"Titre a trouver",
+		"MAUVAIS CARACTERES",
 		"",
 		"Paul",
 		"Sasha",

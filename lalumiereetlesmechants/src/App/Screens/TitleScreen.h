@@ -17,7 +17,7 @@ public:
 	ScreenRequest getRequest() const override { return m_request; }
 
 private:
-	static constexpr std::string_view TITLE_TEXT = "Mauvais Character";
+	static constexpr std::string_view TITLE_TEXT = "MAUVAIS CARACTERES";
 
 	static constexpr int PLAY_CHOICE = 0;
 	static constexpr int CREDITS_CHOICE = 1;
