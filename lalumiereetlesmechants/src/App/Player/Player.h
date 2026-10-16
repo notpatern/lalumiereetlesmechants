@@ -20,9 +20,12 @@ public:
 	DamageResult TakeDamage(const DamageInfos& damage) override;
 	bool IsDead() const override { return m_health.IsDead(); }
 	int getHealth() const { return m_health.getCurrent(); }
+	int getMaxHealth() const { return m_health.getMax(); }
 
 	DamageInfos getContactDamage() const;
+
 	void AddXp(int amount);
+	const Experience& getExperience() const { return m_experience; }
 
 	bool getIsActive() const { return !IsDead(); }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }

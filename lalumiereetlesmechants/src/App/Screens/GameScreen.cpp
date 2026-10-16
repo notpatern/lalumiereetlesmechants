@@ -1,4 +1,5 @@
 #include "GameScreen.h"
+
 #include "DebugConsole.h"
 
 #include <string>
@@ -46,6 +47,7 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 		return;
 	}
 
+	m_hud.Update(deltaTime);
 	m_gameManager.Update(deltaTime, input);
 }
 
@@ -53,8 +55,7 @@ std::vector<ScreenText> GameScreen::getTexts() const
 {
 	std::vector<ScreenText> texts;
 
-	texts.push_back({ "Score : " + std::to_string(m_gameManager.getScore()), { 0, HUD_ROW } });
-	texts.push_back({ "Vies : " + std::to_string(m_gameManager.getPlayer().getHealth()), { LIVES_COLUMN, HUD_ROW } });
+	m_hud.AddTexts(texts, m_gameManager);
 
 	if (m_gameManager.IsGameOver())
 	{

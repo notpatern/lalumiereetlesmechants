@@ -8,6 +8,8 @@
 #include <windows.h>
 #include <vector>
 
+#include "Hud.h"
+
 class GameScreen : public IScreen
 {
 public:
@@ -21,10 +23,8 @@ private:
 	static constexpr std::string_view VICTORY_TEXT = "Victoire";
 	static constexpr std::string_view PAUSE_TEXT = "Pause";
 
-	static constexpr int HUD_ROW = PlayArea::HEIGHT;
-	static constexpr int LIVES_COLUMN = PlayArea::WIDTH - 10;
-
 	GameManager m_gameManager;
+	Hud m_hud;
 
 	ScreenRequest m_request = ScreenRequest::None;
 

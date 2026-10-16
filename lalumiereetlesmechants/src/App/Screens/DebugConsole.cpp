@@ -10,6 +10,7 @@ namespace DebugConsole
 
 		DWORD written = 0;
 		FillConsoleOutputCharacterA(console, ' ', info.dwSize.X * (PlayArea::HEIGHT + 2), { 0, 0 }, &written);
+		FillConsoleOutputAttribute(console, 0x0F, info.dwSize.X * (PlayArea::HEIGHT + 2), { 0, 0 }, &written);
 	}
 
 	void WriteTexts(HANDLE console, const std::vector<ScreenText>& texts)
@@ -19,6 +20,7 @@ namespace DebugConsole
 		{
 			const COORD cell{ static_cast<SHORT>(text.position.x), static_cast<SHORT>(text.position.y) };
 			WriteConsoleOutputCharacterA(console, text.text.data(), static_cast<DWORD>(text.text.size()), cell, &written);
+			FillConsoleOutputAttribute(console, text.color, static_cast<DWORD>(text.text.size()), cell, &written);
 		}
 	}
 }

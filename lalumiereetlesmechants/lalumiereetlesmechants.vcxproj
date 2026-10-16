@@ -151,6 +151,8 @@
     <ClCompile Include="src\App\Screens\CreditsScreen.cpp" />
     <ClCompile Include="src\App\Screens\DebugConsole.cpp" />
     <ClCompile Include="src\App\Screens\GameScreen.cpp" />
+    <ClCompile Include="src\App\Screens\Hud.cpp" />
+    <ClCompile Include="src\App\Screens\HudBar.cpp" />
     <ClCompile Include="src\App\Screens\IScreen.cpp" />
     <ClCompile Include="src\App\Screens\Menu.cpp" />
     <ClCompile Include="src\App\Screens\TitleScreen.cpp" />
@@ -190,6 +192,8 @@
     <ClInclude Include="src\App\Screens\CreditsScreen.h" />
     <ClInclude Include="src\App\Screens\DebugConsole.h" />
     <ClInclude Include="src\App\Screens\GameScreen.h" />
+    <ClInclude Include="src\App\Screens\Hud.h" />
+    <ClInclude Include="src\App\Screens\HudBar.h" />
     <ClInclude Include="src\App\Screens\IScreen.h" />
     <ClInclude Include="src\App\Screens\Menu.h" />
     <ClInclude Include="src\App\Screens\ScreenText.h" />
