@@ -68,4 +68,6 @@ private:
 	void CheckPlayerContact();
 
 	void OnEnemyKilled(const Enemy& enemy);
+
+	void CollectXpOrbs();
 };

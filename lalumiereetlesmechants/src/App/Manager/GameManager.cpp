@@ -26,17 +26,22 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
 
-	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = m_player.getAimPoint() };
+	const Utility::Vector2<float> playerCenter = m_player.getAimPoint();
+	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = playerCenter };
 	m_enemiesPool.ForEachActive([&](Enemy& enemy)
 	{
 		enemy.Update(deltaTime, enemyContext);
 	});
 	m_missilesPool.Update(deltaTime);
-	m_xpOrbsPool.Update(deltaTime);
+	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
+	{
+		orb.Update(deltaTime, playerCenter);
+	});
 
 	CheckMissilesHits(m_enemiesPool);
 	CheckMissilesHits(m_player);
 	CheckPlayerContact();
+	CollectXpOrbs();
 	CheckPlayAreaExits();
 }
 
@@ -76,6 +81,20 @@ void GameManager::OnEnemyKilled(const Enemy& enemy)
 	{
 		orb->Spawn(enemy.getHitboxRect().getCenter(), enemy.getXp());
 	}
+}
+
+void GameManager::CollectXpOrbs()
+{
+	const Collision::CellRect playerBody = m_player.getBodyRect();
+
+	m_xpOrbsPool.ForEachActive([&](XpOrb& orb)
+	{
+		if (playerBody.Contains(Collision::ToCell(orb.getPosition())))
+		{
+			m_player.AddXp(orb.getValue());
+			orb.Collect();
+		}
+	});
 }
 
 template <typename T>
