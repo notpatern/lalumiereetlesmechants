@@ -51,6 +51,9 @@ DamageResult Missile::OnHit(IDamageable& damageable)
 void Missile::Update(float dt)
 {
 	if (!getIsActive())
+	{
+		return;
+	}
 
 	m_lastPosition = m_position;
 
