@@ -15,7 +15,7 @@ public:
 	ScreenRequest getRequest() const override { return m_request; }
 
 private:
-	static constexpr std::string_view TITLE_TEXT = "La lumiere et les mechants";
+	static constexpr std::string_view TITLE_TEXT = "Titre a trouver";
 	static constexpr int PLAY_CHOICE = 0;
 	static constexpr int CREDITS_CHOICE = 1;
 	static constexpr int QUIT_CHOICE = 2;

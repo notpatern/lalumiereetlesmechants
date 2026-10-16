@@ -33,5 +33,5 @@ void TitleScreen::DrawDebug(HANDLE console) const
 	DebugConsole::Clear(console);
 	DebugConsole::WriteTexts(console, getTexts());
 
-	SetConsoleTitleA("La lumiere et les mechants");
+	SetConsoleTitleA("Titre a trouver");
 }

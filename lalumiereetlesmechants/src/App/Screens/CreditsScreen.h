@@ -18,7 +18,7 @@ public:
 private:
 	static constexpr std::array<std::string_view, 7> LINES =
 	{
-		"La lumiere et les mechants",
+		"Titre a trouver",
 		"",
 		"Paul",
 		"Sasha",

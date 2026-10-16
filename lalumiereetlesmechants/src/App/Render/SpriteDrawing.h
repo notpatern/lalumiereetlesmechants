@@ -19,21 +19,22 @@ namespace SpriteUtils
 		static const std::vector<std::string_view> TURRET_LINES = { "[=O=]", " \\_/ " };
 		static const std::vector<std::string_view> CHARGER_LINES = { "/#\\", "\\V/" };
 
-		static const SpriteDrawing PLAYER{ { " ^ ", "/A\\" }, 0x0E };
+		static const SpriteDrawing PLAYER{ { " ^ ", "/A\\" }, 0x0B };
 		static const SpriteDrawing HUNTER{ HUNTER_LINES, 0x0C };
 		static const SpriteDrawing HUNTER_HIT{ HUNTER_LINES, 0x0F };
-		static const SpriteDrawing TURRET{ TURRET_LINES, 0x0D };
+		static const SpriteDrawing TURRET{ TURRET_LINES, 0x04 };
 		static const SpriteDrawing TURRET_HIT{ TURRET_LINES, 0x0F };
-		static const SpriteDrawing CHARGER{ CHARGER_LINES, 0x06 };
+		static const SpriteDrawing CHARGER{ CHARGER_LINES, 0x05 };
 		static const SpriteDrawing CHARGER_HIT{ CHARGER_LINES, 0x0F };
-		static const SpriteDrawing CHARGER_TELEGRAPH{ CHARGER_LINES, 0x0E };
-		static const SpriteDrawing SWARM{ { "x" }, 0x09 };
+		static const SpriteDrawing CHARGER_TELEGRAPH{ CHARGER_LINES, 0xCF };
+		static const SpriteDrawing SWARM{ { "x" }, 0x0A };
 		static const SpriteDrawing PLAYER_MISSILE{ { "|" }, 0x0B };
 		static const SpriteDrawing ENEMY_MISSILE{ { "o" }, 0x0D };
 		static const SpriteDrawing BIG_ENEMY_MISSILE{ { "/\\", "\\/" }, 0x0D };
-		static const SpriteDrawing XP_ORB{ { "+" }, 0x0A };
-		static const SpriteDrawing SPARK{ { "*" }, 0x0C };
+		static const SpriteDrawing XP_ORB{ { "+" }, 0x0E };
+		static const SpriteDrawing SPARK{ { "*" }, 0x0F };
 		static const SpriteDrawing SMOKE{ { "," }, 0x08 };
+		static const SpriteDrawing LEVEL_UP_SPARK{ { "+" }, 0x0E };
 		static const SpriteDrawing NOTHING{ {}, 0x0F };
 
 		switch (type)
@@ -68,6 +69,8 @@ namespace SpriteUtils
 			return SPARK;
 		case SpriteType::Smoke:
 			return SMOKE;
+		case SpriteType::LevelUpSpark:
+			return LEVEL_UP_SPARK;
 		default:
 			return NOTHING;
 		}
