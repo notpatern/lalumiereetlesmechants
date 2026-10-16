@@ -24,11 +24,7 @@ public:
 
 	bool getIsActive() const { return !IsDead(); }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
-	Utility::Vector2<float> getAimPoint() const
-	{
-		const Collision::CellRect core = getHitboxRect();
-		return { core.topLeftCell.x + 0.5f, core.topLeftCell.y + 0.5f };
-	}
+	Utility::Vector2<float> getAimPoint() const { return getHitboxRect().getCenter(); }
 	bool IsInvincible() const { return !m_invincibility.IsFinished(); }
 	bool IsVisible() const;
 
@@ -36,6 +32,7 @@ public:
 
 private:
 	Utility::Vector2<float> m_speed{30.f, 15.f};
+	static constexpr float DIAGONAL_FACTOR = 0.7071f;
 
 	static constexpr float MISSILE_SPEED = 45.f;
 	static constexpr int MISSILE_DAMAGE = 1;

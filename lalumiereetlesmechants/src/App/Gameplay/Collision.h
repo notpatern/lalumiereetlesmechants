@@ -24,6 +24,11 @@ namespace Collision
 			return topLeftCell.x <= other.bottomRightCell.x && other.topLeftCell.x <= bottomRightCell.x
 			&& topLeftCell.y <= other.bottomRightCell.y && other.topLeftCell.y <= bottomRightCell.y;
 		}
+
+		Utility::Vector2<float> getCenter() const
+		{
+			return { (topLeftCell.x + bottomRightCell.x + 1) / 2.f, (topLeftCell.y + bottomRightCell.y + 1) / 2.f };
+		}
 	};
 
 	struct Hitbox

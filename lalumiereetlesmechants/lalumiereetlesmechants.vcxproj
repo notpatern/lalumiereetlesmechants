@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App\Entites\PooledEntity.cpp" />
     <ClCompile Include="src\App\Gameplay\EnemyArchetype.cpp" />
     <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Health.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\Entites\PooledEntity.h" />
     <ClInclude Include="src\App\Gameplay\EnemyArchetype.h" />
     <ClInclude Include="src\App\Gameplay\Collision.h" />
     <ClInclude Include="src\App\Gameplay\DamageInfos.h" />

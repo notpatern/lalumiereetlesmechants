@@ -3,7 +3,7 @@
 #include "../../Utilities/ScreenDirection.h"
 #include "../Gameplay/PlayArea.h"
 
-Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr), m_isActive(false)
+Enemy::Enemy() : m_type(EnemyType::Hunter), m_health(0), m_observer(nullptr)
 {
 }
 
@@ -18,15 +18,14 @@ void Enemy::Spawn(const SpawnEntry& entry, IEnemyObserver* observer)
 	m_hitbox.size = archetype.hitboxSize;
 	m_weapon.Equip(archetype.weapon);
 	m_hitFlash.Start(0.f);
-	m_isActive = true;
 	m_observer = observer;
 	RefreshSpriteType();
-	SetInRenderQueue(true);
+	Activate();
 }
 
 void Enemy::Update(float dt, const EnemyUpdateContext& context)
 {
-	if (!m_isActive)
+	if (!getIsActive())
 	{
 		return;
 	}
@@ -50,7 +49,7 @@ void Enemy::OnLeftPlayArea()
 
 DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 {
-	if (!m_isActive)
+	if (!getIsActive())
 	{
 		return DamageResult::Ignored;
 	}
@@ -62,6 +61,7 @@ DamageResult Enemy::TakeDamage(const DamageInfos& damage)
 	}
 
 	m_hitFlash.Start(HIT_FLASH_DURATION);
+	RefreshSpriteType();
 	return DamageResult::Hit;
 }
 
@@ -101,13 +101,12 @@ void Enemy::Shoot(const EnemyUpdateContext& context)
 
 void Enemy::RemoveFromPlay(EnemyRemovalReason reason)
 {
-	if (!m_isActive)
+	if (!getIsActive())
 	{
 		return;
 	}
 
-	m_isActive = false;
-	SetInRenderQueue(false);
+	Deactivate();
 
 	if (m_observer)
 	{

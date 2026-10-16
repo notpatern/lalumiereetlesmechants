@@ -88,7 +88,7 @@ Utility::Vector2<int> Player::ReadDirection(const InputManager& input)
 
 void Player::Move(float dt, const Utility::Vector2<int>& direction, const Collision::CellRect& bounds)
 {
-	const float diagonalFactor = (direction.x != 0 && direction.y != 0) ? 0.7071f : 1.f;
+	const float diagonalFactor = (direction.x != 0 && direction.y != 0) ? DIAGONAL_FACTOR  : 1.f;
 	const float stepX = static_cast<float>(direction.x) * m_speed.x * diagonalFactor * dt;
 	const float stepY = static_cast<float>(direction.y) * m_speed.y * diagonalFactor * dt;
 

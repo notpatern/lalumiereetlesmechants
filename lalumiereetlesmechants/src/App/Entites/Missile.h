@@ -5,9 +5,9 @@
 #include "../Gameplay/IDamageable.h"
 #include "../Render/Sprite.h"
 #include "../Gameplay/Collision.h"
-#include "Entities.h"
+#include "PooledEntity.h"
 
-class Missile : public Entity
+class Missile : public PooledEntity
 {
 public:
 	Missile();
@@ -15,8 +15,6 @@ public:
 	Utility::Vector2<float> getLastPosition() const { return m_lastPosition; }
 
 	void Update(float dt);
-
-	bool getIsActive() const { return m_isActive; }
 
 	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage, const Utility::Vector2<int>& hitboxSize = { 1, 1 });
 	void Explode();
@@ -38,10 +36,6 @@ private:
 	Team m_team;
 	int m_damage;
 	Utility::Vector2<int> m_hitboxSize{ 1, 1 };
-
-	bool m_isActive;
-
-	void Deactivate();
 
 };
 

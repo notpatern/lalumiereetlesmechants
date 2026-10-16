@@ -1,6 +1,6 @@
 #include "Missile.h"
 
-Missile::Missile() : m_team(Team::Player), m_damage(0), m_isActive(false)
+Missile::Missile() : m_team(Team::Player), m_damage(0)
 {
 }
 
@@ -23,8 +23,7 @@ void Missile::Launch(const Utility::Vector2<float>& position, const Utility::Vec
 		m_spriteType = SpriteUtils::SpriteType::PlayerMissile;
 	}
 
-	m_isActive = true;
-	SetInRenderQueue(true);
+	Activate();
 }
 
 DamageInfos Missile::getDamageInfos() const
@@ -35,12 +34,6 @@ DamageInfos Missile::getDamageInfos() const
 void Missile::OnLeftPlayArea()
 {
 	Deactivate();
-}
-
-void Missile::Deactivate()
-{
-	m_isActive = false;
-	SetInRenderQueue(false);
 }
 
 void Missile::Explode()
@@ -57,10 +50,7 @@ DamageResult Missile::OnHit(IDamageable& damageable)
 
 void Missile::Update(float dt)
 {
-	if (!m_isActive)
-	{
-		return;
-	}
+	if (!getIsActive())
 
 	m_lastPosition = m_position;
 

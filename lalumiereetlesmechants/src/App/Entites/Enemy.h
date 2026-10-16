@@ -9,7 +9,7 @@
 #include "../Gameplay/IEnemyObserver.h"
 #include "../Gameplay/Movement.h"
 #include "../Gameplay/Wave.h"
-#include "Entities.h"
+#include "PooledEntity.h"
 #include "../Gameplay/EnemyArchetype.h"
 #include "../Gameplay/Weapon.h"
 
@@ -20,7 +20,7 @@ struct EnemyUpdateContext
 };
 
 
-class Enemy : public IDamageable, public Entity
+class Enemy : public IDamageable, public PooledEntity
 {
 public:
 	Enemy();
@@ -37,7 +37,6 @@ public:
 
 	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
 
-	bool getIsActive() const { return m_isActive; }
 	EnemyType getType() const { return m_type; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }
 	bool IsFlashing() const { return !m_hitFlash.IsFinished(); }
@@ -57,8 +56,6 @@ private:
 	Weapon m_weapon;
 
 	IEnemyObserver* m_observer;
-
-	bool m_isActive;
 
 	void Die();
 
