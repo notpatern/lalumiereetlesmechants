@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "../Gameplay/Collision.h"
 #include "../Gameplay/WaveData.h"
+#include "../../Utilities/ScreenDirection.h"
 
 GameManager::GameManager() :
 	m_missilesPool{INITIAL_MISSILES_POOL_SIZE, MAX_MISSILES_POOL_SIZE},
@@ -25,6 +26,7 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 
 	m_player.Update(deltaTime, inputManager, PlayArea::Bounds());
 	m_waveSpawner.Update(deltaTime);
+	SeparateEnemies(deltaTime);
 
 	const Utility::Vector2<float> playerCenter = m_player.getAimPoint();
 	const EnemyUpdateContext enemyContext{ .missiles = m_missilesPool, .playerCenter = playerCenter };
@@ -43,6 +45,48 @@ void GameManager::Update(float deltaTime, const InputManager& inputManager)
 	CheckPlayerContact();
 	CollectXpOrbs();
 	CheckPlayAreaExits();
+}
+
+void GameManager::SeparateEnemies(float deltaTime)
+{
+	m_enemiesPool.ForEachActive([&](Enemy& enemy)
+	{
+		const MovementSettings& settings = enemy.getMovementSettings();
+		if (settings.separationRadius <= 0.f)
+		{
+			return;
+		}
+
+		const float radiusSquared = settings.separationRadius * settings.separationRadius;
+		Utility::Vector2<float> push{ 0.f, 0.f };
+
+		m_enemiesPool.ForEachActive([&](const Enemy& other)
+		{
+			if (&other == &enemy || other.getMovementSettings().separationRadius <= 0.f)
+			{
+				return;
+			}
+
+			const float distanceSquared = Utility::ScreenDistanceSquared(other.getPosition(), enemy.getPosition());
+			if (distanceSquared >= radiusSquared)
+			{
+				return;
+			}
+
+			const Utility::Vector2<float> away = Utility::ScreenDirection(other.getPosition(), enemy.getPosition());
+			const float strength = 1.f - distanceSquared / radiusSquared;
+			push.x += away.x * strength;
+			push.y += away.y * strength;
+		});
+
+		if (Utility::ScreenDistanceSquared({ 0.f, 0.f }, push) > 1.f)
+		{
+			push = Utility::ScreenDirection({ 0.f, 0.f }, push);
+		}
+
+		const float step = settings.separationSpeed * deltaTime;
+		enemy.Nudge({ push.x * step, push.y * step });
+	});
 }
 
 void GameManager::CheckPlayAreaExits()

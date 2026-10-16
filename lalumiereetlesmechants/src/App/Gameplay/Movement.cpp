@@ -81,6 +81,12 @@ Utility::Vector2<float> Movement::Update(float deltaTime, const Utility::Vector2
 	return m_basePosition;
 }
 
+void Movement::Nudge(const Utility::Vector2<float>& offset)
+{
+	m_basePosition.x += offset.x;
+	m_basePosition.y += offset.y;
+}
+
 void Movement::BounceOnEdges()
 {
 	const bool passedRightEdge = m_velocity.x > 0.f && m_basePosition.x > m_maxX;

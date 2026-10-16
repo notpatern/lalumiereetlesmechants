@@ -28,6 +28,7 @@ public:
 	void Spawn(const SpawnEntry& entry, IEnemyObserver* observer);
 	void Update(float dt, const EnemyUpdateContext& context);
 	void OnLeftPlayArea();
+	void Nudge(const Utility::Vector2<float>& offset) { m_movement.Nudge(offset); }
 
 	// IDamageable
 	DamageResult TakeDamage(const DamageInfos& damage) override;
@@ -37,6 +38,7 @@ public:
 
 	int getPoints() const { return EnemyArchetypes::Get(m_type).points; }
 	int getXp() const { return EnemyArchetypes::Get(m_type).xp; }
+	const MovementSettings& getMovementSettings() const { return EnemyArchetypes::Get(m_type).movement; }
 
 	EnemyType getType() const { return m_type; }
 	Collision::CellRect getHitboxRect() const { return m_hitbox.At(m_position); }

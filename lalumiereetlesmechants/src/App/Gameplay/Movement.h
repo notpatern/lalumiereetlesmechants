@@ -14,6 +14,8 @@ struct MovementSettings
 {
 	MovementType type = MovementType::Straight;
 	float speed = 0.f;
+	float separationRadius = 0.f;
+	float separationSpeed = 0.f;
 	float amplitude = 0.f;
 	float frequency = 0.f;
 	bool bounceOnEdges = false;
@@ -31,6 +33,7 @@ class Movement
 public:
 	void Start(const MovementSettings& settings, const Utility::Vector2<float>& start, const Utility::Vector2<float>& velocity, const Utility::Vector2<float>& target, const Utility::Vector2<int>& bodySize);
 	[[nodiscard]] Utility::Vector2<float> Update(float deltaTime, const Utility::Vector2<float>& playerCenter);
+	void Nudge(const Utility::Vector2<float>& offset);
 
 	bool IsTelegraphing() const { return m_chargePhase == ChargePhase::Telegraphing; }
 

@@ -51,6 +51,8 @@ private:
 
 	int m_score = 0;
 
+	void SeparateEnemies(float deltaTime);
+
 	void CheckPlayAreaExits();
 
 	template <typename T>

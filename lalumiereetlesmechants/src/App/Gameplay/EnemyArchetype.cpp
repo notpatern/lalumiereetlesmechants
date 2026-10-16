@@ -50,7 +50,7 @@ namespace EnemyArchetypes
 			.contactDamage = 1,
 			.points = 50,
 			.xp = 1,
-			.movement = { .type = MovementType::Seek, .speed = 10.f, .stayOnScreen = true, .turnRate = 3.f },
+			.movement = { .type = MovementType::Seek, .speed = 10.f, .separationRadius = 1.5f, .separationSpeed = 8.f, .stayOnScreen = true, .turnRate = 3.f },
 			.sprite = SpriteUtils::SpriteType::Swarm,
 			.hitSprite = SpriteUtils::SpriteType::Swarm,
 		};
