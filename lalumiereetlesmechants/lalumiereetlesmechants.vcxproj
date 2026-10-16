@@ -127,9 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\App\Entites\Particle.cpp" />
-    <ClCompile Include="src\App\Entites\PooledEntity.cpp" />
-    <ClCompile Include="src\App\Entites\XpOrb.cpp" />
+    <ClCompile Include="src\App\Entities\Particle.cpp" />
+    <ClCompile Include="src\App\Entities\PooledEntity.cpp" />
+    <ClCompile Include="src\App\Entities\XpOrb.cpp" />
     <ClCompile Include="src\App\Gameplay\EnemyArchetype.cpp" />
     <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Experience.cpp" />
@@ -143,10 +143,10 @@
     <ClCompile Include="src\App\Manager\InputManager.cpp" />
     <ClCompile Include="src\App\Player\Player.cpp" />
     <ClCompile Include="src\App\Render\Renderer.cpp" />
-    <ClCompile Include="src\App\Entites\Missile.cpp" />
+    <ClCompile Include="src\App\Entities\Missile.cpp" />
     <ClCompile Include="src\App\Render\Sprite.cpp" />
-    <ClCompile Include="src\App\Entites\Enemy.cpp" />
-    <ClCompile Include="src\App\Entites\Entities.cpp" />
+    <ClCompile Include="src\App\Entities\Enemy.cpp" />
+    <ClCompile Include="src\App\Entities\Entity.cpp" />
     <ClCompile Include="src\App\App.cpp" />
     <ClCompile Include="src\App\Screens\CreditsScreen.cpp" />
     <ClCompile Include="src\App\Screens\GameScreen.cpp" />
@@ -159,9 +159,9 @@
     <ClCompile Include="src\App\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\App\Entites\Particle.h" />
-    <ClInclude Include="src\App\Entites\PooledEntity.h" />
-    <ClInclude Include="src\App\Entites\XpOrb.h" />
+    <ClInclude Include="src\App\Entities\Particle.h" />
+    <ClInclude Include="src\App\Entities\PooledEntity.h" />
+    <ClInclude Include="src\App\Entities\XpOrb.h" />
     <ClInclude Include="src\App\Gameplay\EnemyArchetype.h" />
     <ClInclude Include="src\App\Gameplay\Collision.h" />
     <ClInclude Include="src\App\Gameplay\DamageInfos.h" />
@@ -182,10 +182,10 @@
     <ClInclude Include="src\App\Manager\InputManager.h" />
     <ClInclude Include="src\App\Player\Player.h" />
     <ClInclude Include="src\App\Render\Renderer.h" />
-    <ClInclude Include="src\App\Entites\Missile.h" />
+    <ClInclude Include="src\App\Entities\Missile.h" />
     <ClInclude Include="src\App\Render\Sprite.h" />
-    <ClInclude Include="src\App\Entites\Enemy.h" />
-    <ClInclude Include="src\App\Entites\Entities.h" />
+    <ClInclude Include="src\App\Entities\Enemy.h" />
+    <ClInclude Include="src\App\Entities\Entity.h" />
     <ClInclude Include="src\App\App.h" />
     <ClInclude Include="src\App\Render\SpriteDrawing.h" />
     <ClInclude Include="src\App\Render\SpriteType.h" />

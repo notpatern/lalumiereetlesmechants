@@ -1,9 +1,9 @@
 #pragma once
 #include "InputManager.h"
-#include "../Entites/Enemy.h"
-#include "../Entites/Missile.h"
-#include "../Entites/Particle.h"
-#include "../Entites/XpOrb.h"
+#include "../Entities/Enemy.h"
+#include "../Entities/Missile.h"
+#include "../Entities/Particle.h"
+#include "../Entities/XpOrb.h"
 #include "../Gameplay/Collision.h"
 #include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/Hittable.h"

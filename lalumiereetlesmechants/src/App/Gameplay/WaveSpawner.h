@@ -1,7 +1,7 @@
 #pragma once
 #include "IEnemyObserver.h"
 #include "Wave.h"
-#include "../Entites/Enemy.h"
+#include "../Entities/Enemy.h"
 #include "../../Utilities/Countdown.h"
 #include "../../Utilities/Pool.h"
 #include <cstddef>

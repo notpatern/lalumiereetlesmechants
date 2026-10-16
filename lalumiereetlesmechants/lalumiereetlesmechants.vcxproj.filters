@@ -21,13 +21,13 @@
     <ClCompile Include="src\App\App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\Entities.cpp">
+    <ClCompile Include="src\App\Entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\Enemy.cpp">
+    <ClCompile Include="src\App\Entities\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\Missile.cpp">
+    <ClCompile Include="src\App\Entities\Missile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\App\Render\Sprite.cpp">
@@ -75,13 +75,13 @@
     <ClCompile Include="src\App\Screens\TitleScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\Particle.cpp">
+    <ClCompile Include="src\App\Entities\Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\PooledEntity.cpp">
+    <ClCompile Include="src\App\Entities\PooledEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\Entites\XpOrb.cpp">
+    <ClCompile Include="src\App\Entities\XpOrb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\App\Gameplay\EnemyArchetype.cpp">
@@ -110,13 +110,13 @@
     <ClInclude Include="src\App\App.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\Entities.h">
+    <ClInclude Include="src\App\Entities\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\Enemy.h">
+    <ClInclude Include="src\App\Entities\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\Missile.h">
+    <ClInclude Include="src\App\Entities\Missile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\App\Render\Sprite.h">
@@ -200,13 +200,13 @@
     <ClInclude Include="src\App\Render\SpriteType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\Particle.h">
+    <ClInclude Include="src\App\Entities\Particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\PooledEntity.h">
+    <ClInclude Include="src\App\Entities\PooledEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\Entites\XpOrb.h">
+    <ClInclude Include="src\App\Entities\XpOrb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\App\Gameplay\EnemyArchetype.h">
