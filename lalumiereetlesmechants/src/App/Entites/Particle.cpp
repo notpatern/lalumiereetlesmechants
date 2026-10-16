@@ -2,12 +2,13 @@
 #include "../Gameplay/PlayArea.h"
 #include "../../Utilities/ScreenDirection.h"
 
-void Particle::Spawn(const Utility::Vector2<float>& position, float angle)
+void Particle::Spawn(const Utility::Vector2<float>& position, float angle, SpriteUtils::SpriteType spark, SpriteUtils::SpriteType smoke)
 {
 	m_position = position;
 	m_velocity = Utility::ScreenVector(angle, SPEED);
 	m_lifetime.Start(LIFETIME);
-	m_spriteType = SpriteUtils::SpriteType::Spark;
+	m_spriteType = spark;
+	m_smokeSprite = smoke;
 	Activate();
 }
 
@@ -25,7 +26,7 @@ void Particle::Update(float dt)
 
 	if (IsSmoke())
 	{
-		m_spriteType = SpriteUtils::SpriteType::Smoke;
+		m_spriteType = m_smokeSprite;
 		m_position.y += PlayArea::SCROLL_SPEED * dt;
 	}
 }

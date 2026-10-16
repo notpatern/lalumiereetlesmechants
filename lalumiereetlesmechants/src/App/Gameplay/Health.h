@@ -6,6 +6,7 @@ public:
 	explicit Health(int maxHealth);
 
 	bool TakeDamage(int amount);
+	void Heal(int amount);
 	void Reset();
 
 	bool IsDead() const;

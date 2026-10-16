@@ -23,6 +23,7 @@ public:
 	GameManager& operator=(const GameManager&) = delete;
 
 	void Update(float deltaTime, const InputManager& inputManager);
+	void SkipWave() { m_waveSpawner.SkipToNextWave(); }
 
 	const Player& getPlayer() const { return m_player; }
 
@@ -58,7 +59,6 @@ private:
 
 	static constexpr ImpactFeedback PLAYER_HIT_FEEDBACK{ .hitStop = 0.12f, .shakeX = 2, .shakeY = 1, .shakeDuration = 0.35f };
 	static constexpr ImpactFeedback PLAYER_KILLED_FEEDBACK{ .shakeX = 3, .shakeY = 2, .shakeDuration = 0.8f };
-	static constexpr ImpactFeedback LEVEL_UP_FEEDBACK{ .hitStop = 0.06f, .shakeX = 1, .shakeY = 1, .shakeDuration = 0.2f };
 
 	static constexpr float PLAYER_START_X = PlayArea::WIDTH / 2.f;
 	static constexpr float PLAYER_START_Y = PlayArea::HEIGHT / 2.f;
@@ -100,5 +100,5 @@ private:
 	void DropXpOrbs(const Utility::Vector2<float>& center, int count);
 
 	void CollectXpOrbs();
-	void SpawnExplosion(const Utility::Vector2<float>& center, int particleCount);
+	void SpawnExplosion(const Utility::Vector2<float>& center, int particleCount, SpriteUtils::SpriteType spark = SpriteUtils::SpriteType::Spark, SpriteUtils::SpriteType smoke = SpriteUtils::SpriteType::Smoke);
 };

@@ -18,6 +18,7 @@ public:
 	WaveSpawner& operator=(const WaveSpawner&) = delete;
 
 	void Update(float deltaTime);
+	void SkipToNextWave();
 
 	void OnEnemyRemoved(const EnemyRemovedEvent& event) override;
 
@@ -44,6 +45,7 @@ private:
 	Utility::Countdown m_timer;
 
 	void StartWave(std::size_t waveIndex);
+	void StartNextWave();
 	void UpdateSpawning(float deltaTime);
 	void SpawnEnemy(const SpawnEntry& entry);
 

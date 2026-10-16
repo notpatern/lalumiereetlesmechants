@@ -53,7 +53,13 @@ DamageInfos Player::getContactDamage() const
 
 void Player::AddXp(int amount)
 {
+	const int levelBefore = m_experience.getLevel();
 	m_experience.AddXp(amount);
+
+	for (int level = levelBefore + 1; level <= m_experience.getLevel(); ++level)
+	{
+		m_health.Heal(LEVELS[level - 1].livesRestored);
+	}
 }
 
 bool Player::IsVisible() const
@@ -121,7 +127,7 @@ void Player::TryShoot()
 		return;
 	}
 
-	const ShotLevel& shot = SHOT_LEVELS[m_experience.getLevel() - 1];
+	const ShotSettings& shot = LEVELS[m_experience.getLevel() - 1].shot;
 	const float missileSpeed = MissileArchetypes::Get(shot.missile).speed;
 	for (int i = 0; i < shot.missileCount; ++i)
 	{

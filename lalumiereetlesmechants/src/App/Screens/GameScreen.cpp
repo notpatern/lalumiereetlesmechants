@@ -54,6 +54,13 @@ void GameScreen::Update(float deltaTime, const InputManager& input)
 		return;
 	}
 
+#ifdef _DEBUG
+	if (input.WasJustPressed(VK_F2))
+	{
+		m_gameManager.SkipWave();
+	}
+#endif
+
 	m_gameManager.Update(deltaTime, input);
 	m_hud.Update(deltaTime);
 }
@@ -128,7 +135,8 @@ void GameScreen::DrawDebug(HANDLE console) const
 
 	m_gameManager.getParticles().ForEachActive([&](const Particle& particle)
 	{
-		draw(particle.getPosition(), particle.IsSmoke() ? ',' : '*');
+		const SpriteUtils::SpriteType type = particle.getSpriteType();
+		draw(particle.getPosition(), type == SpriteUtils::SpriteType::LevelUpSpark ? '+' : (type == SpriteUtils::SpriteType::Smoke ? ',' : '*'));
 	});
 
 	m_gameManager.getXpOrbs().ForEachActive([&](const XpOrb& orb)

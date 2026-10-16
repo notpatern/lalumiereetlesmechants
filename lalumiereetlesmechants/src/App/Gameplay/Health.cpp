@@ -1,4 +1,5 @@
 #include "Health.h"
+#include <algorithm>
 
 Health::Health(int maxHealth) : m_max(maxHealth), m_current(maxHealth)
 {
@@ -19,6 +20,16 @@ bool Health::TakeDamage(int amount)
 	}
 
 	return IsDead();
+}
+
+void Health::Heal(int amount)
+{
+	if (IsDead() || amount <= 0)
+	{
+		return;
+	}
+
+	m_current = std::min(m_current + amount, m_max);
 }
 
 void Health::Reset()

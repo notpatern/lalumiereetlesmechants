@@ -208,12 +208,11 @@ void GameManager::CollectXpOrbs()
 
 	if (m_player.getExperience().getLevel() > levelBefore)
 	{
-		SpawnExplosion(m_player.getAimPoint(), LEVEL_UP_PARTICLE_COUNT);
-		PlayFeedback(LEVEL_UP_FEEDBACK);
+		SpawnExplosion(m_player.getAimPoint(), LEVEL_UP_PARTICLE_COUNT, SpriteUtils::SpriteType::LevelUpSpark, SpriteUtils::SpriteType::LevelUpSpark);
 	}
 }
 
-void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int particleCount)
+void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int particleCount, SpriteUtils::SpriteType spark, SpriteUtils::SpriteType smoke)
 {
 	const float angleStep = 2.f * std::numbers::pi_v<float> / particleCount;
 
@@ -221,7 +220,7 @@ void GameManager::SpawnExplosion(const Utility::Vector2<float>& center, int part
 	{
 		if (Particle* particle = m_particlesPool.Acquire())
 		{
-			particle->Spawn(center, i * angleStep);
+			particle->Spawn(center, i * angleStep, spark, smoke);
 		}
 	}
 }

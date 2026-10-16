@@ -34,20 +34,28 @@ void WaveSpawner::Update(float deltaTime)
 		m_timer.Update(deltaTime);
 		if (m_timer.IsFinished())
 		{
-			if (m_waveIndex + 1 < m_waves->size())
-			{
-				StartWave(m_waveIndex + 1);
-			}
-			else
-			{
-				m_state = State::Finished;
-			}
+			StartNextWave();
 		}
 		break;
 
 	case State::Finished:
 		break;
 	}
+}
+
+void WaveSpawner::SkipToNextWave()
+{
+	if (m_state == State::Finished)
+	{
+		return;
+	}
+
+	m_enemies->ForEachActive([](Enemy& enemy)
+	{
+		enemy.OnLeftPlayArea();
+	});
+
+	StartNextWave();
 }
 
 void WaveSpawner::OnEnemyRemoved(const EnemyRemovedEvent&)
@@ -62,6 +70,7 @@ void WaveSpawner::StartWave(std::size_t waveIndex)
 {
 	m_waveIndex = waveIndex;
 	m_entryIndex = 0;
+	m_spawnedFromEntry = 0;
 	m_state = State::Spawning;
 
 	const std::vector<SpawnEntry>& entries = (*m_waves)[m_waveIndex].spawnEntries;
@@ -69,6 +78,18 @@ void WaveSpawner::StartWave(std::size_t waveIndex)
 	if (!entries.empty())
 	{
 		m_timer.Start(entries[0].delay);
+	}
+}
+
+void WaveSpawner::StartNextWave()
+{
+	if (m_waveIndex + 1 < m_waves->size())
+	{
+		StartWave(m_waveIndex + 1);
+	}
+	else
+	{
+		m_state = State::Finished;
 	}
 }
 

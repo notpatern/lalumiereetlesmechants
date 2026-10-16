@@ -19,6 +19,7 @@ namespace SpriteUtils
 		Swarm,
 		Spark,
 		Smoke,
+		LevelUpSpark,
 		NONE
 	};
 }

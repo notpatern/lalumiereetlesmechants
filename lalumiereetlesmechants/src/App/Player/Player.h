@@ -11,13 +11,19 @@
 #include "../Gameplay/MissileArchetype.h"
 #include <array>
 
-struct ShotLevel
+struct ShotSettings
 {
 	int missileCount = 1;
 	float spacing = 0.f;
 	float spreadSpeed = 0.f;
 	float fireInterval = 0.25f;
 	MissileType missile = MissileType::PlayerShot;
+};
+
+struct PlayerLevel
+{
+	ShotSettings shot;
+	int livesRestored = 1;
 };
 
 class Player : public IDamageable, public Entity
@@ -53,17 +59,21 @@ private:
 	Utility::Pool<Missile>* m_missilePool;
 
 	Utility::Countdown m_fireCooldown;
-	static constexpr std::array SHOT_LEVELS
-	{
-		ShotLevel{ .missileCount = 1, .fireInterval = 0.25f },
-		ShotLevel{ .missileCount = 2, .spacing = 2.f, .fireInterval = 0.25f },
-		ShotLevel{ .missileCount = 3, .spreadSpeed = 25.f, .fireInterval = 0.25f },
-		ShotLevel{ .missileCount = 3, .spreadSpeed = 25.f, .fireInterval = 0.18f },
-		ShotLevel{ .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.18f },
-	};
-	static_assert(SHOT_LEVELS.size() == Experience::MAX_LEVEL, "Il faut un tir par niveau d'experience");
 
 	static constexpr int MAX_HEALTH = 3;
+
+	static constexpr std::array LEVELS
+	{
+		PlayerLevel{ .shot = { .missileCount = 1, .fireInterval = 0.25f }, .livesRestored = 0 },
+		PlayerLevel{ .shot = { .missileCount = 2, .spacing = 2.f, .fireInterval = 0.25f } },
+		PlayerLevel{ .shot = { .missileCount = 2, .spacing = 2.f, .fireInterval = 0.20f } },
+		PlayerLevel{ .shot = { .missileCount = 3, .spreadSpeed = 25.f, .fireInterval = 0.20f } },
+		PlayerLevel{ .shot = { .missileCount = 3, .spreadSpeed = 25.f, .fireInterval = 0.16f } },
+		PlayerLevel{ .shot = { .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.16f } },
+		PlayerLevel{ .shot = { .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.13f } },
+		PlayerLevel{ .shot = { .missileCount = 5, .spreadSpeed = 25.f, .fireInterval = 0.10f } },
+	};
+	static_assert(LEVELS.size() == Experience::MAX_LEVEL, "Il faut une fiche par niveau d'experience");
 	static constexpr float HIT_INVINCIBILITY_DURATION = 1.5f;
 	static constexpr float BLINK_PERIOD = 0.1f;
 
