@@ -4,20 +4,23 @@
 #include "Sprite.h"
 #include "../Screens/IScreen.h"
 #include "../Render/SpriteDrawing.h"
+#include "../Gameplay/PlayArea.h"
 #include <string_view>
 #include <vector>
 #include <windows.h>
 
 class Renderer // il render le monde, les sprites et les ecrans. Ses render queue se remplissent et se vident automatiquement avec les instanciation et destructions des Sprites et Screens
 {
+public:
 	static constexpr short SCREEN_WIDTH = 80;
-	static constexpr short SCREEN_HEIGHT = 40;
+	static constexpr short SCREEN_HEIGHT = PlayArea::HEIGHT + 2;
 
+private:
 	static constexpr int PANEL_PADDING_X = 3;
 	static constexpr int PANEL_PADDING_Y = 1;
 	static constexpr WORD PANEL_COLOR = 0x0F;
 	static constexpr WORD WORLD_COLOR = 0x0F;
-private:
+
 	World* m_world = nullptr;
 	std::vector<Sprite*> m_spriteRenderQueue{};
 	std::vector<IScreen*> m_screenRenderQueue{};

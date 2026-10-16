@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "../Gameplay/Collision.h"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -45,7 +46,7 @@ void Renderer::Render()
 	COORD dwBufferCoord = { 0, 0 };
 	SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
-	WriteConsoleOutput(hOutput, (CHAR_INFO*)m_buffer, dwBufferSize,
+	WriteConsoleOutputA(hOutput, (CHAR_INFO*)m_buffer, dwBufferSize,
 		dwBufferCoord, &rcRegion);
 }
 
@@ -82,10 +83,10 @@ void Renderer::RenderSprite(Sprite* sprite, const Utility::Vector2<int>& cameraO
 
 	const SpriteUtils::SpriteDrawing& drawing =
 		SpriteUtils::GetSpriteDrawing(sprite->GetType());
-	Utility::Vector2<float> position = sprite->GetPosition();
+	const Utility::Vector2<int> cell = Collision::ToCell(sprite->GetPosition());
 
-	int spriteX = (int)std::round(position.x) + cameraOffset.x;
-	int spriteY = (int)std::round(position.y) + cameraOffset.y;
+	int spriteX = cell.x + cameraOffset.x;
+	int spriteY = cell.y + cameraOffset.y;
 
 	for (int y = 0; y < (int)drawing.lines.size(); y++)
 	{
@@ -97,7 +98,7 @@ void Renderer::RenderSprite(Sprite* sprite, const Utility::Vector2<int>& cameraO
 
 			if (spriteChar == ' '
 				|| screenX < 0 || screenX >= SCREEN_WIDTH
-				|| screenY < 0 || screenY >= SCREEN_HEIGHT)
+				|| screenY < 0 || screenY >= PlayArea::HEIGHT)
 			{
 				continue;
 			}
