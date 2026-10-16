@@ -21,6 +21,7 @@ public:
 	std::vector<ScreenText> getTexts() const override;
 	ScreenRequest getRequest() const override { return m_request; }
 	Utility::Vector2<int> getCameraOffset() const override { return m_gameManager.getShakeOffset(); }
+	bool DrawsPanel() const override { return false; }
 
 private:
 	static constexpr std::string_view GAME_OVER_TEXT = "Defaite";
