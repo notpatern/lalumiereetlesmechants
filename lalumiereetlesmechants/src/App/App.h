@@ -18,12 +18,15 @@ private:
 
 	World m_world{};
 
+	static constexpr UINT TIMER_RESOLUTION_MS = 1;
+
 public:
 	App(Utility::Timer* timer);
 	~App();
 
 	void Run();	
 	LONG_PTR setConsoleWindowStyle(INT n_index, LONG_PTR new_style);
+	void SetupConsole();
 
 	inline bool getIsRunning() {
 		return m_isRunning;

@@ -1,5 +1,6 @@
 #include "App.h"
 #include <windows.h>
+#include <timeapi.h>
 #include <iostream>
 #include <memory>
 
@@ -8,9 +9,14 @@
 #include "Screens/GameScreen.h"
 #include "Screens/TitleScreen.h"
 
-App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE)){
+#pragma comment(lib, "winmm.lib")
+
+App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(STD_OUTPUT_HANDLE))
+{
+	timeBeginPeriod(TIMER_RESOLUTION_MS);
 	LONG_PTR new_style =  WS_OVERLAPPEDWINDOW | WS_HSCROLL | WS_VSCROLL;
     setConsoleWindowStyle(GWL_STYLE,new_style);
+	SetupConsole();
 
 	if (GetConsoleScreenBufferInfo(m_consoleHandle, &m_consoleInfo)) {
 		m_windowSize.x = m_consoleInfo.srWindow.Right - m_consoleInfo.srWindow.Left + 1;
@@ -22,6 +28,7 @@ App::App(Utility::Timer* timer) : m_timer(timer), m_consoleHandle(GetStdHandle(S
 
 App::~App()
 {
+	timeEndPeriod(TIMER_RESOLUTION_MS);
 	delete m_timer;
 }
 
@@ -68,4 +75,30 @@ LONG_PTR App::setConsoleWindowStyle(INT n_index, LONG_PTR new_style)
 	ShowWindow(hwnd_console, SW_SHOW);
 
 	return style_ptr;
+}
+
+void App::SetupConsole()
+{
+	const SMALL_RECT tinyWindow = { 0, 0, 1, 1 };
+	SetConsoleWindowInfo(m_consoleHandle, TRUE, &tinyWindow);
+	SetConsoleScreenBufferSize(m_consoleHandle, { Renderer::SCREEN_WIDTH, Renderer::SCREEN_HEIGHT });
+	const SMALL_RECT gameWindow = { 0, 0, Renderer::SCREEN_WIDTH - 1, Renderer::SCREEN_HEIGHT - 1 };
+	if (!SetConsoleWindowInfo(m_consoleHandle, TRUE, &gameWindow))
+	{
+		const COORD largest = GetLargestConsoleWindowSize(m_consoleHandle);
+		const SHORT width = largest.X < Renderer::SCREEN_WIDTH ? largest.X : Renderer::SCREEN_WIDTH;
+		const SHORT height = largest.Y < Renderer::SCREEN_HEIGHT ? largest.Y : Renderer::SCREEN_HEIGHT;
+		const SMALL_RECT fitWindow = { 0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height - 1) };
+		SetConsoleWindowInfo(m_consoleHandle, TRUE, &fitWindow);
+	}
+
+	const HANDLE inputHandle = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD inputMode = 0;
+	GetConsoleMode(inputHandle, &inputMode);
+	SetConsoleMode(inputHandle, (inputMode | ENABLE_EXTENDED_FLAGS) & ~ENABLE_QUICK_EDIT_MODE);
+
+	CONSOLE_CURSOR_INFO cursorInfo{ 1, FALSE };
+	SetConsoleCursorInfo(m_consoleHandle, &cursorInfo);
+
+	SetConsoleTitleA("MAUVAIS CARACTERES");
 }
