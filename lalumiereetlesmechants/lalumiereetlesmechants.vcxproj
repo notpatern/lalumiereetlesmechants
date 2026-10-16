@@ -134,6 +134,7 @@
     <ClCompile Include="src\App\Gameplay\Collision.cpp" />
     <ClCompile Include="src\App\Gameplay\Experience.cpp" />
     <ClCompile Include="src\App\Gameplay\Health.cpp" />
+    <ClCompile Include="src\App\Gameplay\MissileArchetype.cpp" />
     <ClCompile Include="src\App\Gameplay\Movement.cpp" />
     <ClCompile Include="src\App\Gameplay\WaveData.cpp" />
     <ClCompile Include="src\App\Gameplay\WaveSpawner.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\App\Gameplay\Hittable.h" />
     <ClInclude Include="src\App\Gameplay\IDamageable.h" />
     <ClInclude Include="src\App\Gameplay\IEnemyObserver.h" />
+    <ClInclude Include="src\App\Gameplay\MissileArchetype.h" />
     <ClInclude Include="src\App\Gameplay\Movement.h" />
     <ClInclude Include="src\App\Gameplay\PlayArea.h" />
     <ClInclude Include="src\App\Gameplay\Wave.h" />

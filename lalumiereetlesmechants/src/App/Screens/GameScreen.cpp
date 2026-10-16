@@ -109,8 +109,7 @@ void GameScreen::DrawDebug(HANDLE console) const
 	m_gameManager.getMissiles().ForEachActive([&](const Missile& missile)
 	{
 		const Utility::Vector2<int> size = missile.getHitboxSize();
-		const bool isBig = size.x > 1 || size.y > 1;
-		const char character = isBig ? 'O' : (missile.getTeam() == Team::Enemy ? 'o' : '|');
+		const char character = MissileDebugCharacter(missile.getType());
 		for (int y = 0; y < size.y; ++y)
 		{
 			for (int x = 0; x < size.x; ++x)
@@ -163,5 +162,19 @@ char GameScreen::EnemyDebugCharacter(EnemyType type)
 	case EnemyType::Hunter:
 	default:
 		return 'C';
+	}
+}
+
+char GameScreen::MissileDebugCharacter(MissileType type)
+{
+	switch (type)
+	{
+	case MissileType::EnemyShot:
+		return 'o';
+	case MissileType::BigEnemyShot:
+		return 'O';
+	case MissileType::PlayerShot:
+	default:
+		return '|';
 	}
 }

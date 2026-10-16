@@ -3,6 +3,7 @@
 #include "../../Utilities/Vector2.h"
 #include "../Gameplay/DamageInfos.h"
 #include "../Gameplay/IDamageable.h"
+#include "../Gameplay/MissileArchetype.h"
 #include "../Render/Sprite.h"
 #include "../Gameplay/Collision.h"
 #include "PooledEntity.h"
@@ -16,11 +17,12 @@ public:
 
 	void Update(float dt);
 
-	void Launch(const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity, Team team, int damage, const Utility::Vector2<int>& hitboxSize = { 1, 1 });
+	void Launch(MissileType type, const Utility::Vector2<float>& position, const Utility::Vector2<float>& velocity);
 	void Explode();
 
 	DamageResult OnHit(IDamageable& damageable);
 
+	MissileType getType() const { return m_type; }
 	Team getTeam() const { return m_team; }
 	Utility::Vector2<int> getHitboxSize() const { return m_hitboxSize; }
 	DamageInfos getDamageInfos() const;
@@ -33,8 +35,8 @@ private:
 	static constexpr float LIFETIME = 10.f;
 	Utility::Countdown m_lifetime;
 
+	MissileType m_type;
 	Team m_team;
-	int m_damage;
 	Utility::Vector2<int> m_hitboxSize{ 1, 1 };
 
 };

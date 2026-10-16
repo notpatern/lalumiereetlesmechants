@@ -98,8 +98,9 @@ void Enemy::Shoot(const EnemyUpdateContext& context)
 	if (Missile* missile = context.missiles.Acquire())
 	{
 		const WeaponSettings& settings = m_weapon.getSettings();
+		const MissileArchetype& missileArchetype = MissileArchetypes::Get(settings.missile);
 
-		const Utility::Vector2<float> muzzle{ m_position.x + m_hitbox.size.x / 2 - settings.missileSize.x / 2, m_position.y + m_hitbox.size.y };
+		const Utility::Vector2<float> muzzle{ m_position.x + m_hitbox.size.x / 2 - missileArchetype.hitboxSize.x / 2, m_position.y + m_hitbox.size.y };
 
 		Utility::Vector2<float> direction{ 0.f, 1.f };
 		if (settings.aim == AimMode::AtPlayer)
@@ -107,7 +108,7 @@ void Enemy::Shoot(const EnemyUpdateContext& context)
 			direction = Utility::ScreenDirection(muzzle, context.playerCenter);
 		}
 
-		missile->Launch(muzzle, { direction.x * settings.missileSpeed, direction.y * settings.missileSpeed }, Team::Enemy, settings.missileDamage, settings.missileSize);
+		missile->Launch(settings.missile, muzzle, { direction.x * missileArchetype.speed, direction.y * missileArchetype.speed });
 	}
 }
 

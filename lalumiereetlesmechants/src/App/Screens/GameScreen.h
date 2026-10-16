@@ -2,6 +2,7 @@
 #include "IScreen.h"
 #include "Menu.h"
 #include "../Gameplay/EnemyArchetype.h"
+#include "../Gameplay/MissileArchetype.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/InputManager.h"
 #include <string_view>
@@ -42,4 +43,5 @@ private:
 	float m_endElapsed = 0.f;
 
 	static char EnemyDebugCharacter(EnemyType type);
+	static char MissileDebugCharacter(MissileType type);
 };

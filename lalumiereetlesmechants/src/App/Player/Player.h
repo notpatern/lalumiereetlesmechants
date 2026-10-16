@@ -8,6 +8,7 @@
 #include "../Gameplay/Experience.h"
 #include "../Gameplay/Health.h"
 #include "../Gameplay/IDamageable.h"
+#include "../Gameplay/MissileArchetype.h"
 #include <array>
 
 struct ShotLevel
@@ -16,6 +17,7 @@ struct ShotLevel
 	float spacing = 0.f;
 	float spreadSpeed = 0.f;
 	float fireInterval = 0.25f;
+	MissileType missile = MissileType::PlayerShot;
 };
 
 class Player : public IDamageable, public Entity
@@ -47,9 +49,6 @@ public:
 private:
 	Utility::Vector2<float> m_speed{30.f, 15.f};
 	static constexpr float DIAGONAL_FACTOR = 0.7071f;
-
-	static constexpr float MISSILE_SPEED = 45.f;
-	static constexpr int MISSILE_DAMAGE = 1;
 
 	Utility::Pool<Missile>* m_missilePool;
 

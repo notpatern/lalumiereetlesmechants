@@ -12,7 +12,7 @@ namespace EnemyArchetypes
 			.points = 150,
 			.xp = 1,
 			.movement = { .type = MovementType::Straight, .speed = 3.f },
-			.weapon = { .fireInterval = 1.5f, .missileSpeed = 14.f, .missileDamage = 1, .aim = AimMode::AtPlayer },
+			.weapon = { .fireInterval = 1.5f, .aim = AimMode::AtPlayer, .missile = MissileType::EnemyShot },
 			.sprite = SpriteUtils::SpriteType::Hunter,
 			.hitSprite = SpriteUtils::SpriteType::HunterHit,
 		};
@@ -25,7 +25,7 @@ namespace EnemyArchetypes
 			.points = 250,
 			.xp = 3,
 			.movement = { .type = MovementType::Sine, .amplitude = 1.5f, .frequency = 2.f, .bounceOnEdges = true },
-			.weapon = { .fireInterval = 1.2f, .missileSpeed = 6.f, .missileDamage = 1, .missileSize = { 2, 2 } },
+			.weapon = { .fireInterval = 1.2f, .missile = MissileType::BigEnemyShot },
 			.sprite = SpriteUtils::SpriteType::Turret,
 			.hitSprite = SpriteUtils::SpriteType::TurretHit,
 		};

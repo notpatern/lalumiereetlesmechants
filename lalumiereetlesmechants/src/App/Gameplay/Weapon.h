@@ -1,6 +1,6 @@
 #pragma once
+#include "MissileArchetype.h"
 #include "../../Utilities/Countdown.h"
-#include "../../Utilities/Vector2.h"
 
 enum class AimMode
 {
@@ -11,10 +11,8 @@ enum class AimMode
 struct WeaponSettings
 {
 	float fireInterval = 0.f;
-	float missileSpeed = 20.f;
-	int missileDamage = 1;
 	AimMode aim = AimMode::Down;
-	Utility::Vector2<int> missileSize{ 1, 1 };
+	MissileType missile = MissileType::EnemyShot;
 };
 
 class Weapon

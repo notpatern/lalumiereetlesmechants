@@ -122,13 +122,14 @@ void Player::TryShoot()
 	}
 
 	const ShotLevel& shot = SHOT_LEVELS[m_experience.getLevel() - 1];
+	const float missileSpeed = MissileArchetypes::Get(shot.missile).speed;
 	for (int i = 0; i < shot.missileCount; ++i)
 	{
 		if (Missile* missile = m_missilePool->Acquire())
 		{
 			const float fromCenter = i - (shot.missileCount - 1) / 2.f;
 			const float missileX = m_position.x + BODY_WIDTH / 2 + fromCenter * shot.spacing;
-			missile->Launch({ missileX, m_position.y - 1.f }, { fromCenter * shot.spreadSpeed, -MISSILE_SPEED }, Team::Player, MISSILE_DAMAGE);
+			missile->Launch(shot.missile, { missileX, m_position.y - 1.f }, { fromCenter * shot.spreadSpeed, -missileSpeed });
 		}
 	}
 	m_fireCooldown.Start(shot.fireInterval);
